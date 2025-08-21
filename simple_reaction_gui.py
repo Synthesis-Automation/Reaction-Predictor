@@ -1838,7 +1838,17 @@ class SimpleReactionGUI(QMainWindow):
                 try:
                     temp_val = reaction_data['temperature']
                     if str(temp_val).strip() and str(temp_val).strip() != 'nan':
-                        info_text += f"Temperature: {temp_val}°C\n"
+                        # Prefer numeric formatting with two decimals and space before unit
+                        try:
+                            temp_float = float(str(temp_val))
+                            info_text += f"Temperature: {temp_float:.2f} °C\n"
+                        except Exception:
+                            # Fall back to string; avoid duplicating unit if already present
+                            temp_str = str(temp_val)
+                            if '°' in temp_str:
+                                info_text += f"Temperature: {temp_str}\n"
+                            else:
+                                info_text += f"Temperature: {temp_str} °C\n"
                 except:
                     pass
             
@@ -1846,7 +1856,16 @@ class SimpleReactionGUI(QMainWindow):
                 try:
                     time_val = reaction_data['time']
                     if str(time_val).strip() and str(time_val).strip() != 'nan':
-                        info_text += f"Time: {time_val}h\n"
+                        # Prefer numeric formatting with two decimals and space before unit
+                        try:
+                            time_float = float(str(time_val))
+                            info_text += f"Time: {time_float:.2f} h\n"
+                        except Exception:
+                            time_str = str(time_val)
+                            if time_str.strip().endswith('h'):
+                                info_text += f"Time: {time_str}\n"
+                            else:
+                                info_text += f"Time: {time_str} h\n"
                 except:
                     pass
             
@@ -2180,47 +2199,133 @@ class SimpleReactionGUI(QMainWindow):
         """Handle prediction completion with enhanced results"""
         self.predict_button.setEnabled(True)
         self.predict_button.setText("Predict Conditions")
-        
-        if result.get('analysis_type') == 'enhanced' or result.get('analysis_type') == 'comprehensive':
-            # Display enhanced ligand/solvent recommendations
+
+        # Choose formatter based on analysis type
+        analysis_type = result.get('analysis_type')
+        if analysis_type in ('enhanced', 'comprehensive'):
             results_text = self._format_enhanced_recommendations(result)
-        elif result.get('analysis_type') == 'buchwald_hartwig':
-            # Display Buchwald-Hartwig specific recommendations
+        elif analysis_type == 'buchwald_hartwig':
             results_text = self._format_buchwald_recommendations(result)
-        elif result.get('analysis_type') == 'general':
-            # Display general recommendations
+        elif analysis_type == 'general':
             results_text = self._format_general_recommendations(result)
         else:
-            # Display basic results
             results_text = self._format_basic_results(result)
-        
+
         self.results_text.setPlainText(results_text)
-        
-        # Display related reactions if available
+
+        # Export a well-structured JSON for external apps
+        try:
+            export = self._build_export_payload(result)
+            export_dir = os.path.join(os.getcwd(), 'exports')
+            os.makedirs(export_dir, exist_ok=True)
+            ts = time.strftime('%Y%m%d-%H%M%S')
+            out_path = os.path.join(export_dir, f'prediction_{ts}.json')
+            with open(out_path, 'w', encoding='utf-8') as f:
+                json.dump(export, f, ensure_ascii=False, indent=2)
+            self.statusBar().showMessage(f"Prediction completed • Exported JSON: {os.path.basename(out_path)}")
+        except Exception as e:
+            self.statusBar().showMessage(f"Prediction completed • JSON export failed: {e}")
+
+        # Related reactions display
         related_reactions = result.get('recommendations', {}).get('related_reactions', [])
-        
-        # If no related reactions from recommendation engine, try to get from actual dataset
         if not related_reactions:
             reaction_smiles = result.get('reaction_smiles', '')
             if reaction_smiles:
-                # Try dataset first for any reaction type
                 related_reactions = self.get_related_reactions_from_dataset(reaction_smiles)
-                
-                # If still no reactions and it's a Buchwald-Hartwig type, use mock data
                 if not related_reactions:
-                    analysis_type = result.get('analysis_type', '')
                     detected_type = result.get('recommendations', {}).get('reaction_type', '')
-                    
-                    # Show mock reactions for Buchwald-Hartwig or Cross-Coupling reactions
                     if (analysis_type == 'buchwald_hartwig' or 
                         'buchwald' in detected_type.lower() or 
                         'cross' in detected_type.lower() or
                         'coupling' in detected_type.lower()):
                         related_reactions = self.get_mock_related_reactions(reaction_smiles)
-        
+
         self.display_related_reactions(related_reactions)
-        
-        self.statusBar().showMessage("Prediction completed")
+
+    def _build_export_payload(self, result: dict) -> dict:
+        """Convert internal result into a clean, stable JSON payload.
+
+        Schema:
+          {
+            meta: { generated_at, analysis_type, status },
+            input: { reaction_smiles, selected_reaction_type },
+            detection: { reaction_type },
+            dataset: { ligands_available, solvents_available, reaction_types_supported },
+            recommendations: {
+              combined: [ { ligand, ligand_compatibility, solvent, solvent_abbreviation, solvent_compatibility, combined_score, recommendation_confidence, typical_conditions: { temperature, time, atmosphere, catalyst_loading, base, additives }, synergy_bonus } ],
+              ligands: [ { ligand, compatibility_score, applications, reaction_suitability } ],
+              solvents: [ { solvent, abbreviation, compatibility_score, applications, reaction_suitability } ],
+              alternatives: { budget_friendly_ligands, low_boiling_solvents, green_solvents }
+            },
+            related_reactions: [ { reaction_smiles, yield, catalyst, ligand, solvent, temperature, time, similarity, reaction_id } ]
+          }
+        """
+        recs = result.get('recommendations', {}) or {}
+
+        combined = []
+        for c in recs.get('combined_conditions', []) or []:
+            combined.append({
+                'ligand': c.get('ligand'),
+                'ligand_compatibility': c.get('ligand_compatibility'),
+                'solvent': c.get('solvent'),
+                'solvent_abbreviation': c.get('solvent_abbreviation'),
+                'solvent_compatibility': c.get('solvent_compatibility'),
+                'combined_score': c.get('combined_score'),
+                'recommendation_confidence': c.get('recommendation_confidence'),
+                'typical_conditions': c.get('typical_conditions', {}),
+                'synergy_bonus': c.get('synergy_bonus', 0),
+            })
+
+        ligands = []
+        for l in recs.get('ligand_recommendations', []) or []:
+            ligands.append({
+                'ligand': l.get('ligand'),
+                'compatibility_score': l.get('compatibility_score'),
+                'applications': l.get('applications'),
+                'reaction_suitability': l.get('reaction_suitability'),
+            })
+
+        solvents = []
+        for s in recs.get('solvent_recommendations', []) or []:
+            solvents.append({
+                'solvent': s.get('solvent'),
+                'abbreviation': s.get('abbreviation'),
+                'compatibility_score': s.get('compatibility_score'),
+                'applications': s.get('applications'),
+                'reaction_suitability': s.get('reaction_suitability'),
+            })
+
+        alternatives = {}
+        alt = recs.get('property_based_alternatives', {}) or {}
+        for key in ['budget_friendly_ligands', 'low_boiling_solvents', 'green_solvents']:
+            if key in alt:
+                alternatives[key] = alt[key]
+
+        related = recs.get('related_reactions', []) or []
+
+        payload = {
+            'meta': {
+                'generated_at': time.strftime('%Y-%m-%dT%H:%M:%S'),
+                'analysis_type': result.get('analysis_type', 'unknown'),
+                'status': result.get('status'),
+            },
+            'input': {
+                'reaction_smiles': result.get('reaction_smiles'),
+                'selected_reaction_type': result.get('reaction_type') or result.get('selected_reaction_type'),
+            },
+            'detection': {
+                'reaction_type': recs.get('reaction_type'),
+            },
+            'dataset': recs.get('dataset_info', {}),
+            'recommendations': {
+                'combined': combined,
+                'ligands': ligands,
+                'solvents': solvents,
+                'alternatives': alternatives,
+            },
+            'related_reactions': related,
+        }
+        return payload
     
     def _format_buchwald_recommendations(self, result):
         """Format Buchwald-Hartwig specific recommendations"""
