@@ -1,10 +1,32 @@
 import numpy as np
 import pandas as pd
-from scipy.spatial.distance import cdist
-from scipy.cluster.hierarchy import dendrogram, linkage
-import matplotlib.pyplot as plt
-import networkx as nx
-from sklearn.preprocessing import MinMaxScaler
+
+# Optional dependencies (graceful degradation if missing)
+try:  # SciPy distances
+    from scipy.spatial.distance import cdist  # type: ignore
+except Exception:
+    cdist = None  # type: ignore
+
+try:  # SciPy clustering
+    from scipy.cluster.hierarchy import dendrogram, linkage  # type: ignore
+except Exception:
+    dendrogram = None  # type: ignore
+    linkage = None  # type: ignore
+
+try:  # Matplotlib
+    import matplotlib.pyplot as plt  # type: ignore
+except Exception:
+    plt = None  # type: ignore
+
+try:  # NetworkX
+    import networkx as nx  # type: ignore
+except Exception:
+    nx = None  # type: ignore
+
+try:  # scikit-learn scaler
+    from sklearn.preprocessing import MinMaxScaler  # type: ignore
+except Exception:
+    MinMaxScaler = None  # type: ignore
 
 # Verify data lengths
 solvents = [

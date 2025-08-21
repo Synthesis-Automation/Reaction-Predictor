@@ -1,10 +1,38 @@
 import numpy as np
 import pandas as pd
-from scipy.spatial.distance import cdist
-from scipy.cluster.hierarchy import dendrogram, linkage
-import matplotlib.pyplot as plt
-import networkx as nx
-from sklearn.preprocessing import MinMaxScaler
+
+# Optional dependencies (graceful degradation if missing)
+try:  # scikit-learn for scaling
+    from sklearn.preprocessing import MinMaxScaler  # type: ignore
+except Exception:
+    MinMaxScaler = None  # type: ignore
+
+try:  # SciPy for distances
+    from scipy.spatial.distance import cdist  # type: ignore
+except Exception:
+    cdist = None  # type: ignore
+
+try:  # SciPy for clustering
+    from scipy.cluster.hierarchy import dendrogram, linkage  # type: ignore
+except Exception:
+    dendrogram = None  # type: ignore
+    linkage = None  # type: ignore
+
+try:  # Matplotlib for plots
+    import matplotlib.pyplot as plt  # type: ignore
+except Exception:
+    plt = None  # type: ignore
+
+try:  # NetworkX for graphs
+    import networkx as nx  # type: ignore
+except Exception:
+    nx = None  # type: ignore
+
+try:  # Excel writer backend
+    import openpyxl  # noqa: F401
+    OPENPYXL_AVAILABLE = True
+except Exception:
+    OPENPYXL_AVAILABLE = False
 
 # Define expanded ligand database
 ligands = [
@@ -1394,8 +1422,15 @@ def create_feature_matrix():
 
     # Normalize features
     X = np.array(X)
-    scaler = MinMaxScaler()
-    X_normalized = scaler.fit_transform(X)
+    if MinMaxScaler:
+        scaler = MinMaxScaler()
+        X_normalized = scaler.fit_transform(X)
+    else:
+        # Manual min-max scaling fallback
+        X_min = X.min(axis=0)
+        X_max = X.max(axis=0)
+        denom = np.where((X_max - X_min) == 0, 1, (X_max - X_min))
+        X_normalized = (X - X_min) / denom
 
     return X_normalized
 
@@ -1654,31 +1689,30 @@ property_weights = {
     "Coordination Mode": 0.05,
 }
 
-# Export ligand database to Excel
-excel_path = "ligand_database.xlsx"
-with pd.ExcelWriter(excel_path, engine="openpyxl") as writer:
-    # Main data sheet
-    ligand_data.to_excel(writer, sheet_name="Ligand Properties", index=False)
+def export_ligand_database_excel(path: str = "ligand_database.xlsx") -> None:
+    """Export ligand database to Excel (optional; requires openpyxl)."""
+    if not OPENPYXL_AVAILABLE:
+        print("Note: openpyxl not installed; skipping ligand Excel export")
+        return
+    with pd.ExcelWriter(path, engine="openpyxl") as writer:
+        ligand_data.to_excel(writer, sheet_name="Ligand Properties", index=False)
 
-    # Additional information sheet
-    info_data = pd.DataFrame(
-        {
-            "Property": list(property_weights.keys()),
-            "Weight": list(property_weights.values()),
-            "Description": [
-                "Tolman cone angle - measure of steric bulk",
-                "Tolman Electronic Parameter - measure of electron density",
-                "Natural bite angle for bidentate ligands",
-                "Molecular volume/spatial requirement",
-                "Basicity/electron-donating ability",
-                "Relative cost category",
-                "Binding mode to metal center",
-            ],
-        }
-    )
-    info_data.to_excel(writer, sheet_name="Property Information", index=False)
-
-print(f"Ligand database has been exported to {excel_path}")
+        info_data = pd.DataFrame(
+            {
+                "Property": list(property_weights.keys()),
+                "Weight": list(property_weights.values()),
+                "Description": [
+                    "Tolman cone angle - measure of steric bulk",
+                    "Tolman Electronic Parameter - measure of electron density",
+                    "Natural bite angle for bidentate ligands",
+                    "Molecular volume/spatial requirement",
+                    "Basicity/electron-donating ability",
+                    "Relative cost category",
+                    "Binding mode to metal center",
+                ],
+            }
+        )
+        info_data.to_excel(writer, sheet_name="Property Information", index=False)
 
 
 # Function to recommend similar ligands
@@ -1710,7 +1744,11 @@ def recommend_ligands(selected_ligand, num_recommendations=4):
     selected_vector = ligand_properties[selected_idx].reshape(1, -1)
 
     # Compute weighted Euclidean distances
-    distances = cdist(selected_vector, ligand_properties, metric="euclidean")[0]
+    if cdist is not None:
+        distances = cdist(selected_vector, ligand_properties, metric="euclidean")[0]
+    else:
+        diffs = ligand_properties - selected_vector
+        distances = np.sqrt(np.sum(diffs**2, axis=1))
 
     # Sort and get the closest ligands (excluding itself)
     closest_indices = np.argsort(distances)[1 : num_recommendations + 1]
@@ -1724,6 +1762,10 @@ def recommend_ligands(selected_ligand, num_recommendations=4):
 
 
 def analyze_ligand_clusters():
+    # Check optional deps
+    if linkage is None or plt is None:
+        print("Clustering dependencies not installed; skipping cluster analysis.")
+        return
     # Normalize all properties for clustering
     properties_normalized = ligand_data.copy()
     for column in property_weights.keys():
@@ -1766,10 +1808,20 @@ def analyze_ligand_clusters():
 
 
 def create_ligand_network(threshold=0.7):
+    if nx is None:
+        print("NetworkX not installed; skipping network graph.")
+        return None
     # Normalize all properties
     properties_normalized = ligand_data.copy()
-    scaler = MinMaxScaler()
-    properties = scaler.fit_transform(ligand_data[list(property_weights.keys())])
+    if MinMaxScaler:
+        scaler = MinMaxScaler()
+        properties = scaler.fit_transform(ligand_data[list(property_weights.keys())])
+    else:
+        arr = ligand_data[list(property_weights.keys())].to_numpy(dtype=float)
+        arr_min = arr.min(axis=0)
+        arr_max = arr.max(axis=0)
+        denom = np.where((arr_max - arr_min) == 0, 1, (arr_max - arr_min))
+        properties = (arr - arr_min) / denom
 
     # Calculate similarity matrix
     similarity_matrix = 1 / (1 + cdist(properties, properties, metric="euclidean"))

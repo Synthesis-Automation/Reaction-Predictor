@@ -10,16 +10,19 @@ import json
 from typing import Dict, List, Optional, Tuple
 import re
 
-# Add reagents directory to path
-sys.path.append(os.path.join(os.path.dirname(__file__), 'reagents'))
+# Ensure project root (containing 'reagents' package) is on sys.path
+_HERE = os.path.dirname(__file__)
+_ROOT = os.path.abspath(_HERE)
+if _ROOT not in sys.path:
+    sys.path.insert(0, _ROOT)
 
 try:
-    from ligand import (
+    from reagents.ligand import (
         recommend_ligands_for_reaction, 
         get_reaction_specific_ligands,
         create_ligand_dataframe
     )
-    from solvent import (
+    from reagents.solvent import (
         recommend_solvents_for_reaction,
         get_reaction_specific_solvents, 
         create_solvent_dataframe
