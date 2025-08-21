@@ -1,0 +1,22 @@
+{
+  "ligand": {
+    "ligand": "P(C6F5)3",
+    "cone_angle": 184,
+    "electronic_parameter": 2084.3,
+    "bite_angle": 0,
+    "steric_bulk": 290,
+    "donor_pka": 1.3,
+    "price_category": 3,
+    "coordination_mode": 1,
+    "reaction_compatibility": {
+      "Cross-Coupling": 0.4,
+      "Hydrogenation": 0.5,
+      "Metathesis": 0.3,
+      "C-H_Activation": 0.3,
+      "Carbonylation": 0.4
+    },
+    "typical_applications": [
+      "Electron-poor substrates"
+    ]
+  }
+}

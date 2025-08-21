@@ -1,0 +1,22 @@
+{
+  "ligand": {
+    "ligand": "AlPhos",
+    "cone_angle": 158,
+    "electronic_parameter": 2063.9,
+    "bite_angle": 0,
+    "steric_bulk": 385,
+    "donor_pka": 4.6,
+    "price_category": 3,
+    "coordination_mode": 1,
+    "reaction_compatibility": {
+      "Cross-Coupling": 0.8,
+      "Hydrogenation": 0.7,
+      "Metathesis": 0.2,
+      "C-H_Activation": 0.6,
+      "Carbonylation": 0.8
+    },
+    "typical_applications": [
+      "Cross-coupling"
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "ligand": {
+    "ligand": "PMe2Ph",
+    "cone_angle": 122,
+    "electronic_parameter": 2065.3,
+    "bite_angle": 0,
+    "steric_bulk": 190,
+    "donor_pka": 6.5,
+    "price_category": 1,
+    "coordination_mode": 1,
+    "reaction_compatibility": {
+      "Cross-Coupling": 0.6,
+      "Hydrogenation": 0.8,
+      "Metathesis": 0.3,
+      "C-H_Activation": 0.4,
+      "Carbonylation": 0.6
+    },
+    "typical_applications": [
+      "Hydrogenation"
+    ]
+  }
+}

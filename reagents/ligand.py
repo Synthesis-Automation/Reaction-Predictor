@@ -1,5 +1,7 @@
 import numpy as np
 import pandas as pd
+import os
+import json
 
 # Optional dependencies (graceful degradation if missing)
 try:  # scikit-learn for scaling
@@ -1390,8 +1392,89 @@ ligand_data = pd.DataFrame(
 )
 
 
-def create_ligand_dataframe():
-    """Create the ligand DataFrame from the ligand_data dictionary"""
+def create_ligand_dataframe(json_path: str | None = None, json_dir: str | None = None, prefer_builtin: bool = False):
+    """
+    Create the ligand DataFrame.
+
+    If a JSON file or directory is present, load from there; otherwise fall back to the
+    built-in table. Supports either:
+      - data/ligands.json (array of ligand objects), or
+      - data/ligands/ (directory of *.json files, one ligand per file)
+    """
+    # Resolve defaults relative to repo root (../data from this file)
+    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, 'data'))
+    default_file = os.path.join(base_dir, 'ligands.json')
+    default_dir = os.path.join(base_dir, 'ligands')
+
+    json_path = json_path or default_file
+    json_dir = json_dir or default_dir
+
+    def _normalize_entry(entry: dict) -> dict:
+        # Accept both 'ligand' and 'name'
+        name = entry.get('ligand') or entry.get('name') or entry.get('Ligand')
+        rc = entry.get('reaction_compatibility') or entry.get('Reaction_Compatibility')
+        # reaction_compatibility can be dict or list or string
+        if isinstance(rc, dict):
+            order = ["Cross-Coupling", "Hydrogenation", "Metathesis", "C-H_Activation", "Carbonylation"]
+            rc_str = ",".join(str(float(rc.get(k, 0.5))) for k in order)
+        elif isinstance(rc, (list, tuple)):
+            rc_str = ",".join(str(float(x)) for x in rc)
+        else:
+            rc_str = rc if isinstance(rc, str) else "0.5,0.5,0.5,0.5,0.5"
+
+        apps = entry.get('typical_applications') or entry.get('Typical_Applications') or ''
+        if isinstance(apps, (list, tuple)):
+            apps_str = ", ".join(map(str, apps))
+        else:
+            apps_str = str(apps)
+
+        return {
+            "Ligand": name,
+            "Cone Angle (°)": entry.get('cone_angle') or entry.get('Cone Angle (°)'),
+            "Electronic Parameter (cm⁻¹)": entry.get('electronic_parameter') or entry.get('Electronic Parameter (cm⁻¹)'),
+            "Bite Angle (°)": entry.get('bite_angle') or entry.get('Bite Angle (°)'),
+            "Steric Bulk (Å³)": entry.get('steric_bulk') or entry.get('Steric Bulk (Å³)'),
+            "Donor Strength (pKa)": entry.get('donor_pka') or entry.get('Donor Strength (pKa)'),
+            "Price Category": entry.get('price_category') or entry.get('Price Category'),
+            "Coordination Mode": entry.get('coordination_mode') or entry.get('Coordination Mode'),
+            "Reaction_Compatibility": rc_str,
+            "Typical_Applications": apps_str,
+        }
+
+    # If explicitly requested, return built-in table
+    if prefer_builtin:
+        return pd.DataFrame(ligand_data)
+
+    # Load from JSON file if available
+    records: list[dict] = []
+    try:
+        if os.path.isfile(json_path):
+            with open(json_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            if isinstance(data, dict) and 'ligands' in data:
+                data = data['ligands']
+            if isinstance(data, list):
+                records = [_normalize_entry(d) for d in data]
+        elif os.path.isdir(json_dir):
+            for fn in os.listdir(json_dir):
+                if fn.lower().endswith('.json'):
+                    with open(os.path.join(json_dir, fn), 'r', encoding='utf-8') as f:
+                        d = json.load(f)
+                    # allow either single object or {"ligand": {...}}
+                    if isinstance(d, dict) and 'ligand' in d and isinstance(d['ligand'], dict):
+                        d = d['ligand']
+                    records.append(_normalize_entry(d))
+    except Exception as e:
+        print(f"Warning: failed to load ligands JSON: {e}")
+        records = []
+
+    if records:
+        df = pd.DataFrame.from_records(records)
+        # Basic validation: require Ligand names present
+        df = df[df['Ligand'].notna() & (df['Ligand'].astype(str).str.len() > 0)]
+        return df.reset_index(drop=True)
+
+    # Fallback to built-in table
     return pd.DataFrame(ligand_data)
 
 
@@ -1558,9 +1641,9 @@ def recommend_ligands_for_reaction(
             compatible_ligands.append(
                 {
                     "index": idx,
-                    "name": row["Ligand"],
+                    "name": row.get("Ligand", row.get("name", "")),
                     "compatibility": compatibility,
-                    "applications": row["Typical_Applications"],
+                    "applications": row.get("Typical_Applications", ""),
                 }
             )
 

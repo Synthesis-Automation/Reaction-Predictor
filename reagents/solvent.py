@@ -1,5 +1,7 @@
 import numpy as np
 import pandas as pd
+import os
+import json
 
 # Optional dependencies (graceful degradation if missing)
 try:  # SciPy distances
@@ -724,8 +726,87 @@ solvent_data = pd.DataFrame(
 )
 
 
-def create_solvent_dataframe():
-    """Create the solvent DataFrame from the solvent_data dictionary"""
+def create_solvent_dataframe(json_path: str | None = None, json_dir: str | None = None, prefer_builtin: bool = False):
+    """
+    Create the solvent DataFrame.
+
+    If a JSON file or directory is present, load from there; otherwise fall back to the
+    built-in table. Supports either:
+      - data/solvents.json (array of solvent objects), or
+      - data/solvents/ (directory of *.json files, one solvent per file)
+    """
+    # Resolve defaults relative to repo root (../data from this file)
+    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, 'data'))
+    default_file = os.path.join(base_dir, 'solvents.json')
+    default_dir = os.path.join(base_dir, 'solvents')
+
+    json_path = json_path or default_file
+    json_dir = json_dir or default_dir
+
+    # If explicitly requested, return built-in table
+    if prefer_builtin:
+        return solvent_data
+
+    def _normalize_entry(entry: dict) -> dict:
+        name = entry.get('solvent') or entry.get('name') or entry.get('Solvent')
+        abbr = entry.get('abbreviation') or entry.get('Abbreviation')
+        cas = entry.get('cas') or entry.get('CAS Number')
+        rc = entry.get('reaction_compatibility') or entry.get('Reaction_Compatibility')
+        if isinstance(rc, dict):
+            order = ["Cross-Coupling", "Hydrogenation", "Metathesis", "C-H_Activation", "Carbonylation"]
+            rc_str = ",".join(str(float(rc.get(k, 0.5))) for k in order)
+        elif isinstance(rc, (list, tuple)):
+            rc_str = ",".join(str(float(x)) for x in rc)
+        else:
+            rc_str = rc if isinstance(rc, str) else "0.5,0.5,0.5,0.5,0.5"
+
+        apps = entry.get('typical_applications') or entry.get('Typical_Applications') or ''
+        if isinstance(apps, (list, tuple)):
+            apps_str = ", ".join(map(str, apps))
+        else:
+            apps_str = str(apps)
+
+        return {
+            "Solvent": name,
+            "CAS Number": cas,
+            "Abbreviation": abbr,
+            "Dielectric Constant": entry.get('dielectric_constant') or entry.get('Dielectric Constant'),
+            "Polarity Index": entry.get('polarity_index') or entry.get('Polarity Index'),
+            "Boiling Point (°C)": entry.get('boiling_point_c') or entry.get('Boiling Point (°C)'),
+            "Density (g/mL)": entry.get('density_g_ml') or entry.get('Density (g/mL)'),
+            "Dipole Moment (D)": entry.get('dipole_moment_d') or entry.get('Dipole Moment (D)'),
+            "Donor Number (DN)": entry.get('donor_number_dn') or entry.get('Donor Number (DN)'),
+            "Hydrogen Bond Donor": entry.get('hydrogen_bond_donor') or entry.get('Hydrogen Bond Donor'),
+            "Reaction_Compatibility": rc_str,
+            "Typical_Applications": apps_str,
+        }
+
+    records: list[dict] = []
+    try:
+        if os.path.isfile(json_path):
+            with open(json_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            if isinstance(data, dict) and 'solvents' in data:
+                data = data['solvents']
+            if isinstance(data, list):
+                records = [_normalize_entry(d) for d in data]
+        elif os.path.isdir(json_dir):
+            for fn in os.listdir(json_dir):
+                if fn.lower().endswith('.json'):
+                    with open(os.path.join(json_dir, fn), 'r', encoding='utf-8') as f:
+                        d = json.load(f)
+                    if isinstance(d, dict) and 'solvent' in d and isinstance(d['solvent'], dict):
+                        d = d['solvent']
+                    records.append(_normalize_entry(d))
+    except Exception as e:
+        print(f"Warning: failed to load solvents JSON: {e}")
+        records = []
+
+    if records:
+        df = pd.DataFrame.from_records(records)
+        df = df[df['Solvent'].notna() & (df['Solvent'].astype(str).str.len() > 0)]
+        return df.reset_index(drop=True)
+
     return solvent_data
 
 
@@ -887,10 +968,10 @@ def recommend_solvents_for_reaction(
             compatible_solvents.append(
                 {
                     "index": idx,
-                    "name": row["Solvent"],
+                    "name": row.get("Solvent", row.get("name", "")),
                     "compatibility": compatibility,
-                    "applications": row["Typical_Applications"],
-                    "abbreviation": row["Abbreviation"],
+                    "applications": row.get("Typical_Applications", ""),
+                    "abbreviation": row.get("Abbreviation", ""),
                 }
             )
 

@@ -1,0 +1,23 @@
+{
+  "ligand": {
+    "ligand": "XantPhos",
+    "cone_angle": 155,
+    "electronic_parameter": 2066.5,
+    "bite_angle": 110,
+    "steric_bulk": 485,
+    "donor_pka": 2.85,
+    "price_category": 3,
+    "coordination_mode": 2,
+    "reaction_compatibility": {
+      "Cross-Coupling": 0.8,
+      "Hydrogenation": 0.8,
+      "Metathesis": 0.4,
+      "C-H_Activation": 0.6,
+      "Carbonylation": 0.8
+    },
+    "typical_applications": [
+      "Cross-coupling",
+      "carbonylation"
+    ]
+  }
+}

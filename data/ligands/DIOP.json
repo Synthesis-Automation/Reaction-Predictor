@@ -1,0 +1,22 @@
+{
+  "ligand": {
+    "ligand": "DIOP",
+    "cone_angle": 125,
+    "electronic_parameter": 2071.8,
+    "bite_angle": 98,
+    "steric_bulk": 410,
+    "donor_pka": 2.79,
+    "price_category": 3,
+    "coordination_mode": 2,
+    "reaction_compatibility": {
+      "Cross-Coupling": 0.7,
+      "Hydrogenation": 0.8,
+      "Metathesis": 0.3,
+      "C-H_Activation": 0.5,
+      "Carbonylation": 0.7
+    },
+    "typical_applications": [
+      "Cross-coupling"
+    ]
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "ligand": {
+    "ligand": "DPPF",
+    "cone_angle": 125,
+    "electronic_parameter": 2072.1,
+    "bite_angle": 96,
+    "steric_bulk": 425,
+    "donor_pka": 2.8,
+    "price_category": 2,
+    "coordination_mode": 2,
+    "reaction_compatibility": {
+      "Cross-Coupling": 0.8,
+      "Hydrogenation": 0.8,
+      "Metathesis": 0.3,
+      "C-H_Activation": 0.6,
+      "Carbonylation": 0.8
+    },
+    "typical_applications": [
+      "Cross-coupling",
+      "carbonylation"
+    ]
+  }
+}

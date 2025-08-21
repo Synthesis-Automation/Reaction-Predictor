@@ -1,0 +1,22 @@
+{
+  "ligand": {
+    "ligand": "DPPE",
+    "cone_angle": 125,
+    "electronic_parameter": 2073.6,
+    "bite_angle": 85,
+    "steric_bulk": 360,
+    "donor_pka": 2.76,
+    "price_category": 1,
+    "coordination_mode": 2,
+    "reaction_compatibility": {
+      "Cross-Coupling": 0.7,
+      "Hydrogenation": 0.8,
+      "Metathesis": 0.3,
+      "C-H_Activation": 0.5,
+      "Carbonylation": 0.7
+    },
+    "typical_applications": [
+      "Cross-coupling"
+    ]
+  }
+}

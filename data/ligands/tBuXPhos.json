@@ -1,0 +1,22 @@
+{
+  "ligand": {
+    "ligand": "tBuXPhos",
+    "cone_angle": 160,
+    "electronic_parameter": 2060.3,
+    "bite_angle": 0,
+    "steric_bulk": 425,
+    "donor_pka": 7.0,
+    "price_category": 4,
+    "coordination_mode": 1,
+    "reaction_compatibility": {
+      "Cross-Coupling": 0.9,
+      "Hydrogenation": 0.6,
+      "Metathesis": 0.2,
+      "C-H_Activation": 0.7,
+      "Carbonylation": 0.8
+    },
+    "typical_applications": [
+      "Sterically hindered substrates"
+    ]
+  }
+}
