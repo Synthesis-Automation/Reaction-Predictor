@@ -1,0 +1,22 @@
+{
+  "ligand": {
+    "ligand": "BINAP",
+    "cone_angle": 165,
+    "electronic_parameter": 2067.8,
+    "bite_angle": 93,
+    "steric_bulk": 520,
+    "donor_pka": 2.75,
+    "price_category": 3,
+    "coordination_mode": 2,
+    "reaction_compatibility": {
+      "Cross-Coupling": 0.8,
+      "Hydrogenation": 0.95,
+      "Metathesis": 0.3,
+      "C-H_Activation": 0.6,
+      "Carbonylation": 0.8
+    },
+    "typical_applications": [
+      "Asymmetric hydrogenation"
+    ]
+  }
+}

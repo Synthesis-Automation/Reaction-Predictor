@@ -1,0 +1,22 @@
+{
+  "ligand": {
+    "ligand": "BIPHEP",
+    "cone_angle": 160,
+    "electronic_parameter": 2067.4,
+    "bite_angle": 92,
+    "steric_bulk": 510,
+    "donor_pka": 2.74,
+    "price_category": 3,
+    "coordination_mode": 2,
+    "reaction_compatibility": {
+      "Cross-Coupling": 0.8,
+      "Hydrogenation": 0.9,
+      "Metathesis": 0.3,
+      "C-H_Activation": 0.6,
+      "Carbonylation": 0.8
+    },
+    "typical_applications": [
+      "Asymmetric reactions"
+    ]
+  }
+}

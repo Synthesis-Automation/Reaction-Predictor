@@ -1,0 +1,22 @@
+{
+  "ligand": {
+    "ligand": "TangPhos",
+    "cone_angle": 128,
+    "electronic_parameter": 2070.8,
+    "bite_angle": 85,
+    "steric_bulk": 390,
+    "donor_pka": 2.78,
+    "price_category": 4,
+    "coordination_mode": 2,
+    "reaction_compatibility": {
+      "Cross-Coupling": 0.7,
+      "Hydrogenation": 0.8,
+      "Metathesis": 0.3,
+      "C-H_Activation": 0.5,
+      "Carbonylation": 0.7
+    },
+    "typical_applications": [
+      "Cross-coupling"
+    ]
+  }
+}

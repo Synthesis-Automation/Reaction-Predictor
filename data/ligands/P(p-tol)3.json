@@ -1,0 +1,22 @@
+{
+  "ligand": {
+    "ligand": "P(p-tol)3",
+    "cone_angle": 145,
+    "electronic_parameter": 2066.7,
+    "bite_angle": 0,
+    "steric_bulk": 265,
+    "donor_pka": 3.84,
+    "price_category": 1,
+    "coordination_mode": 1,
+    "reaction_compatibility": {
+      "Cross-Coupling": 0.7,
+      "Hydrogenation": 0.8,
+      "Metathesis": 0.3,
+      "C-H_Activation": 0.5,
+      "Carbonylation": 0.7
+    },
+    "typical_applications": [
+      "Cross-coupling"
+    ]
+  }
+}

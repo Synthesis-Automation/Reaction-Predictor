@@ -1,0 +1,22 @@
+{
+  "ligand": {
+    "ligand": "PMe3",
+    "cone_angle": 118,
+    "electronic_parameter": 2064.1,
+    "bite_angle": 0,
+    "steric_bulk": 160,
+    "donor_pka": 8.65,
+    "price_category": 1,
+    "coordination_mode": 1,
+    "reaction_compatibility": {
+      "Cross-Coupling": 0.5,
+      "Hydrogenation": 0.7,
+      "Metathesis": 0.3,
+      "C-H_Activation": 0.3,
+      "Carbonylation": 0.5
+    },
+    "typical_applications": [
+      "Small substrate hydrogenation"
+    ]
+  }
+}

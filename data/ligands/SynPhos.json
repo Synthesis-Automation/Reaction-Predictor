@@ -1,0 +1,22 @@
+{
+  "ligand": {
+    "ligand": "SynPhos",
+    "cone_angle": 166,
+    "electronic_parameter": 2066.8,
+    "bite_angle": 94,
+    "steric_bulk": 530,
+    "donor_pka": 2.77,
+    "price_category": 4,
+    "coordination_mode": 2,
+    "reaction_compatibility": {
+      "Cross-Coupling": 0.8,
+      "Hydrogenation": 0.9,
+      "Metathesis": 0.3,
+      "C-H_Activation": 0.6,
+      "Carbonylation": 0.8
+    },
+    "typical_applications": [
+      "Asymmetric reactions"
+    ]
+  }
+}

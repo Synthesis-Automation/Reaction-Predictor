@@ -1,0 +1,22 @@
+{
+  "ligand": {
+    "ligand": "P(mes)3",
+    "cone_angle": 212,
+    "electronic_parameter": 2064.8,
+    "bite_angle": 0,
+    "steric_bulk": 320,
+    "donor_pka": 6.43,
+    "price_category": 2,
+    "coordination_mode": 1,
+    "reaction_compatibility": {
+      "Cross-Coupling": 0.5,
+      "Hydrogenation": 0.6,
+      "Metathesis": 0.3,
+      "C-H_Activation": 0.3,
+      "Carbonylation": 0.5
+    },
+    "typical_applications": [
+      "Bulky substrate catalysis"
+    ]
+  }
+}
