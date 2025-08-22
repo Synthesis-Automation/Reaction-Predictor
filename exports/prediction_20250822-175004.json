@@ -1,11 +1,11 @@
 {
   "meta": {
-    "generated_at": "2025-08-22T17:32:41",
+    "generated_at": "2025-08-22T17:50:04",
     "analysis_type": "enhanced",
     "status": "Enhanced recommendations generated successfully"
   },
   "input": {
-    "reaction_smiles": "Brc1ccccc1.NCC(=O)OC>>COC(=O)CNc1ccccc1",
+    "reaction_smiles": "Brc1ccc2c(c1)cccc2C(C)(C)C.Nc1ccccc1>>CC(C)(C)c1cccc2cc(Nc3ccccc3)ccc12",
     "selected_reaction_type": "C-N Coupling - Ullmann"
   },
   "detection": {
@@ -270,52 +270,53 @@
   "top_conditions": [
     {
       "reaction": {
-        "smiles": "Brc1ccccc1.NCC(=O)OC>>COC(=O)CNc1ccccc1"
+        "smiles": "Brc1ccc2c(c1)cccc2C(C)(C)C.Nc1ccccc1>>CC(C)(C)c1cccc2cc(Nc3ccccc3)ccc12"
       },
-      "starting_materials": [
+      "chemicals": [
         {
           "name": null,
           "cas": null,
-          "smiles": "Brc1ccccc1",
-          "equivalents": null
+          "smiles": "Brc1ccc2c(c1)cccc2C(C)(C)C",
+          "equivalents": null,
+          "role": "starting_material"
         },
         {
           "name": null,
           "cas": null,
-          "smiles": "NCC(=O)OC",
-          "equivalents": null
-        }
-      ],
-      "catalyst": {
-        "metal_precursor": {
+          "smiles": "Nc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
           "name": "CuI",
           "cas": "7681-65-4",
           "smiles": null,
-          "equivalents": null
+          "equivalents": null,
+          "role": "metal_precursor"
         },
-        "ligand": {
+        {
           "name": "BenzP*",
           "cas": null,
           "smiles": null,
-          "equivalents": null
-        }
-      },
-      "additives": [
+          "equivalents": null,
+          "role": "ligand"
+        },
         {
-          "role": "base",
           "name": "K2CO3",
-          "cas": null,
+          "cas": "584-08-7",
           "smiles": null,
-          "equivalents": null
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "Acetic Acid",
+          "abbreviation": "AcOH",
+          "cas": "64-19-7",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
         }
       ],
-      "solvent": {
-        "name": "Acetic Acid",
-        "abbreviation": "AcOH",
-        "cas": "64-19-7",
-        "smiles": null,
-        "volume_ml": null
-      },
       "conditions": {
         "temperature": "80-140°C",
         "time": "6-24 hours",
@@ -324,52 +325,53 @@
     },
     {
       "reaction": {
-        "smiles": "Brc1ccccc1.NCC(=O)OC>>COC(=O)CNc1ccccc1"
+        "smiles": "Brc1ccc2c(c1)cccc2C(C)(C)C.Nc1ccccc1>>CC(C)(C)c1cccc2cc(Nc3ccccc3)ccc12"
       },
-      "starting_materials": [
+      "chemicals": [
         {
           "name": null,
           "cas": null,
-          "smiles": "Brc1ccccc1",
-          "equivalents": null
+          "smiles": "Brc1ccc2c(c1)cccc2C(C)(C)C",
+          "equivalents": null,
+          "role": "starting_material"
         },
         {
           "name": null,
           "cas": null,
-          "smiles": "NCC(=O)OC",
-          "equivalents": null
-        }
-      ],
-      "catalyst": {
-        "metal_precursor": {
+          "smiles": "Nc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
           "name": "CuI",
           "cas": "7681-65-4",
           "smiles": null,
-          "equivalents": null
+          "equivalents": null,
+          "role": "metal_precursor"
         },
-        "ligand": {
+        {
           "name": "BenzP*",
           "cas": null,
           "smiles": null,
-          "equivalents": null
-        }
-      },
-      "additives": [
+          "equivalents": null,
+          "role": "ligand"
+        },
         {
-          "role": "base",
           "name": "K2CO3",
-          "cas": null,
+          "cas": "584-08-7",
           "smiles": null,
-          "equivalents": null
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "Acetone",
+          "abbreviation": "Me2CO",
+          "cas": "67-64-1",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
         }
       ],
-      "solvent": {
-        "name": "Acetone",
-        "abbreviation": "Me2CO",
-        "cas": "67-64-1",
-        "smiles": null,
-        "volume_ml": null
-      },
       "conditions": {
         "temperature": "80-140°C",
         "time": "6-24 hours",
@@ -378,52 +380,53 @@
     },
     {
       "reaction": {
-        "smiles": "Brc1ccccc1.NCC(=O)OC>>COC(=O)CNc1ccccc1"
+        "smiles": "Brc1ccc2c(c1)cccc2C(C)(C)C.Nc1ccccc1>>CC(C)(C)c1cccc2cc(Nc3ccccc3)ccc12"
       },
-      "starting_materials": [
+      "chemicals": [
         {
           "name": null,
           "cas": null,
-          "smiles": "Brc1ccccc1",
-          "equivalents": null
+          "smiles": "Brc1ccc2c(c1)cccc2C(C)(C)C",
+          "equivalents": null,
+          "role": "starting_material"
         },
         {
           "name": null,
           "cas": null,
-          "smiles": "NCC(=O)OC",
-          "equivalents": null
-        }
-      ],
-      "catalyst": {
-        "metal_precursor": {
+          "smiles": "Nc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
           "name": "CuI",
           "cas": "7681-65-4",
           "smiles": null,
-          "equivalents": null
+          "equivalents": null,
+          "role": "metal_precursor"
         },
-        "ligand": {
+        {
           "name": "BenzP*",
           "cas": null,
           "smiles": null,
-          "equivalents": null
-        }
-      },
-      "additives": [
+          "equivalents": null,
+          "role": "ligand"
+        },
         {
-          "role": "base",
           "name": "K2CO3",
-          "cas": null,
+          "cas": "584-08-7",
           "smiles": null,
-          "equivalents": null
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "Acetonitrile",
+          "abbreviation": "MeCN",
+          "cas": "75-05-8",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
         }
       ],
-      "solvent": {
-        "name": "Acetonitrile",
-        "abbreviation": "MeCN",
-        "cas": "75-05-8",
-        "smiles": null,
-        "volume_ml": null
-      },
       "conditions": {
         "temperature": "80-140°C",
         "time": "6-24 hours",
@@ -433,29 +436,28 @@
   ],
   "related_reactions": [
     {
-      "reaction_smiles": "Brc1ccccc1 . CC(=O)c1n[nH]c2cc(Cl)ccc12>>CC(=O)c1nn(-c2ccccc2)c2cc(Cl)ccc12",
-      "similarity": 0.3237833594976452,
-      "yield": 82,
+      "reaction_smiles": "Brc1ccc(-c2nc(-c3ccccc3)nc(-c3ccccc3)n2)cc1 . CC(C)(C)c1ccc2[nH]c3c(-c4ccccc4C(F)(F)F)cc(C(C)(C)C)cc3c2c1>>CC(C)(C)c1ccc2c(c1)c1cc(C(C)(C)C)cc(-c3ccccc3C(F)(F)F)c1n2-c1ccc(-c2nc(-c3ccccc3)nc(-c3ccccc3)n2)cc1",
+      "similarity": 0.26941838649155725,
+      "yield": 70,
       "catalyst": "Cuprous iodide",
-      "ligand": "L-Proline",
-      "solvent": "DMSO",
-      "temperature": 120.0,
-      "time": 2.0,
-      "reference": "Organic Letters (2024), 26(5), 1046-1050. | Li, Jianan; et al | Organic Letters (2024), 26(5), 1046-1050.",
-      "reaction_id": "31-614-CAS-40106798"
+      "ligand": "18-Crown-6",
+      "solvent": "Unresolved CAS 95-50-1",
+      "temperature": 190.0,
+      "time": 20.0,
+      "reference": "ACS Applied Polymer Materials (2024), 6(9), 5256-5267. | Chern, Yaw-Terng; et al | ACS Applied Polymer Materials (2024), 6(9), 5256-5267.",
+      "reaction_id": "31-614-CAS-41704917"
     },
     {
-      "reaction_smiles": "Brc1ccccc1 . Cc1ccc(C)c2c1NCCC2C(=O)O>>Cc1ccc(C)c2c1C(C(=O)O)CCN2c1ccccc1",
-      "similarity": 0.3135792778649922,
-      "yield": 84,
+      "reaction_smiles": "Brc1ccc2ccccc2c1 . OCCOCCN1CCNCC1>>OCCOCCN1CCN(c2ccc3ccccc3c2)CC1",
+      "similarity": 0.2611111111111111,
+      "yield": 94,
       "catalyst": "Cuprous iodide",
-      "ligand": "Pyridine",
-      "solvent": "DMF",
-      "temperature": 120.0,
-      "time": 13.0,
+      "ligand": "1, 2-Benzenediamine, N1, N2-bis(2-phenyl-1-naphthalenyl)-",
+      "solvent": "DMSO",
+      "temperature": 50.0,
+      "time": 16.0,
       "reference": "Organic Letters (2024), 26(5), 1046-1050. | Li, Jianan; et al | Organic Letters (2024), 26(5), 1046-1050.",
-      "reaction_id": "31-614-CAS-42120045"
+      "reaction_id": "31-614-CAS-40801487"
     }
-  ],
-  "related_reactions_file": "exports\\related_20250822-173241.html"
+  ]
 }

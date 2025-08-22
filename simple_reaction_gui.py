@@ -18,7 +18,8 @@ from PyQt6.QtWidgets import (
     QSplitter, QCheckBox, QScrollArea, QProgressBar, QSizePolicy
 )
 from PyQt6.QtCore import Qt, QThread, pyqtSignal, QUrl, QTimer, QMutex
-from PyQt6.QtGui import QFont, QPalette, QColor, QPixmap
+from PyQt6.QtGui import QFont, QPalette, QColor, QPixmap, QImage
+import csv
 import io
 import base64
 import http.server
@@ -43,6 +44,13 @@ from sample_reactions import (
 
 def create_reaction_image(reaction_smiles: str, width: int = 600, height: int = 200) -> QPixmap:
     """Create reaction image from SMILES using RDKit"""
+    # Avoid QPixmap/QPainter before QApplication exists
+    try:
+        from PyQt6.QtWidgets import QApplication  # local import to avoid circulars
+        if QApplication.instance() is None:
+            return QPixmap()  # null pixmap; caller should handle gracefully
+    except Exception:
+        return QPixmap()
     try:
         from rdkit import Chem
         from rdkit.Chem import rdDepictor, AllChem
@@ -110,159 +118,141 @@ def create_reaction_image(reaction_smiles: str, width: int = 600, height: int = 
 
 def create_complete_reaction_image(reactants, products, width, height, base_pixmap=None):
     """Create a complete reaction image with arrow showing all reactants and products"""
-    from PyQt6.QtGui import QPainter, QPen, QBrush, QFont
-    from PyQt6.QtCore import Qt
-    
+    # Avoid QPixmap/QPainter before QApplication exists
     try:
-        from rdkit.Chem.Draw import rdMolDraw2D
-        
-        # Create a new pixmap for the complete reaction
-        pixmap = QPixmap(width, height)
-        pixmap.fill(Qt.GlobalColor.white)
-        
-        painter = QPainter(pixmap)
-        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-        
-        # Calculate layout
-        arrow_width = 60
-        mol_width = (width - arrow_width - 40) // 2  # 40 for margins
-        
-        # Draw ALL reactants on the left
-        reactant_x = 20
-        reactant_y = 10
-        
-        if reactants:
-            try:
-                # Create a combined image for all reactants
-                if len(reactants) == 1:
-                    # Single reactant
-                    drawer = rdMolDraw2D.MolDraw2DCairo(mol_width, height - 20)
-                    drawer.DrawMolecule(reactants[0])
+        from PyQt6.QtWidgets import QApplication
+        if QApplication.instance() is None:
+            return QPixmap()
+    except Exception:
+        return QPixmap()
+
+    from PyQt6.QtGui import QPainter, QPen, QFont
+    from PyQt6.QtCore import Qt
+
+    # Use QImage for offscreen painting; convert to QPixmap at end
+    image = QImage(width, height, QImage.Format.Format_ARGB32)
+    image.fill(Qt.GlobalColor.white)
+    painter = QPainter(image)
+    painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+
+    # Layout
+    arrow_width = 60
+    mol_width = (width - arrow_width - 40) // 2
+    reactant_x = 20
+    reactant_y = 10
+
+    try:
+        from rdkit.Chem.Draw import rdMolDraw2D  # type: ignore
+        rdkit_available = True
+    except Exception:
+        rdkit_available = False
+
+    # Draw reactants
+    try:
+        if reactants and rdkit_available:
+            if len(reactants) == 1:
+                drawer = rdMolDraw2D.MolDraw2DCairo(mol_width, height - 20)
+                drawer.DrawMolecule(reactants[0])
+                drawer.FinishDrawing()
+                img_data = drawer.GetDrawingText()
+                mol_pixmap = QPixmap()
+                if mol_pixmap.loadFromData(img_data):
+                    painter.drawPixmap(reactant_x, reactant_y, mol_pixmap)
+            else:
+                reactant_width = mol_width // len(reactants) - 10
+                plus_width = 15
+                current_x = reactant_x
+                for i, mol in enumerate(reactants):
+                    actual_width = max(reactant_width, 80)
+                    drawer = rdMolDraw2D.MolDraw2DCairo(actual_width, height - 40)
+                    drawer.DrawMolecule(mol)
                     drawer.FinishDrawing()
-                    
                     img_data = drawer.GetDrawingText()
                     mol_pixmap = QPixmap()
                     if mol_pixmap.loadFromData(img_data):
-                        painter.drawPixmap(reactant_x, reactant_y, mol_pixmap)
-                else:
-                    # Multiple reactants - draw them side by side horizontally
-                    reactant_width = mol_width // len(reactants) - 10  # Divide width, leave space for + signs
-                    plus_width = 15  # Width for + signs
-                    
-                    current_x = reactant_x
-                    for i, mol in enumerate(reactants):
-                        # Ensure minimum width for readability
-                        actual_width = max(reactant_width, 80)
-                        
-                        drawer = rdMolDraw2D.MolDraw2DCairo(actual_width, height - 40)
-                        drawer.DrawMolecule(mol)
-                        drawer.FinishDrawing()
-                        
-                        img_data = drawer.GetDrawingText()
-                        mol_pixmap = QPixmap()
-                        if mol_pixmap.loadFromData(img_data):
-                            # Center the molecule vertically
-                            y_centered = reactant_y + (height - 40 - mol_pixmap.height()) // 2
-                            painter.drawPixmap(current_x, y_centered, mol_pixmap)
-                        
-                        # Move to next position
-                        current_x += actual_width
-                        
-                        # Draw + sign between reactants (except for the last one)
-                        if i < len(reactants) - 1:
-                            painter.setPen(QPen(Qt.GlobalColor.black, 2))
-                            painter.setFont(QFont("Arial", 12, QFont.Weight.Bold))
-                            plus_y = height // 2
-                            painter.drawText(current_x + 2, plus_y + 5, "+")
-                            current_x += plus_width
-            except Exception as e:
-                print(f"Error drawing reactants: {e}")
-                # Fallback: draw text
-                painter.setPen(QPen(Qt.GlobalColor.black))
-                painter.setFont(QFont("Arial", 10))
-                painter.drawText(reactant_x, height//2, f"{len(reactants)} Reactants")
-        
-        # Draw arrow in the middle
-        arrow_x = reactant_x + mol_width + 10
-        arrow_y = height // 2
-        
-        painter.setPen(QPen(Qt.GlobalColor.black, 3))
-        painter.drawLine(arrow_x, arrow_y, arrow_x + arrow_width - 15, arrow_y)
-        
-        # Arrow head
-        painter.drawLine(arrow_x + arrow_width - 15, arrow_y, arrow_x + arrow_width - 25, arrow_y - 8)
-        painter.drawLine(arrow_x + arrow_width - 15, arrow_y, arrow_x + arrow_width - 25, arrow_y + 8)
-        
-        # Draw ALL products on the right
-        product_x = arrow_x + arrow_width + 10
-        
-        if products:
-            try:
-                # Create a combined image for all products
-                if len(products) == 1:
-                    # Single product
-                    drawer = rdMolDraw2D.MolDraw2DCairo(mol_width, height - 20)
-                    drawer.DrawMolecule(products[0])
-                    drawer.FinishDrawing()
-                    
-                    img_data = drawer.GetDrawingText()
-                    mol_pixmap = QPixmap()
-                    if mol_pixmap.loadFromData(img_data):
-                        painter.drawPixmap(product_x, reactant_y, mol_pixmap)
-                else:
-                    # Multiple products - draw them side by side horizontally
-                    product_width = mol_width // len(products) - 10  # Divide width, leave space for + signs
-                    plus_width = 15  # Width for + signs
-                    
-                    current_x = product_x
-                    for i, mol in enumerate(products):
-                        # Ensure minimum width for readability
-                        actual_width = max(product_width, 80)
-                        
-                        drawer = rdMolDraw2D.MolDraw2DCairo(actual_width, height - 40)
-                        drawer.DrawMolecule(mol)
-                        drawer.FinishDrawing()
-                        
-                        img_data = drawer.GetDrawingText()
-                        mol_pixmap = QPixmap()
-                        if mol_pixmap.loadFromData(img_data):
-                            # Center the molecule vertically
-                            y_centered = reactant_y + (height - 40 - mol_pixmap.height()) // 2
-                            painter.drawPixmap(current_x, y_centered, mol_pixmap)
-                        
-                        # Move to next position
-                        current_x += actual_width
-                        
-                        # Draw + sign between products (except for the last one)
-                        if i < len(products) - 1:
-                            painter.setPen(QPen(Qt.GlobalColor.black, 2))
-                            painter.setFont(QFont("Arial", 12, QFont.Weight.Bold))
-                            plus_y = height // 2
-                            painter.drawText(current_x + 2, plus_y + 5, "+")
-                            current_x += plus_width
-            except Exception as e:
-                print(f"Error drawing products: {e}")
-                # Fallback: draw text
-                painter.setPen(QPen(Qt.GlobalColor.black))
-                painter.setFont(QFont("Arial", 10))
-                painter.drawText(product_x, height//2, f"{len(products)} Products")
-        
-        painter.end()
-        return pixmap
-        
+                        y_centered = reactant_y + (height - 40 - mol_pixmap.height()) // 2
+                        painter.drawPixmap(current_x, y_centered, mol_pixmap)
+                    current_x += actual_width
+                    if i < len(reactants) - 1:
+                        painter.setPen(QPen(Qt.GlobalColor.black, 2))
+                        painter.setFont(QFont("Arial", 12, QFont.Weight.Bold))
+                        plus_y = height // 2
+                        painter.drawText(current_x + 2, plus_y + 5, "+")
+                        current_x += plus_width
+        else:
+            painter.setPen(QPen(Qt.GlobalColor.black))
+            painter.setFont(QFont("Arial", 10))
+            painter.drawText(reactant_x, height//2, f"{len(reactants)} Reactants")
     except Exception as e:
-        print(f"Error in create_complete_reaction_image: {e}")
-        return create_placeholder_image("Error creating reaction", width, height)
+        print(f"Error drawing reactants: {e}")
+
+    # Arrow
+    arrow_x = reactant_x + mol_width + 10
+    arrow_y = height // 2
+    painter.setPen(QPen(Qt.GlobalColor.black, 3))
+    painter.drawLine(arrow_x, arrow_y, arrow_x + arrow_width - 15, arrow_y)
+    painter.drawLine(arrow_x + arrow_width - 15, arrow_y, arrow_x + arrow_width - 25, arrow_y - 8)
+    painter.drawLine(arrow_x + arrow_width - 15, arrow_y, arrow_x + arrow_width - 25, arrow_y + 8)
+
+    # Products
+    product_x = arrow_x + arrow_width + 10
+    try:
+        if products and rdkit_available:
+            if len(products) == 1:
+                drawer = rdMolDraw2D.MolDraw2DCairo(mol_width, height - 20)
+                drawer.DrawMolecule(products[0])
+                drawer.FinishDrawing()
+                img_data = drawer.GetDrawingText()
+                mol_pixmap = QPixmap()
+                if mol_pixmap.loadFromData(img_data):
+                    painter.drawPixmap(product_x, reactant_y, mol_pixmap)
+            else:
+                product_width = mol_width // len(products) - 10
+                plus_width = 15
+                current_x = product_x
+                for i, mol in enumerate(products):
+                    actual_width = max(product_width, 80)
+                    drawer = rdMolDraw2D.MolDraw2DCairo(actual_width, height - 40)
+                    drawer.DrawMolecule(mol)
+                    drawer.FinishDrawing()
+                    img_data = drawer.GetDrawingText()
+                    mol_pixmap = QPixmap()
+                    if mol_pixmap.loadFromData(img_data):
+                        y_centered = reactant_y + (height - 40 - mol_pixmap.height()) // 2
+                        painter.drawPixmap(current_x, y_centered, mol_pixmap)
+                    current_x += actual_width
+                    if i < len(products) - 1:
+                        painter.setPen(QPen(Qt.GlobalColor.black, 2))
+                        painter.setFont(QFont("Arial", 12, QFont.Weight.Bold))
+                        plus_y = height // 2
+                        painter.drawText(current_x + 2, plus_y + 5, "+")
+                        current_x += plus_width
+        else:
+            painter.setPen(QPen(Qt.GlobalColor.black))
+            painter.setFont(QFont("Arial", 10))
+            painter.drawText(product_x, height//2, f"{len(products)} Products")
+    except Exception as e:
+        print(f"Error drawing products: {e}")
+
+    painter.end()
+    return QPixmap.fromImage(image)
 
 def create_placeholder_image(reaction_smiles: str, width: int = 600, height: int = 200) -> QPixmap:
     """Create a placeholder image when RDKit is not available"""
+    # Avoid QPixmap/QPainter before QApplication exists
+    try:
+        from PyQt6.QtWidgets import QApplication
+        if QApplication.instance() is None:
+            return QPixmap()
+    except Exception:
+        return QPixmap()
     from PyQt6.QtGui import QPainter, QPen, QBrush, QFont
     from PyQt6.QtCore import Qt
     
-    pixmap = QPixmap(width, height)
-    pixmap.fill(Qt.GlobalColor.white)
+    image = QImage(width, height, QImage.Format.Format_ARGB32)
+    image.fill(Qt.GlobalColor.white)
     
-    painter = QPainter(pixmap)
+    painter = QPainter(image)
     painter.setPen(QPen(Qt.GlobalColor.black, 2))
     
     # Draw border
@@ -302,7 +292,7 @@ def create_placeholder_image(reaction_smiles: str, width: int = 600, height: int
     painter.drawText(20, height - 20, "Install RDKit for structure visualization")
     
     painter.end()
-    return pixmap
+    return QPixmap.fromImage(image)
 
 class SimplePredictionWorker(QThread):
     """Enhanced prediction worker with recommendation engine"""
@@ -2260,7 +2250,13 @@ class SimpleReactionGUI(QMainWindow):
             os.makedirs(export_dir, exist_ok=True)
             ts = time.strftime('%Y%m%d-%H%M%S')
 
-            export = self._build_export_payload(result, related_reactions=related_reactions)
+            # Use shared export builder
+            try:
+                from prediction_export import build_export_payload  # type: ignore
+                export = build_export_payload(result, related_reactions)
+            except Exception:
+                export = self._build_export_payload(result, related_reactions=related_reactions)
+
             out_path = os.path.join(export_dir, f'prediction_{ts}.json')
             with open(out_path, 'w', encoding='utf-8') as f:
                 json.dump(export, f, ensure_ascii=False, indent=2)
@@ -2366,6 +2362,72 @@ class SimpleReactionGUI(QMainWindow):
             else:
                 return {'name': 'Pd(OAc)2', 'cas': '3375-31-3', 'smiles': None, 'equivalents': None}
 
+        # Lightweight CAS lookup from data/cas_dictionary.csv for ligands/bases
+        def _load_cas_map():
+            cas_by_token = {}
+            cas_by_name = {}
+            try:
+                data_dir = os.path.join(os.path.dirname(__file__), 'data')
+                path = os.path.join(data_dir, 'cas_dictionary.csv')
+                with open(path, 'r', encoding='utf-8') as f:
+                    reader = csv.DictReader(f)
+                    for row in reader:
+                        cas = (row.get('CAS') or '').strip()
+                        name = (row.get('Name') or '').strip()
+                        token = (row.get('Token') or '').strip()
+                        if cas:
+                            if token:
+                                cas_by_token[token.lower()] = cas
+                            if name:
+                                cas_by_name[name.lower()] = cas
+            except Exception:
+                pass
+            # Common synonyms/aliases
+            aliases = {
+                'k2co3': 'K2CO3',
+                'cs2co3': 'Cs2CO3',
+                'k3po4': 'K3PO4',
+                'kotbu': 'KOtBu',
+                'potassium tert-butoxide': 'KOtBu',
+                'naotbu': 'NaOtBu',
+                'dipea': 'DIPEA',
+                'dbu': 'DBU',
+                'pyridine': 'Pyridine',
+                'xphos': 'XPhos',
+                'sphos': 'SPhos',
+                'ruphos': 'RuPhos',
+                'brettphos': 'BrettPhos',
+                'tbuxphos': 'tBuXPhos',
+                'johnphos': 'JohnPhos',
+                'xantphos': 'XantPhos',
+                'dppe': 'DPPE',
+                'dppf': 'DPPF',
+                'binap': 'BINAP',
+            }
+            return cas_by_token, cas_by_name, aliases
+
+        cas_by_token, cas_by_name, alias_map = _load_cas_map()
+
+        def _lookup_cas(name: str | None):
+            if not name:
+                return None
+            key = name.strip().lower()
+            # direct token hit
+            if key in cas_by_token:
+                return cas_by_token[key]
+            # direct name hit
+            if key in cas_by_name:
+                return cas_by_name[key]
+            # alias to token/name
+            if key in alias_map:
+                alias = alias_map[key]
+                ak = alias.lower()
+                if ak in cas_by_token:
+                    return cas_by_token[ak]
+                if ak in cas_by_name:
+                    return cas_by_name[ak]
+            return None
+
         top_conditions = []
         for c in (recs.get('combined_conditions', []) or [])[:3]:
             conditions = c.get('typical_conditions', {}) or {}
@@ -2377,11 +2439,13 @@ class SimpleReactionGUI(QMainWindow):
             # Metal precursor (based on detected type)
             mp = _default_metal_precursor(detected_type)
             chemicals.append({**mp, 'role': 'metal_precursor'})
-            # Ligand
-            chemicals.append({'name': c.get('ligand'), 'cas': None, 'smiles': None, 'equivalents': None, 'role': 'ligand'})
+            # Ligand with CAS lookup
+            lig_name = c.get('ligand')
+            chemicals.append({'name': lig_name, 'cas': _lookup_cas(lig_name), 'smiles': None, 'equivalents': None, 'role': 'ligand'})
             # Base
             if base_name:
-                chemicals.append({'name': base_name, 'cas': None, 'smiles': None, 'equivalents': None, 'role': 'base'})
+                # Default 2.0 eq for bases if not specified
+                chemicals.append({'name': base_name, 'cas': _lookup_cas(base_name), 'smiles': None, 'equivalents': 2.0, 'role': 'base'})
             # Solvent
             chemicals.append({'name': c.get('solvent'), 'abbreviation': c.get('solvent_abbreviation'), 'cas': _solvent_cas(c.get('solvent')), 'smiles': None, 'equivalents': None, 'role': 'solvent'})
 

@@ -1,11 +1,11 @@
 {
   "meta": {
-    "generated_at": "2025-08-22T15:19:14",
+    "generated_at": "2025-08-22T18:43:16",
     "analysis_type": "enhanced",
     "status": "Enhanced recommendations generated successfully"
   },
   "input": {
-    "reaction_smiles": "Brc1ccc2ccccc2c1.NCC>>CCNc1ccc2ccccc2c1",
+    "reaction_smiles": "c1ccccc1>>Oc1ccccc1",
     "selected_reaction_type": "Auto detect reaction type"
   },
   "detection": {
@@ -39,7 +39,8 @@
           "base": "K₂CO₃ or Cs₂CO₃",
           "catalyst_loading": "1-5 mol%"
         },
-        "synergy_bonus": 0.1
+        "synergy_bonus": 0.1,
+        "suggested_base": null
       },
       {
         "ligand": "SPhos",
@@ -56,7 +57,8 @@
           "base": "K₂CO₃ or Cs₂CO₃",
           "catalyst_loading": "1-5 mol%"
         },
-        "synergy_bonus": 0.0
+        "synergy_bonus": 0.0,
+        "suggested_base": null
       },
       {
         "ligand": "SPhos",
@@ -73,7 +75,8 @@
           "base": "K₂CO₃ or Cs₂CO₃",
           "catalyst_loading": "1-5 mol%"
         },
-        "synergy_bonus": 0.0
+        "synergy_bonus": 0.0,
+        "suggested_base": null
       },
       {
         "ligand": "SPhos",
@@ -90,7 +93,8 @@
           "base": "K₂CO₃ or Cs₂CO₃",
           "catalyst_loading": "1-5 mol%"
         },
-        "synergy_bonus": 0.0
+        "synergy_bonus": 0.0,
+        "suggested_base": null
       },
       {
         "ligand": "XPhos",
@@ -107,7 +111,8 @@
           "base": "K₂CO₃ or Cs₂CO₃",
           "catalyst_loading": "1-5 mol%"
         },
-        "synergy_bonus": 0.0
+        "synergy_bonus": 0.0,
+        "suggested_base": null
       }
     ],
     "ligands": [
@@ -257,5 +262,166 @@
       ]
     }
   },
-  "related_reactions": []
+  "top_conditions": [
+    {
+      "reaction": {
+        "smiles": "c1ccccc1>>Oc1ccccc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "c1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "Pd(OAc)2",
+          "cas": "3375-31-3",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "XPhos",
+          "cas": "98327-87-8",
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "K₂CO₃ or Cs₂CO₃",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "THF",
+          "abbreviation": "THF",
+          "cas": "109-99-9",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-120°C",
+        "time": "4-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    },
+    {
+      "reaction": {
+        "smiles": "c1ccccc1>>Oc1ccccc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "c1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "Pd(OAc)2",
+          "cas": "3375-31-3",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "SPhos",
+          "cas": "161265-03-8",
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "K₂CO₃ or Cs₂CO₃",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "Dimethylformamide",
+          "abbreviation": "DMF",
+          "cas": "68-12-2",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-120°C",
+        "time": "4-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    },
+    {
+      "reaction": {
+        "smiles": "c1ccccc1>>Oc1ccccc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "c1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "Pd(OAc)2",
+          "cas": "3375-31-3",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "SPhos",
+          "cas": "161265-03-8",
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "K₂CO₃ or Cs₂CO₃",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "THF",
+          "abbreviation": "THF",
+          "cas": "109-99-9",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-120°C",
+        "time": "4-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    }
+  ],
+  "related_reactions": [
+    {
+      "reaction_smiles": "Brc1ccc(C)cc1.CN(C)C>>CN(C)c1ccc(C)cc1",
+      "yield": 92.5,
+      "catalyst": "Pd2(dba)3",
+      "ligand": "XPhos",
+      "similarity": 0.87
+    },
+    {
+      "reaction_smiles": "Ic1cccc(C(F)(F)F)c1.Nc1ccccc1>>FC(F)(F)c1cccc(Nc2ccccc2)c1",
+      "yield": 76.8,
+      "catalyst": "Pd(OAc)2",
+      "ligand": "XPhos",
+      "similarity": 0.79
+    }
+  ]
 }

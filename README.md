@@ -206,7 +206,23 @@ pip install pyinstaller
 pyinstaller --onefile --windowed simple_reaction_gui.py
 ```
 
-## 🚀 Next Steps
+## �️ Command-line Predictor
+
+In addition to the GUI, a CLI app is available and shares the same enhanced recommendation engine and export format.
+
+PowerShell examples:
+
+```powershell
+# Inline JSON
+python predict_cli.py '{"reaction_smiles": "Brc1ccc2c(c1)cccc2C(C)(C)C.Nc1ccccc1>>CC(C)(C)c1cccc2cc(Nc3ccccc3)ccc12", "selected_reaction_type": "C-N Coupling - Ullmann"}'
+
+# From a file
+Get-Content .\input.json | python predict_cli.py
+```
+
+The CLI prints the JSON export to stdout.
+
+## �🚀 Next Steps
 
 This is a basic interface ready for:
 - ✅ **Prediction System Integration**
