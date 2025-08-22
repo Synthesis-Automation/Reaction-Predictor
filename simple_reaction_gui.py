@@ -1921,8 +1921,12 @@ class SimpleReactionGUI(QMainWindow):
         placeholder_label.setMinimumHeight(450)  # Further increased from 300 to 450
         self.related_reactions_layout.addWidget(placeholder_label)
     
-    def get_related_reactions_from_dataset(self, input_smiles, top_k=2):
-        """Find related reactions from actual dataset using chemical similarity"""
+    def get_related_reactions_from_dataset(self, input_smiles, top_k=2, reaction_type=None):
+        """Find related reactions from actual dataset using chemical similarity.
+
+        If reaction_type hints at Ullmann, prefer the Ullmann dataset; otherwise use Buchwald.
+        Falls back gracefully when files are not present.
+        """
         try:
             import pandas as pd
             import json
@@ -1938,11 +1942,30 @@ class SimpleReactionGUI(QMainWindow):
                 rdkit_available = False
                 print("RDKit not available - using fallback similarity")
             
-            # Load the Buchwald reactions dataset
-            dataset_path = os.path.join(os.path.dirname(__file__), 'data', 'buchwald_reactions.csv')
-            
-            if not os.path.exists(dataset_path):
-                print(f"Dataset not found at {dataset_path}")
+            # Select dataset based on reaction_type hint
+            base_dir = os.path.dirname(__file__)
+            rt = (reaction_type or "").lower() if isinstance(reaction_type, str) else ""
+
+            # Candidate paths for each dataset
+            buchwald_candidates = [
+                os.path.join(base_dir, 'data', 'buchwald_reactions.csv'),
+                os.path.join(base_dir, 'data', 'reaction_dataset', 'buchwald_reactions.csv')
+            ]
+            ullmann_candidates = [
+                os.path.join(base_dir, 'data', 'Ullman_2024_full.csv'),
+                os.path.join(base_dir, 'data', 'reaction_dataset', 'Ullman_2024_full.csv')
+            ]
+
+            candidates = ullmann_candidates if 'ullmann' in rt else buchwald_candidates
+
+            dataset_path = next((p for p in candidates if os.path.exists(p)), None)
+            if dataset_path is None:
+                # Try the other dataset type as a fallback
+                alt_candidates = buchwald_candidates if candidates is ullmann_candidates else ullmann_candidates
+                dataset_path = next((p for p in alt_candidates if os.path.exists(p)), None)
+
+            if not dataset_path:
+                print("No reaction dataset found (checked Buchwald and Ullmann).")
                 return self.get_mock_related_reactions(input_smiles)
             
             # Read the dataset
@@ -2053,7 +2076,20 @@ class SimpleReactionGUI(QMainWindow):
             if json_str.startswith('[') and json_str.endswith(']'):
                 parsed = json.loads(json_str)
                 if isinstance(parsed, list) and len(parsed) > 0:
-                    return parsed[0]  # Return first item
+                    # Heuristic: Ullmann dataset sometimes tokenizes a single long name
+                    # into many short fragments. If many short tokens, join with spaces.
+                    try:
+                        items = [str(x).strip() for x in parsed if str(x).strip()]
+                        if not items:
+                            return 'N/A'
+                        avg_len = sum(len(it) for it in items) / max(1, len(items))
+                        if len(items) > 3 and avg_len < 8:
+                            return " ".join(items)
+                        # Otherwise, join multiple entries with comma for readability
+                        return ", ".join(items)
+                    except Exception:
+                        # Fallback to first item
+                        return str(parsed[0])
                 return 'N/A'
             
             # Handle plain string
@@ -2231,7 +2267,13 @@ class SimpleReactionGUI(QMainWindow):
         if not related_reactions:
             reaction_smiles = result.get('reaction_smiles', '')
             if reaction_smiles:
-                related_reactions = self.get_related_reactions_from_dataset(reaction_smiles)
+                # Determine the best available reaction type hint
+                rt_hint = (
+                    result.get('recommendations', {}).get('reaction_type')
+                    or result.get('reaction_type')
+                    or self.reaction_type_combo.currentText()
+                )
+                related_reactions = self.get_related_reactions_from_dataset(reaction_smiles, reaction_type=rt_hint)
                 if not related_reactions:
                     detected_type = result.get('recommendations', {}).get('reaction_type', '')
                     if (analysis_type == 'buchwald_hartwig' or 

@@ -55,7 +55,7 @@ class EnhancedRecommendationEngine:
         """Analyze and determine the reaction type from SMILES"""
         
         # If user specified a type, try to map it
-        if suggested_type and suggested_type != "Auto-detect":
+        if suggested_type and suggested_type not in ("Auto-detect", "Auto detect reaction type"):
             mapped_type = self._map_reaction_type(suggested_type)
             if mapped_type:
                 return mapped_type
@@ -85,14 +85,27 @@ class EnhancedRecommendationEngine:
     def _map_reaction_type(self, gui_type: str) -> Optional[str]:
         """Map GUI reaction types to our enhanced system types"""
         mapping = {
+            # Couplings
             "Suzuki-Miyaura Coupling": "Cross-Coupling",
-            "Buchwald-Hartwig Amination": "Cross-Coupling", 
+            "C-C Coupling - Suzuki-Miyaura": "Cross-Coupling",
+            "Buchwald-Hartwig Amination": "Cross-Coupling",
+            "C-N Coupling - Buchwald-Hartwig": "Cross-Coupling",
             "Heck Coupling": "Cross-Coupling",
+            "C-C Coupling - Heck": "Cross-Coupling",
             "Sonogashira Coupling": "Cross-Coupling",
+            "C-C Coupling - Sonogashira": "Cross-Coupling",
             "Stille Coupling": "Cross-Coupling",
+            "C-C Coupling - Stille": "Cross-Coupling",
             "Negishi Coupling": "Cross-Coupling",
+            "C-C Coupling - Negishi": "Cross-Coupling",
             "Chan-Lam Coupling": "Cross-Coupling",
+            "C-N Coupling - Chan-Lam": "Cross-Coupling",
+            # Ullmann variants
             "Ullmann Ether Synthesis": "Cross-Coupling",
+            "Ullmann Reaction": "Cross-Coupling",
+            "C-N Coupling - Ullmann": "Cross-Coupling",
+            "C-O Coupling - Ullmann Ether": "Cross-Coupling",
+            # Other categories
             "Hydrogenation": "Hydrogenation",
             "Carbonylation": "Carbonylation",
             "Oxidation": "C-H_Activation",
