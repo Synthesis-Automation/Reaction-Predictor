@@ -375,36 +375,8 @@ property_weights = {
 }
 
 
-excel_path = "solvent_database.xlsx"
-if OPENPYXL_AVAILABLE:
-    try:
-        with pd.ExcelWriter(excel_path, engine="openpyxl") as writer:
-            create_solvent_dataframe().to_excel(writer, sheet_name="Solvent Properties", index=False)
-            properties = ["CAS Number", "Abbreviation"] + list(property_weights.keys())
-            weights = [0.00, 0.00] + list(property_weights.values())
-            descriptions = [
-                "Chemical Abstracts Service registry number",
-                "Common abbreviation used in literature",
-                "Relative permittivity - measure of polarity",
-                "Empirical measure of solvent polarity",
-                "Temperature at normal pressure where liquid->gas",
-                "Mass per unit volume at 20°C",
-                "Measure of charge separation",
-                "Lewis basicity measure",
-                "Ability to donate hydrogen bonds",
-            ]
-            while len(descriptions) < len(properties):
-                descriptions.append("")
-            info_data = pd.DataFrame({
-                "Property": properties,
-                "Weight": weights,
-                "Description": descriptions[: len(properties)],
-            })
-            info_data.to_excel(writer, sheet_name="Property Information", index=False)
-    except Exception:
-        pass
-else:
-    print("Note: openpyxl not installed; skipping solvent Excel export")
+## Removed automatic Excel export (solvent_database.xlsx) on import as it's not relevant for GUI runtime.
+## If needed, provide an explicit utility function elsewhere to generate the workbook on demand.
 
 
 # Legacy helpers using optional libs; guarded for availability
@@ -509,436 +481,53 @@ def create_solvent_network(threshold=0.7):
     plt.close()
 
 
-def create_solvent_dataframe(json_path: str | None = None, json_dir: str | None = None, prefer_builtin: bool = False):
+ 
+
+def export_solvent_excel(excel_path: str = "solvent_database.xlsx") -> bool:
+    """Export the solvent database to an Excel file on demand (no side effects at import).
+
+    Returns True on success, False otherwise.
     """
-    Create the solvent DataFrame.
-
-    If a JSON file or directory is present, load from there; otherwise fall back to the
-    built-in table. Supports either:
-      - data/solvents.json (array of solvent objects), or
-      - data/solvents/ (directory of *.json files, one solvent per file)
-    """
-    # Resolve defaults relative to repo root (../data from this file)
-    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, 'data'))
-    default_file = os.path.join(base_dir, 'solvents.json')
-    default_dir = os.path.join(base_dir, 'solvents')
-
-    json_path = json_path or default_file
-    json_dir = json_dir or default_dir
-
-    # prefer_builtin is deprecated; JSON is the source of truth now.
-
-    def _normalize_entry(entry: dict) -> dict:
-        name = entry.get('solvent') or entry.get('name') or entry.get('Solvent')
-        abbr = entry.get('abbreviation') or entry.get('Abbreviation')
-        cas = entry.get('cas') or entry.get('CAS Number')
-        rc = entry.get('reaction_compatibility') or entry.get('Reaction_Compatibility')
-        if isinstance(rc, dict):
-            order = ["Cross-Coupling", "Hydrogenation", "Metathesis", "C-H_Activation", "Carbonylation"]
-            rc_str = ",".join(str(float(rc.get(k, 0.5))) for k in order)
-        elif isinstance(rc, (list, tuple)):
-            rc_str = ",".join(str(float(x)) for x in rc)
-        else:
-            rc_str = rc if isinstance(rc, str) else "0.5,0.5,0.5,0.5,0.5"
-
-        apps = entry.get('typical_applications') or entry.get('Typical_Applications') or ''
-        if isinstance(apps, (list, tuple)):
-            apps_str = ", ".join(map(str, apps))
-        else:
-            apps_str = str(apps)
-
-        return {
-            "Solvent": name,
-            "CAS Number": cas,
-            "Abbreviation": abbr,
-            "Dielectric Constant": entry.get('dielectric_constant') or entry.get('Dielectric Constant'),
-            "Polarity Index": entry.get('polarity_index') or entry.get('Polarity Index'),
-            "Boiling Point (°C)": entry.get('boiling_point_c') or entry.get('Boiling Point (°C)'),
-            "Density (g/mL)": entry.get('density_g_ml') or entry.get('Density (g/mL)'),
-            "Dipole Moment (D)": entry.get('dipole_moment_d') or entry.get('Dipole Moment (D)'),
-            "Donor Number (DN)": entry.get('donor_number_dn') or entry.get('Donor Number (DN)'),
-            "Hydrogen Bond Donor": entry.get('hydrogen_bond_donor') or entry.get('Hydrogen Bond Donor'),
-            "Reaction_Compatibility": rc_str,
-            "Typical_Applications": apps_str,
-        }
-
-    records: list[dict] = []
+    if not OPENPYXL_AVAILABLE:
+        print("Note: openpyxl not installed; skipping solvent Excel export")
+        return False
     try:
-        if os.path.isfile(json_path):
-            with open(json_path, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-            if isinstance(data, dict) and 'solvents' in data:
-                data = data['solvents']
-            if isinstance(data, list):
-                records = [_normalize_entry(d) for d in data]
-        elif os.path.isdir(json_dir):
-            for fn in os.listdir(json_dir):
-                if fn.lower().endswith('.json'):
-                    with open(os.path.join(json_dir, fn), 'r', encoding='utf-8') as f:
-                        d = json.load(f)
-                    if isinstance(d, dict) and 'solvent' in d and isinstance(d['solvent'], dict):
-                        d = d['solvent']
-                    records.append(_normalize_entry(d))
-    except Exception as e:
-        print(f"Warning: failed to load solvents JSON: {e}")
-        records = []
+        with pd.ExcelWriter(excel_path, engine="openpyxl") as writer:
+            # Main data sheet
+            create_solvent_dataframe().to_excel(writer, sheet_name="Solvent Properties", index=False)
 
-    if records:
-        df = pd.DataFrame.from_records(records)
-        df = df[df['Solvent'].notna() & (df['Solvent'].astype(str).str.len() > 0)]
-        return df.reset_index(drop=True)
+            # Additional information sheet with aligned arrays
+            properties = ["CAS Number", "Abbreviation"] + list(property_weights.keys())
+            weights = [0.00, 0.00] + list(property_weights.values())
+            descriptions = [
+                "Chemical Abstracts Service registry number",
+                "Common abbreviation used in literature",
+                "Relative permittivity - measure of polarity",
+                "Empirical measure of solvent polarity",
+                "Temperature at normal pressure where liquid->gas",
+                "Mass per unit volume at 20°C",
+                "Measure of charge separation",
+                "Lewis basicity measure",
+                "Ability to donate hydrogen bonds",
+            ]
 
-    # Fallback: return empty DataFrame with expected columns
-    return pd.DataFrame(columns=EXPECTED_SOLVENT_COLUMNS)
+            # Ensure all lists have the same length
+            while len(descriptions) < len(properties):
+                descriptions.append("")
 
-
-# Initialize a module-level DataFrame for backward compatibility with existing code
-solvent_data = create_solvent_dataframe()
-
-
-def create_solvent_feature_matrix():
-    """Create a normalized feature matrix for machine learning operations"""
-    df = create_solvent_dataframe()
-
-    # Select numerical features (using actual column names from DataFrame)
-    feature_columns = [
-        "Dielectric Constant",
-        "Polarity Index",
-        "Boiling Point (°C)",
-        "Density (g/mL)",
-        "Dipole Moment (D)",
-        "Donor Number (DN)",
-        "Hydrogen Bond Donor",
-    ]
-
-    X = []
-    for _, row in df.iterrows():
-        features = []
-        for col in feature_columns:
-            if col in df.columns:
-                features.append(row[col])
-            else:
-                features.append(0)  # Default value if column missing
-        X.append(features)
-
-    # Normalize features
-    X = np.array(X)
-    scaler = MinMaxScaler()
-    X_normalized = scaler.fit_transform(X)
-
-    return X_normalized
-
-
-# Reaction-specific property weights for solvents
-SOLVENT_REACTION_WEIGHTS = {
-    "Cross-Coupling": {
-        "Dielectric Constant": 0.15,
-        "Polarity Index": 0.20,
-        "Boiling Point (°C)": 0.10,
-        "Density (g/mL)": 0.05,
-        "Dipole Moment (D)": 0.15,
-        "Donor Number (DN)": 0.25,
-        "Hydrogen Bond Donor": 0.10,
-    },
-    "Hydrogenation": {
-        "Dielectric Constant": 0.10,
-        "Polarity Index": 0.15,
-        "Boiling Point (°C)": 0.15,
-        "Density (g/mL)": 0.05,
-        "Dipole Moment (D)": 0.10,
-        "Donor Number (DN)": 0.35,
-        "Hydrogen Bond Donor": 0.10,
-    },
-    "Metathesis": {
-        "Dielectric Constant": 0.20,
-        "Polarity Index": 0.25,
-        "Boiling Point (°C)": 0.15,
-        "Density (g/mL)": 0.05,
-        "Dipole Moment (D)": 0.10,
-        "Donor Number (DN)": 0.05,
-        "Hydrogen Bond Donor": 0.20,
-    },
-    "C-H_Activation": {
-        "Dielectric Constant": 0.15,
-        "Polarity Index": 0.25,
-        "Boiling Point (°C)": 0.20,
-        "Density (g/mL)": 0.05,
-        "Dipole Moment (D)": 0.15,
-        "Donor Number (DN)": 0.10,
-        "Hydrogen Bond Donor": 0.10,
-    },
-    "Carbonylation": {
-        "Dielectric Constant": 0.15,
-        "Polarity Index": 0.20,
-        "Boiling Point (°C)": 0.10,
-        "Density (g/mL)": 0.05,
-        "Dipole Moment (D)": 0.20,
-        "Donor Number (DN)": 0.20,
-        "Hydrogen Bond Donor": 0.10,
-    },
-}
-
-
-def parse_solvent_reaction_compatibility(compatibility_str, reaction_type):
-    """Parse reaction compatibility string and return score for specific reaction type"""
-    reaction_types = [
-        "Cross-Coupling",
-        "Hydrogenation",
-        "Metathesis",
-        "C-H_Activation",
-        "Carbonylation",
-    ]
-
-    if reaction_type not in reaction_types:
-        return 0.5  # Default compatibility for unknown reactions
-
-    try:
-        scores = [float(x) for x in compatibility_str.split(",")]
-        reaction_idx = reaction_types.index(reaction_type)
-        return scores[reaction_idx] if reaction_idx < len(scores) else 0.5
-    except:
-        return 0.5
-
-
-def calculate_solvent_weighted_similarity(
-    solvent1_features, solvent2_features, weights
-):
-    """Calculate weighted similarity between two solvents based on reaction-specific weights"""
-    similarity = 0.0
-
-    feature_names = [
-        "Dielectric Constant",
-        "Polarity Index",
-        "Boiling Point (°C)",
-        "Density (g/mL)",
-        "Dipole Moment (D)",
-        "Donor Number (DN)",
-        "Hydrogen Bond Donor",
-    ]
-
-    for i, feature in enumerate(feature_names):
-        if feature in weights:
-            # Normalized difference (0 = identical, 1 = maximum difference)
-            max_val = max(abs(solvent1_features[i]), abs(solvent2_features[i]), 1)
-            diff = abs(solvent1_features[i] - solvent2_features[i]) / max_val
-            similarity += weights[feature] * (1 - diff)
-
-    return similarity
-
-
-def recommend_solvents_for_reaction(
-    target_solvent=None, reaction_type="Cross-Coupling", top_n=5, min_compatibility=0.3
-):
-    """
-    Recommend solvents for a specific reaction type.
-
-    Parameters:
-    - target_solvent: Name of reference solvent (optional)
-    - reaction_type: Type of reaction ('Cross-Coupling', 'Hydrogenation', 'Metathesis',
-                    'C-H_Activation', 'Carbonylation')
-    - top_n: Number of recommendations to return
-    - min_compatibility: Minimum compatibility score for the reaction type
-
-    Returns:
-    - List of dictionaries with solvent recommendations
-    """
-    df = create_solvent_dataframe()
-
-    # Filter solvents by reaction compatibility
-    compatible_solvents = []
-    for idx, row in df.iterrows():
-        compatibility = parse_solvent_reaction_compatibility(
-            row["Reaction_Compatibility"], reaction_type
-        )
-        if compatibility >= min_compatibility:
-            compatible_solvents.append(
+            info_data = pd.DataFrame(
                 {
-                    "index": idx,
-                    "name": row.get("Solvent", row.get("name", "")),
-                    "compatibility": compatibility,
-                    "applications": row.get("Typical_Applications", ""),
-                    "abbreviation": row.get("Abbreviation", ""),
+                    "Property": properties,
+                    "Weight": weights,
+                    "Description": descriptions[: len(properties)],
                 }
             )
-
-    # Sort by compatibility score
-    compatible_solvents.sort(key=lambda x: x["compatibility"], reverse=True)
-
-    # If target solvent is specified, calculate similarity scores
-    if target_solvent:
-        target_idx = None
-        for idx, name in enumerate(df["Solvent"]):
-            if name.lower() == target_solvent.lower():
-                target_idx = idx
-                break
-
-        if target_idx is not None:
-            X = create_solvent_feature_matrix()
-            target_features = X[target_idx]
-            weights = SOLVENT_REACTION_WEIGHTS.get(
-                reaction_type, SOLVENT_REACTION_WEIGHTS["Cross-Coupling"]
-            )
-
-            # Calculate similarity scores
-            for solvent in compatible_solvents:
-                if solvent["index"] != target_idx:  # Don't include the target itself
-                    solvent_features = X[solvent["index"]]
-                    similarity = calculate_solvent_weighted_similarity(
-                        target_features, solvent_features, weights
-                    )
-                    solvent["similarity"] = similarity
-                else:
-                    solvent["similarity"] = 0  # Remove target from recommendations
-
-            # Sort by similarity score (keeping only compatible solvents)
-            compatible_solvents = [
-                s for s in compatible_solvents if s["index"] != target_idx
-            ]
-            compatible_solvents.sort(
-                key=lambda x: (x["compatibility"] * 0.6 + x["similarity"] * 0.4),
-                reverse=True,
-            )
-
-    # Return top recommendations
-    recommendations = []
-    for i, solvent in enumerate(compatible_solvents[:top_n]):
-        rec = {
-            "rank": i + 1,
-            "solvent": solvent["name"],
-            "abbreviation": solvent["abbreviation"],
-            "compatibility_score": round(solvent["compatibility"], 3),
-            "applications": solvent["applications"],
-            "reaction_suitability": reaction_type,
-        }
-
-        if "similarity" in solvent:
-            rec["similarity_score"] = round(solvent["similarity"], 3)
-            rec["combined_score"] = round(
-                solvent["compatibility"] * 0.6 + solvent["similarity"] * 0.4, 3
-            )
-
-        recommendations.append(rec)
-
-    return recommendations
-
-
-def get_reaction_specific_solvents(reaction_type, property_preferences=None):
-    """
-    Get solvents optimized for a specific reaction type with optional property preferences.
-
-    Parameters:
-    - reaction_type: Type of reaction
-    - property_preferences: Dict with preferred ranges for properties
-
-    Returns:
-    - Filtered solvent recommendations
-    """
-    recommendations = recommend_solvents_for_reaction(
-        reaction_type=reaction_type, top_n=10, min_compatibility=0.4
-    )
-
-    if property_preferences:
-        df = create_solvent_dataframe()
-        filtered_recs = []
-
-        for rec in recommendations:
-            solvent_name = rec["solvent"]
-            solvent_idx = df[df["Solvent"] == solvent_name].index[0]
-
-            # Check property preferences
-            meets_criteria = True
-            if "bp_max" in property_preferences:
-                if (
-                    df.loc[solvent_idx, "Boiling Point (°C)"]
-                    > property_preferences["bp_max"]
-                ):
-                    meets_criteria = False
-
-            if "bp_min" in property_preferences:
-                if (
-                    df.loc[solvent_idx, "Boiling Point (°C)"]
-                    < property_preferences["bp_min"]
-                ):
-                    meets_criteria = False
-
-            if "polarity_max" in property_preferences:
-                if (
-                    df.loc[solvent_idx, "Polarity Index"]
-                    > property_preferences["polarity_max"]
-                ):
-                    meets_criteria = False
-
-            if "polarity_min" in property_preferences:
-                if (
-                    df.loc[solvent_idx, "Polarity Index"]
-                    < property_preferences["polarity_min"]
-                ):
-                    meets_criteria = False
-
-            if "protic" in property_preferences:
-                is_protic = df.loc[solvent_idx, "Hydrogen Bond Donor"] > 0.5
-                if property_preferences["protic"] != is_protic:
-                    meets_criteria = False
-
-            if meets_criteria:
-                filtered_recs.append(rec)
-
-        return filtered_recs[:5]  # Return top 5 that meet criteria
-
-    return recommendations
-
-
-# Define property weights
-property_weights = {
-    "CAS Number": 0.00,  # Zero weight - not used for similarity
-    "Abbreviation": 0.00,  # Zero weight - not used for similarity
-    "Dielectric Constant": 0.08,
-    "Polarity Index": 0.27,
-    "Boiling Point (°C)": 0.02,
-    "Density (g/mL)": 0.02,
-    "Dipole Moment (D)": 0.11,
-    "Donor Number (DN)": 0.20,
-    "Hydrogen Bond Donor": 0.30,
-}
-
-# Export solvent database to Excel with the new properties
-excel_path = "solvent_database.xlsx"
-if OPENPYXL_AVAILABLE:
-    with pd.ExcelWriter(excel_path, engine="openpyxl") as writer:
-        # Main data sheet
-        solvent_data.to_excel(writer, sheet_name="Solvent Properties", index=False)
-
-        # Additional information sheet with aligned arrays
-        properties = ["CAS Number", "Abbreviation"] + list(property_weights.keys())
-        weights = [0.00, 0.00] + list(property_weights.values())
-        descriptions = [
-            "Chemical Abstracts Service registry number",
-            "Common abbreviation used in literature",
-            "Relative permittivity - measure of polarity",
-            "Empirical measure of solvent polarity",
-            "Temperature at normal pressure where liquid->gas",
-            "Mass per unit volume at 20°C",
-            "Measure of charge separation",
-            "Lewis basicity measure",
-            "Ability to donate hydrogen bonds",
-        ]
-
-        # Ensure all lists have the same length
-        while len(descriptions) < len(properties):
-            descriptions.append("")
-
-        info_data = pd.DataFrame(
-            {
-                "Property": properties,
-                "Weight": weights,
-                "Description": descriptions[: len(properties)],  # Trim to match length
-            }
-        )
-        info_data.to_excel(writer, sheet_name="Property Information", index=False)
-
-    print(f"Solvent database has been exported to {excel_path}")
-else:
-    print("Note: openpyxl not installed; skipping solvent Excel export")
+            info_data.to_excel(writer, sheet_name="Property Information", index=False)
+        print(f"Solvent database exported to {excel_path}")
+        return True
+    except Exception as e:
+        print(f"Failed to export solvent Excel: {e}")
+        return False
 
 
 # Function to recommend similar solvents
