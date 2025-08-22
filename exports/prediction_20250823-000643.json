@@ -1,11 +1,11 @@
 {
   "meta": {
-    "generated_at": "2025-08-22T17:50:04",
+    "generated_at": "2025-08-23T00:06:43",
     "analysis_type": "enhanced",
     "status": "Enhanced recommendations generated successfully"
   },
   "input": {
-    "reaction_smiles": "Brc1ccc2c(c1)cccc2C(C)(C)C.Nc1ccccc1>>CC(C)(C)c1cccc2cc(Nc3ccccc3)ccc12",
+    "reaction_smiles": "Brc1ccc2ccccc2c1.NCC>>CCNc1ccc2ccccc2c1",
     "selected_reaction_type": "C-N Coupling - Ullmann"
   },
   "detection": {
@@ -25,13 +25,13 @@
   "recommendations": {
     "combined": [
       {
-        "ligand": "BenzP*",
-        "ligand_compatibility": 1.0,
-        "solvent": "Acetic Acid",
-        "solvent_abbreviation": "AcOH",
-        "solvent_compatibility": 0.5,
-        "combined_score": 0.75,
-        "recommendation_confidence": "Medium",
+        "ligand": "FerroTANE",
+        "ligand_compatibility": 0.8,
+        "solvent": "Dimethylformamide",
+        "solvent_abbreviation": "DMF",
+        "solvent_compatibility": 0.9,
+        "combined_score": 0.85,
+        "recommendation_confidence": "High",
         "typical_conditions": {
           "temperature": "80-140°C",
           "time": "6-24 hours",
@@ -44,13 +44,13 @@
         "suggested_base": "K2CO3"
       },
       {
-        "ligand": "BenzP*",
-        "ligand_compatibility": 1.0,
-        "solvent": "Acetone",
-        "solvent_abbreviation": "Me2CO",
-        "solvent_compatibility": 0.5,
-        "combined_score": 0.75,
-        "recommendation_confidence": "Medium",
+        "ligand": "FerroTANE",
+        "ligand_compatibility": 0.8,
+        "solvent": "THF",
+        "solvent_abbreviation": "THF",
+        "solvent_compatibility": 0.9,
+        "combined_score": 0.85,
+        "recommendation_confidence": "High",
         "typical_conditions": {
           "temperature": "80-140°C",
           "time": "6-24 hours",
@@ -63,13 +63,13 @@
         "suggested_base": "K2CO3"
       },
       {
-        "ligand": "BenzP*",
-        "ligand_compatibility": 1.0,
-        "solvent": "Acetonitrile",
-        "solvent_abbreviation": "MeCN",
-        "solvent_compatibility": 0.5,
-        "combined_score": 0.75,
-        "recommendation_confidence": "Medium",
+        "ligand": "FerroTANE",
+        "ligand_compatibility": 0.8,
+        "solvent": "N-Methyl-2-pyrrolidone",
+        "solvent_abbreviation": "NMP",
+        "solvent_compatibility": 0.9,
+        "combined_score": 0.85,
+        "recommendation_confidence": "High",
         "typical_conditions": {
           "temperature": "80-140°C",
           "time": "6-24 hours",
@@ -82,13 +82,13 @@
         "suggested_base": "K2CO3"
       },
       {
-        "ligand": "IPent",
-        "ligand_compatibility": 1.0,
-        "solvent": "Acetic Acid",
-        "solvent_abbreviation": "AcOH",
-        "solvent_compatibility": 0.5,
-        "combined_score": 0.75,
-        "recommendation_confidence": "Medium",
+        "ligand": "CyPF-tBu",
+        "ligand_compatibility": 0.8,
+        "solvent": "Dimethylformamide",
+        "solvent_abbreviation": "DMF",
+        "solvent_compatibility": 0.9,
+        "combined_score": 0.85,
+        "recommendation_confidence": "High",
         "typical_conditions": {
           "temperature": "80-140°C",
           "time": "6-24 hours",
@@ -101,13 +101,13 @@
         "suggested_base": "K2CO3"
       },
       {
-        "ligand": "IPent",
-        "ligand_compatibility": 1.0,
-        "solvent": "Acetone",
-        "solvent_abbreviation": "Me2CO",
-        "solvent_compatibility": 0.5,
-        "combined_score": 0.75,
-        "recommendation_confidence": "Medium",
+        "ligand": "CyPF-tBu",
+        "ligand_compatibility": 0.8,
+        "solvent": "THF",
+        "solvent_abbreviation": "THF",
+        "solvent_compatibility": 0.9,
+        "combined_score": 0.85,
+        "recommendation_confidence": "High",
         "typical_conditions": {
           "temperature": "80-140°C",
           "time": "6-24 hours",
@@ -122,145 +122,157 @@
     ],
     "ligands": [
       {
-        "ligand": "BenzP*",
-        "compatibility_score": 1.0,
-        "applications": "Cross-coupling",
+        "ligand": "FerroTANE",
+        "compatibility_score": 0.8,
+        "applications": "Asymmetric catalysis",
+        "reaction_suitability": "Ullmann"
+      },
+      {
+        "ligand": "CyPF-tBu",
+        "compatibility_score": 0.8,
+        "applications": "Cross-coupling, carbonylation",
+        "reaction_suitability": "Ullmann"
+      },
+      {
+        "ligand": "BIBOP",
+        "compatibility_score": 0.8,
+        "applications": "Cross-coupling, carbonylation",
         "reaction_suitability": "Ullmann"
       },
       {
         "ligand": "IPent",
-        "compatibility_score": 1.0,
+        "compatibility_score": 0.8,
         "applications": "Metathesis",
         "reaction_suitability": "Ullmann"
       },
       {
-        "ligand": "BIPHEP",
+        "ligand": "IHept",
         "compatibility_score": 0.8,
-        "applications": "Asymmetric reactions",
+        "applications": "Metathesis",
         "reaction_suitability": "Ullmann"
       },
       {
-        "ligand": "MeO-BIPHEP",
-        "compatibility_score": 0.8,
-        "applications": "Asymmetric reactions",
+        "ligand": "1,10-Phenanthroline",
+        "compatibility_score": 0.75,
+        "applications": "Ullmann Cu-catalyzed",
         "reaction_suitability": "Ullmann"
       },
       {
-        "ligand": "FerroTANE",
-        "compatibility_score": 0.8,
-        "applications": "Asymmetric catalysis",
+        "ligand": "2,2'-Bipyridine",
+        "compatibility_score": 0.75,
+        "applications": "Ullmann Cu-catalyzed",
         "reaction_suitability": "Ullmann"
       }
     ],
     "solvents": [
       {
-        "solvent": "Acetic Acid",
-        "abbreviation": "AcOH",
-        "compatibility_score": 0.5,
-        "applications": "Carbonylation, esterification",
+        "solvent": "Dimethylformamide",
+        "abbreviation": "DMF",
+        "compatibility_score": 0.9,
+        "applications": "Cross-coupling, amide formation",
         "reaction_suitability": "Ullmann"
       },
       {
-        "solvent": "Acetone",
-        "abbreviation": "Me2CO",
-        "compatibility_score": 0.5,
-        "applications": "Cross-coupling, extraction",
+        "solvent": "THF",
+        "abbreviation": "THF",
+        "compatibility_score": 0.9,
+        "applications": "Cross-coupling, organometallic",
+        "reaction_suitability": "Ullmann"
+      },
+      {
+        "solvent": "N-Methyl-2-pyrrolidone",
+        "abbreviation": "NMP",
+        "compatibility_score": 0.9,
+        "applications": "Polar aprotic reactions",
+        "reaction_suitability": "Ullmann"
+      },
+      {
+        "solvent": "MeTHF",
+        "abbreviation": "MeTHF",
+        "compatibility_score": 0.9,
+        "applications": "Green THF alternative",
         "reaction_suitability": "Ullmann"
       },
       {
         "solvent": "Acetonitrile",
         "abbreviation": "MeCN",
-        "compatibility_score": 0.5,
+        "compatibility_score": 0.8,
         "applications": "Cross-coupling, C-H activation",
-        "reaction_suitability": "Ullmann"
-      },
-      {
-        "solvent": "Benzene",
-        "abbreviation": "PhH",
-        "compatibility_score": 0.5,
-        "applications": "C-H activation, aromatic chemistry",
-        "reaction_suitability": "Ullmann"
-      },
-      {
-        "solvent": "1-Butanol",
-        "abbreviation": "BuOH",
-        "compatibility_score": 0.5,
-        "applications": "Hydrogenation, extraction",
         "reaction_suitability": "Ullmann"
       }
     ],
     "alternatives": {
       "budget_friendly_ligands": [
         {
-          "rank": 3,
-          "ligand": "BIPHEP",
-          "compatibility_score": 0.8,
-          "applications": "Asymmetric reactions",
-          "reaction_suitability": "Ullmann"
-        },
-        {
-          "rank": 4,
-          "ligand": "MeO-BIPHEP",
-          "compatibility_score": 0.8,
-          "applications": "Asymmetric reactions",
-          "reaction_suitability": "Ullmann"
-        },
-        {
-          "rank": 10,
+          "rank": 6,
           "ligand": "IAd",
           "compatibility_score": 0.8,
           "applications": "Metathesis",
+          "reaction_suitability": "Ullmann"
+        },
+        {
+          "rank": 7,
+          "ligand": "IAd*",
+          "compatibility_score": 0.8,
+          "applications": "Metathesis",
+          "reaction_suitability": "Ullmann"
+        },
+        {
+          "rank": 9,
+          "ligand": "SPhos",
+          "compatibility_score": 0.7,
+          "applications": "Buchwald-Hartwig amination",
           "reaction_suitability": "Ullmann"
         }
       ],
       "low_boiling_solvents": [
         {
           "rank": 2,
-          "solvent": "Acetone",
-          "abbreviation": "Me2CO",
-          "compatibility_score": 0.5,
-          "applications": "Cross-coupling, extraction",
-          "reaction_suitability": "Ullmann"
-        },
-        {
-          "rank": 3,
-          "solvent": "Acetonitrile",
-          "abbreviation": "MeCN",
-          "compatibility_score": 0.5,
-          "applications": "Cross-coupling, C-H activation",
+          "solvent": "THF",
+          "abbreviation": "THF",
+          "compatibility_score": 0.9,
+          "applications": "Cross-coupling, organometallic",
           "reaction_suitability": "Ullmann"
         },
         {
           "rank": 4,
-          "solvent": "Benzene",
-          "abbreviation": "PhH",
-          "compatibility_score": 0.5,
-          "applications": "C-H activation, aromatic chemistry",
+          "solvent": "MeTHF",
+          "abbreviation": "MeTHF",
+          "compatibility_score": 0.9,
+          "applications": "Green THF alternative",
+          "reaction_suitability": "Ullmann"
+        },
+        {
+          "rank": 5,
+          "solvent": "Acetonitrile",
+          "abbreviation": "MeCN",
+          "compatibility_score": 0.8,
+          "applications": "Cross-coupling, C-H activation",
           "reaction_suitability": "Ullmann"
         }
       ],
       "green_solvents": [
         {
-          "rank": 1,
-          "solvent": "Acetic Acid",
-          "abbreviation": "AcOH",
-          "compatibility_score": 0.5,
-          "applications": "Carbonylation, esterification",
-          "reaction_suitability": "Ullmann"
-        },
-        {
           "rank": 2,
-          "solvent": "Acetone",
-          "abbreviation": "Me2CO",
-          "compatibility_score": 0.5,
-          "applications": "Cross-coupling, extraction",
+          "solvent": "THF",
+          "abbreviation": "THF",
+          "compatibility_score": 0.9,
+          "applications": "Cross-coupling, organometallic",
           "reaction_suitability": "Ullmann"
         },
         {
-          "rank": 3,
+          "rank": 4,
+          "solvent": "MeTHF",
+          "abbreviation": "MeTHF",
+          "compatibility_score": 0.9,
+          "applications": "Green THF alternative",
+          "reaction_suitability": "Ullmann"
+        },
+        {
+          "rank": 5,
           "solvent": "Acetonitrile",
           "abbreviation": "MeCN",
-          "compatibility_score": 0.5,
+          "compatibility_score": 0.8,
           "applications": "Cross-coupling, C-H activation",
           "reaction_suitability": "Ullmann"
         }
@@ -270,20 +282,20 @@
   "top_conditions": [
     {
       "reaction": {
-        "smiles": "Brc1ccc2c(c1)cccc2C(C)(C)C.Nc1ccccc1>>CC(C)(C)c1cccc2cc(Nc3ccccc3)ccc12"
+        "smiles": "Brc1ccc2ccccc2c1.NCC>>CCNc1ccc2ccccc2c1"
       },
       "chemicals": [
         {
           "name": null,
           "cas": null,
-          "smiles": "Brc1ccc2c(c1)cccc2C(C)(C)C",
+          "smiles": "Brc1ccc2ccccc2c1",
           "equivalents": null,
           "role": "starting_material"
         },
         {
           "name": null,
           "cas": null,
-          "smiles": "Nc1ccccc1",
+          "smiles": "NCC",
           "equivalents": null,
           "role": "starting_material"
         },
@@ -295,7 +307,7 @@
           "role": "metal_precursor"
         },
         {
-          "name": "BenzP*",
+          "name": "FerroTANE",
           "cas": null,
           "smiles": null,
           "equivalents": null,
@@ -309,9 +321,9 @@
           "role": "base"
         },
         {
-          "name": "Acetic Acid",
-          "abbreviation": "AcOH",
-          "cas": "64-19-7",
+          "name": "Dimethylformamide",
+          "abbreviation": "DMF",
+          "cas": "68-12-2",
           "smiles": null,
           "equivalents": null,
           "role": "solvent"
@@ -325,20 +337,20 @@
     },
     {
       "reaction": {
-        "smiles": "Brc1ccc2c(c1)cccc2C(C)(C)C.Nc1ccccc1>>CC(C)(C)c1cccc2cc(Nc3ccccc3)ccc12"
+        "smiles": "Brc1ccc2ccccc2c1.NCC>>CCNc1ccc2ccccc2c1"
       },
       "chemicals": [
         {
           "name": null,
           "cas": null,
-          "smiles": "Brc1ccc2c(c1)cccc2C(C)(C)C",
+          "smiles": "Brc1ccc2ccccc2c1",
           "equivalents": null,
           "role": "starting_material"
         },
         {
           "name": null,
           "cas": null,
-          "smiles": "Nc1ccccc1",
+          "smiles": "NCC",
           "equivalents": null,
           "role": "starting_material"
         },
@@ -350,7 +362,7 @@
           "role": "metal_precursor"
         },
         {
-          "name": "BenzP*",
+          "name": "FerroTANE",
           "cas": null,
           "smiles": null,
           "equivalents": null,
@@ -364,9 +376,9 @@
           "role": "base"
         },
         {
-          "name": "Acetone",
-          "abbreviation": "Me2CO",
-          "cas": "67-64-1",
+          "name": "THF",
+          "abbreviation": "THF",
+          "cas": "109-99-9",
           "smiles": null,
           "equivalents": null,
           "role": "solvent"
@@ -380,20 +392,20 @@
     },
     {
       "reaction": {
-        "smiles": "Brc1ccc2c(c1)cccc2C(C)(C)C.Nc1ccccc1>>CC(C)(C)c1cccc2cc(Nc3ccccc3)ccc12"
+        "smiles": "Brc1ccc2ccccc2c1.NCC>>CCNc1ccc2ccccc2c1"
       },
       "chemicals": [
         {
           "name": null,
           "cas": null,
-          "smiles": "Brc1ccc2c(c1)cccc2C(C)(C)C",
+          "smiles": "Brc1ccc2ccccc2c1",
           "equivalents": null,
           "role": "starting_material"
         },
         {
           "name": null,
           "cas": null,
-          "smiles": "Nc1ccccc1",
+          "smiles": "NCC",
           "equivalents": null,
           "role": "starting_material"
         },
@@ -405,7 +417,7 @@
           "role": "metal_precursor"
         },
         {
-          "name": "BenzP*",
+          "name": "FerroTANE",
           "cas": null,
           "smiles": null,
           "equivalents": null,
@@ -419,9 +431,9 @@
           "role": "base"
         },
         {
-          "name": "Acetonitrile",
-          "abbreviation": "MeCN",
-          "cas": "75-05-8",
+          "name": "N-Methyl-2-pyrrolidone",
+          "abbreviation": "NMP",
+          "cas": "872-50-4",
           "smiles": null,
           "equivalents": null,
           "role": "solvent"
@@ -436,20 +448,8 @@
   ],
   "related_reactions": [
     {
-      "reaction_smiles": "Brc1ccc(-c2nc(-c3ccccc3)nc(-c3ccccc3)n2)cc1 . CC(C)(C)c1ccc2[nH]c3c(-c4ccccc4C(F)(F)F)cc(C(C)(C)C)cc3c2c1>>CC(C)(C)c1ccc2c(c1)c1cc(C(C)(C)C)cc(-c3ccccc3C(F)(F)F)c1n2-c1ccc(-c2nc(-c3ccccc3)nc(-c3ccccc3)n2)cc1",
-      "similarity": 0.26941838649155725,
-      "yield": 70,
-      "catalyst": "Cuprous iodide",
-      "ligand": "18-Crown-6",
-      "solvent": "Unresolved CAS 95-50-1",
-      "temperature": 190.0,
-      "time": 20.0,
-      "reference": "ACS Applied Polymer Materials (2024), 6(9), 5256-5267. | Chern, Yaw-Terng; et al | ACS Applied Polymer Materials (2024), 6(9), 5256-5267.",
-      "reaction_id": "31-614-CAS-41704917"
-    },
-    {
       "reaction_smiles": "Brc1ccc2ccccc2c1 . OCCOCCN1CCNCC1>>OCCOCCN1CCN(c2ccc3ccccc3c2)CC1",
-      "similarity": 0.2611111111111111,
+      "similarity": 0.4945652173913043,
       "yield": 94,
       "catalyst": "Cuprous iodide",
       "ligand": "1, 2-Benzenediamine, N1, N2-bis(2-phenyl-1-naphthalenyl)-",
@@ -458,6 +458,18 @@
       "time": 16.0,
       "reference": "Organic Letters (2024), 26(5), 1046-1050. | Li, Jianan; et al | Organic Letters (2024), 26(5), 1046-1050.",
       "reaction_id": "31-614-CAS-40801487"
+    },
+    {
+      "reaction_smiles": "c1ccc2cc(-c3cc4ccccc4[nH]3)ccc2c1 . Ic1ccccc1>>c1ccc(-n2c(-c3ccc4ccccc4c3)cc3ccccc32)cc1",
+      "similarity": 0.2827949901120633,
+      "yield": 60,
+      "catalyst": "Cuprous iodide",
+      "ligand": "1, 10-Phenanthroline",
+      "solvent": "DMF",
+      "temperature": 160.0,
+      "time": 23.5,
+      "reference": "ACS Applied Polymer Materials (2024), 6(9), 5256-5267. | Chern, Yaw-Terng; et al | ACS Applied Polymer Materials (2024), 6(9), 5256-5267.",
+      "reaction_id": "31-614-CAS-41356936"
     }
   ]
 }

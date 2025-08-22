@@ -291,14 +291,32 @@ def recommend_ligands_for_reaction(target_ligand=None, reaction_type="Cross-Coup
     def _is_phosphine(name: str) -> bool:
         n = (name or "").lower()
         tokens = [
-            'phos', 'phosphine', 'pph3', 'binap', 'dppf', 'dppp', 'dppe', 'xantphos', 'johnphos', 'davephos', 'pc y3', 'p(cy)3', 'ptbu', 'p(tbu)3'
+            # Generic markers
+            'phos', 'phosphine', 'pph3',
+            # Common mono/bidentate phosphines
+            'binap', 'dppf', 'dppp', 'dppe', 'xantphos', 'dpephos',
+            'johnphos', 'davephos', 'qphos', 'alphos', 'brettphos', 'tbuxphos',
+            # Trialkyl/aryl phosphines
+            'pcy3', 'p(cy)3', 'ptbu', 'p(tbu)3', 'pme3', 'pet3', 'pri3', 'pi pr', 'pn bu',
+            # Additional chiral/bidentate families often ending with * or lacking 'phos'
+            'biphep', 'meo-biphep', 'f12-biphep', 'meo-f12-biphep', 'benzp', 'segphos', 'josiphos', 'synphos', 'tunephos',
+            'ferrotane', 'cypf', 'bibop', 'jorphos', 'difluorphos', 'josi'
+        ]
+        return any(t in n for t in tokens)
+
+    def _is_nhc(name: str) -> bool:
+        n = (name or "").lower()
+        tokens = [
+            'ipr', 'imes', 'sipr', 'simes', 'i hept', 'ihept', 'i pent', 'ipent', 'iad', 'icy', 'itbu', 'ibox', 'ibiox', 'idd'
         ]
         return any(t in n for t in tokens)
 
     def _is_n_ligand(name: str) -> bool:
         n = (name or "").lower()
         tokens = [
-            'phen', 'phenanthroline', 'bipy', "bipyridine", 'proline', 'en', 'ethylenediamine', 'dmeda', 'diamine', 'pyridine'
+            'phen', 'phenanthroline', 'bipy', "bipyridine", 'proline',
+            # Avoid overly broad substring 'en' which matched many unrelated names (e.g., BenzP*)
+            'ethylenediamine', 'dmeda', 'diamine', 'pyridine', 'neocuproine', 'bathophenanthroline', 'bathocuproine'
         ]
         return any(t in n for t in tokens)
 
@@ -307,9 +325,11 @@ def recommend_ligands_for_reaction(target_ligand=None, reaction_type="Cross-Coup
             nm = lig.get('name', '')
             boost = 0.0
             if _is_n_ligand(nm):
-                boost += 0.2
+                boost += 0.25
             if _is_phosphine(nm):
-                boost -= 0.2
+                boost -= 0.25
+            if _is_nhc(nm):
+                boost -= 0.15
             lig['adjusted'] = max(0.0, min(1.0, lig['compatibility'] + boost))
         # Sort by adjusted score if present
         compatible.sort(key=lambda x: x.get('adjusted', x['compatibility']), reverse=True)
@@ -331,37 +351,32 @@ def recommend_ligands_for_reaction(target_ligand=None, reaction_type="Cross-Coup
             rec["combined_score"] = round(base_comp * 0.6 + lig.get("similarity", 0) * 0.4, 3)
         recs.append(rec)
 
-    # Ensure presence of at least some N-ligands for Ullmann
+    # Ensure presence of at least some N-ligands for Ullmann — and surface them within top_n
     if isinstance(reaction_type, str) and 'ullmann' in reaction_type.lower():
         n_count = sum(1 for r in recs if _is_n_ligand(r.get('ligand', '')))
-        if n_count < max(1, top_n // 2):
-            preferred = ["1,10-Phenanthroline", "2,2'-Bipyridine", "L-Proline", "Ethylenediamine", "DMEDA"]
+        needed = max(1, top_n // 2)
+        if n_count < needed:
+            preferred = ["1,10-Phenanthroline", "2,2'-Bipyridine", "L-Proline", "Ethylenediamine", "DMEDA", "Neocuproine"]
             existing_names = {r['ligand'] for r in recs}
             for name in preferred:
+                if n_count >= needed:
+                    break
                 if name in existing_names:
                     continue
-                # Only add if present in DB (to keep consistency), otherwise add curated placeholder
                 row = df[df['Ligand'] == name]
-                if not row.empty:
-                    recs.append({
-                        "rank": len(recs) + 1,
-                        "ligand": name,
-                        "compatibility_score": 0.8,
-                        "applications": row.iloc[0].get("Typical_Applications", "Ullmann Cu-catalyzed"),
-                        "reaction_suitability": reaction_type,
-                    })
-                else:
-                    recs.append({
-                        "rank": len(recs) + 1,
-                        "ligand": name,
-                        "compatibility_score": 0.75,
-                        "applications": "Ullmann Cu-catalyzed",
-                        "reaction_suitability": reaction_type,
-                        "source": "curated"
-                    })
+                score = 0.85 if not row.empty else 0.8
+                recs.append({
+                    "rank": len(recs) + 1,
+                    "ligand": name,
+                    "compatibility_score": score,
+                    "applications": (row.iloc[0].get("Typical_Applications", "Ullmann Cu-catalyzed") if not row.empty else "Ullmann Cu-catalyzed"),
+                    "reaction_suitability": reaction_type,
+                    "source": (None if not row.empty else "curated")
+                })
                 n_count += 1
-                if n_count >= max(1, top_n // 2):
-                    break
+            # Re-sort to ensure N-ligands appear in the surfaced list and trim to top_n
+            recs.sort(key=lambda r: r.get('compatibility_score', 0), reverse=True)
+            recs = recs[:top_n]
     return recs
 
 
