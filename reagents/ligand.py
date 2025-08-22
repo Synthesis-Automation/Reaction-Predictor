@@ -2,6 +2,7 @@ import os
 import json
 import numpy as np
 import pandas as pd
+from typing import Dict, Optional
 
 # Optional dependencies (graceful degradation)
 try:
@@ -248,16 +249,30 @@ def calculate_weighted_similarity(ligand1_features, ligand2_features, weights):
     return similarity
 
 
-def recommend_ligands_for_reaction(target_ligand=None, reaction_type="Cross-Coupling", top_n=5, min_compatibility=0.3):
+def recommend_ligands_for_reaction(
+    target_ligand=None,
+    reaction_type: str = "Cross-Coupling",
+    top_n: int = 5,
+    min_compatibility: float = 0.3,
+    evidence_ligands: Optional[Dict[str, float]] = None,
+):
     df = create_ligand_dataframe()
 
     compatible = []
     for idx, row in df.iterrows():
         compatibility = parse_reaction_compatibility(row.get("Reaction_Compatibility", ""), reaction_type)
-        if compatibility >= min_compatibility:
+        name = row.get("Ligand", row.get("name", ""))
+        # Include if meets threshold OR appears in evidence list (even if slightly below cutoff)
+        in_evidence = False
+        if evidence_ligands:
+            try:
+                in_evidence = str(name).lower() in {k.lower() for k in evidence_ligands.keys()}
+            except Exception:
+                in_evidence = False
+        if compatibility >= min_compatibility or in_evidence:
             compatible.append({
                 "index": idx,
-                "name": row.get("Ligand", row.get("name", "")),
+                "name": name,
                 "compatibility": compatibility,
                 "applications": row.get("Typical_Applications", ""),
             })
@@ -300,7 +315,7 @@ def recommend_ligands_for_reaction(target_ligand=None, reaction_type="Cross-Coup
             'pcy3', 'p(cy)3', 'ptbu', 'p(tbu)3', 'pme3', 'pet3', 'pri3', 'pi pr', 'pn bu',
             # Additional chiral/bidentate families often ending with * or lacking 'phos'
             'biphep', 'meo-biphep', 'f12-biphep', 'meo-f12-biphep', 'benzp', 'segphos', 'josiphos', 'synphos', 'tunephos',
-            'ferrotane', 'cypf', 'bibop', 'jorphos', 'difluorphos', 'josi'
+            'ferrotane', 'cypf', 'bibop', 'jorphos', 'difluorphos', 'josi', 'quinap'
         ]
         return any(t in n for t in tokens)
 
@@ -330,11 +345,34 @@ def recommend_ligands_for_reaction(target_ligand=None, reaction_type="Cross-Coup
                 boost -= 0.25
             if _is_nhc(nm):
                 boost -= 0.15
-            lig['adjusted'] = max(0.0, min(1.0, lig['compatibility'] + boost))
+            lig['adjusted'] = max(0.0, min(1.0, lig.get('adjusted', lig['compatibility']) + boost))
         # Sort by adjusted score if present
         compatible.sort(key=lambda x: x.get('adjusted', x['compatibility']), reverse=True)
     else:
         compatible.sort(key=lambda x: x["compatibility"], reverse=True)
+
+    # Evidence-aware boost (reaction-agnostic): gently boost ligands observed in similar dataset reactions
+    if evidence_ligands:
+        # Normalize evidence weights to [0,1]
+        try:
+            max_w = max(evidence_ligands.values()) if evidence_ligands else 0.0
+        except Exception:
+            max_w = 0.0
+        for lig in compatible:
+            nm = str(lig.get('name', ''))
+            # case-insensitive match
+            weight = 0.0
+            for k, v in (evidence_ligands or {}).items():
+                if str(k).lower() == nm.lower():
+                    weight = v
+                    break
+            if max_w > 0 and weight > 0:
+                norm = weight / max_w
+                # bounded gentle boost 0.05..0.15
+                boost = 0.05 + 0.10 * float(norm)
+                lig['adjusted'] = max(0.0, min(1.0, lig.get('adjusted', lig['compatibility']) + boost))
+        # Apply re-sort after evidence boost
+        compatible.sort(key=lambda x: x.get('adjusted', x['compatibility']), reverse=True)
 
     recs = []
     for i, lig in enumerate(compatible[:top_n]):
@@ -356,7 +394,7 @@ def recommend_ligands_for_reaction(target_ligand=None, reaction_type="Cross-Coup
         n_count = sum(1 for r in recs if _is_n_ligand(r.get('ligand', '')))
         needed = max(1, top_n // 2)
         if n_count < needed:
-            preferred = ["1,10-Phenanthroline", "2,2'-Bipyridine", "L-Proline", "Ethylenediamine", "DMEDA", "Neocuproine"]
+            preferred = ["L-Proline", "1,10-Phenanthroline", "2,2'-Bipyridine", "Ethylenediamine", "DMEDA", "Neocuproine"]
             existing_names = {r['ligand'] for r in recs}
             for name in preferred:
                 if n_count >= needed:
@@ -364,7 +402,9 @@ def recommend_ligands_for_reaction(target_ligand=None, reaction_type="Cross-Coup
                 if name in existing_names:
                     continue
                 row = df[df['Ligand'] == name]
-                score = 0.85 if not row.empty else 0.8
+                # Slightly prioritize L-Proline among curated additions
+                base_score = 0.9 if name == 'L-Proline' else 0.85
+                score = base_score if not row.empty else max(0.8, base_score - 0.05)
                 recs.append({
                     "rank": len(recs) + 1,
                     "ligand": name,
@@ -375,6 +415,31 @@ def recommend_ligands_for_reaction(target_ligand=None, reaction_type="Cross-Coup
                 })
                 n_count += 1
             # Re-sort to ensure N-ligands appear in the surfaced list and trim to top_n
+            recs.sort(key=lambda r: r.get('compatibility_score', 0), reverse=True)
+            recs = recs[:top_n]
+
+    # If evidence ligands exist but none surfaced, optionally inject the top-evidence ligand
+    if evidence_ligands:
+        surfaced = {r['ligand'].lower() for r in recs}
+        # pick best evidence ligand not yet surfaced
+        try:
+            best_ev = sorted(evidence_ligands.items(), key=lambda kv: kv[1], reverse=True)
+        except Exception:
+            best_ev = []
+        for name, w in best_ev:
+            if name.lower() not in surfaced:
+                row = df[df['Ligand'].str.lower() == str(name).lower()]
+                est = 0.75 if row.empty else max(0.7, float(parse_reaction_compatibility(row.iloc[0].get("Reaction_Compatibility", ""), reaction_type)))
+                recs.append({
+                    "rank": len(recs) + 1,
+                    "ligand": row.iloc[0]['Ligand'] if not row.empty else name,
+                    "compatibility_score": round(min(1.0, est), 3),
+                    "applications": (row.iloc[0].get("Typical_Applications", "") if not row.empty else "observed in similar reactions"),
+                    "reaction_suitability": reaction_type,
+                    "source": "evidence"
+                })
+                break
+        if len(recs) > top_n:
             recs.sort(key=lambda r: r.get('compatibility_score', 0), reverse=True)
             recs = recs[:top_n]
     return recs

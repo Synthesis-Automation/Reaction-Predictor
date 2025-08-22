@@ -84,6 +84,14 @@ class EnhancedRecommendationEngine:
     
     def _map_reaction_type(self, gui_type: str) -> Optional[str]:
         """Map GUI reaction types to our enhanced system types"""
+        # Strip trailing metal tags like " (Pd)" or " (Cu)" from GUI label
+        base_gui = gui_type
+        try:
+            if gui_type and gui_type.endswith(')') and ' (' in gui_type:
+                base_gui = gui_type[:gui_type.rfind(' (')]
+        except Exception:
+            base_gui = gui_type
+
         mapping = {
             # Couplings
             "Suzuki-Miyaura Coupling": "Cross-Coupling",
@@ -111,7 +119,7 @@ class EnhancedRecommendationEngine:
             "Oxidation": "C-H_Activation",
             "C-H Activation": "C-H_Activation"
         }
-        return mapping.get(gui_type)
+        return mapping.get(base_gui)
     
     def _is_cross_coupling_pattern(self, reactants: str, products: str) -> bool:
         """Check if reaction pattern matches cross-coupling"""
@@ -213,11 +221,15 @@ class EnhancedRecommendationEngine:
             # Normalize scoring mapping for internal parsing, but pass original type to allow Ullmann boosts
             scoring_type = 'Cross-Coupling' if (reaction_type or '').lower() == 'ullmann' else reaction_type
 
-            # Get top ligands for this reaction type
+            # Evidence-aware context: mine dataset for ligands used in similar reactions (if available)
+            evidence_ligands = self._harvest_evidence_ligands(reaction_type)
+
+            # Get top ligands for this reaction type, with evidence-aware boost
             ligands = recommend_ligands_for_reaction(
                 reaction_type=reaction_type,
                 top_n=5,
-                min_compatibility=0.4
+                min_compatibility=0.4,
+                evidence_ligands=evidence_ligands or None
             )
             recommendations['ligand_recommendations'] = ligands
             
@@ -273,6 +285,61 @@ class EnhancedRecommendationEngine:
             recommendations['error'] = f"Enhanced recommendation error: {str(e)}"
         
         return recommendations
+
+    def _harvest_evidence_ligands(self, reaction_type: str) -> dict:
+        """Collect a small frequency map of ligands from built-in datasets for this reaction type.
+
+        Keeps it lightweight and offline: scans CSVs in data/reaction_dataset for matching ReactionType.
+        """
+        evidence: dict[str, float] = {}
+        try:
+            data_dir = os.path.join(_ROOT, 'data', 'reaction_dataset')
+            if not os.path.isdir(data_dir):
+                return evidence
+            # Consider a few known files; ignore huge processing
+            for fname in os.listdir(data_dir):
+                if not fname.lower().endswith('.csv'):
+                    continue
+                path = os.path.join(data_dir, fname)
+                try:
+                    import csv
+                    with open(path, 'r', encoding='utf-8') as f:
+                        reader = csv.DictReader(f)
+                        for row in reader:
+                            rtype = (row.get('ReactionType') or '').strip()
+                            if not rtype:
+                                continue
+                            # Simple match: same type token (case-insensitive)
+                            if rtype.lower() != (reaction_type or '').lower():
+                                continue
+                            lig_raw = row.get('Ligand') or ''
+                            if not lig_raw:
+                                continue
+                            # Ligand field often like ["L-Proline"] or a list string
+                            # Strip brackets/quotes and split by comma when safe
+                            items = []
+                            s = str(lig_raw).strip()
+                            # crude parse: remove [] and quotes
+                            s = s.strip('[]')
+                            s = s.replace('"', '').replace("'", '')
+                            # split by comma only if present
+                            parts = [p.strip() for p in s.split(',') if p.strip()]
+                            items = parts if parts else ([s] if s else [])
+                            for it in items:
+                                if not it:
+                                    continue
+                                name = it
+                                evidence[name] = evidence.get(name, 0) + 1
+                except Exception:
+                    # ignore a bad file
+                    continue
+            # retain top few
+            if evidence:
+                top = sorted(evidence.items(), key=lambda kv: kv[1], reverse=True)[:10]
+                return {k: float(v) for k, v in top}
+        except Exception:
+            pass
+        return evidence
     
     def _create_combined_conditions(self, ligands: List[Dict], solvents: List[Dict], reaction_type: str) -> List[Dict]:
         """Create optimized ligand-solvent combinations"""

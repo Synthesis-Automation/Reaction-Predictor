@@ -430,30 +430,76 @@ class SampleReactionsBrowser(QDialog):
         search_layout.addWidget(self.search_input)
         filter_layout.addLayout(search_layout)
         
-        # Category filters
-        category_layout = QHBoxLayout()
+        # Category filters (Coupling-focused with subcategories)
+        category_layout = QVBoxLayout()
         self.category_checkboxes = {}
-        
-        categories = [
-            ("All", "all"),
-            ("Buchwald-Hartwig", "buchwald_hartwig"),
-            ("Coupling", "coupling"),
-            ("Reduction", "reduction"),
-            ("Oxidation", "oxidation"),
-            ("Substitution", "substitution"),
-            ("Elimination", "elimination"),
-            ("Cycloaddition", "cycloaddition")
-        ]
-        
-        for cat_name, cat_key in categories:
-            checkbox = QCheckBox(cat_name)
+
+        # Top-level quick toggles
+        top_row = QHBoxLayout()
+        for cat_name, cat_key in [("All", "all"), ("Coupling", "coupling_only"), ("Everything Else", "non_coupling")]:
+            cb = QCheckBox(cat_name)
             if cat_key == "all":
-                checkbox.setChecked(True)
-            checkbox.stateChanged.connect(self.filter_by_category)
-            self.category_checkboxes[cat_key] = checkbox
-            category_layout.addWidget(checkbox)
-        
-        category_layout.addStretch()
+                cb.setChecked(True)
+            cb.stateChanged.connect(self.filter_by_category)
+            self.category_checkboxes[cat_key] = cb
+            top_row.addWidget(cb)
+        top_row.addStretch()
+        category_layout.addLayout(top_row)
+
+        # Coupling families
+        family_row = QHBoxLayout()
+        for cat_name, cat_key in [("C-C", "cc"), ("C-N", "cn"), ("C-O", "co"), ("C-S", "cs")]:
+            cb = QCheckBox(cat_name)
+            cb.stateChanged.connect(self.filter_by_category)
+            self.category_checkboxes[cat_key] = cb
+            family_row.addWidget(cb)
+        family_row.addStretch()
+        category_layout.addLayout(family_row)
+
+        # Sub-categories per family
+        sub_layout = QHBoxLayout()
+        # C-C subcats
+        cc_box = QGroupBox("C-C Subtypes")
+        cc_l = QHBoxLayout(cc_box)
+        for name, key in [("Suzuki (Pd)", "cc_suzuki"), ("Stille (Pd)", "cc_stille"), ("Sonogashira (Pd)", "cc_sonogashira"), ("Heck (Pd)", "cc_heck"), ("Negishi (Pd)", "cc_negishi"), ("Kumada (Ni)", "cc_kumada")]:
+            cb = QCheckBox(name)
+            cb.stateChanged.connect(self.filter_by_category)
+            self.category_checkboxes[key] = cb
+            cc_l.addWidget(cb)
+        sub_layout.addWidget(cc_box)
+
+        # C-N subcats
+        cn_box = QGroupBox("C-N Subtypes")
+        cn_l = QHBoxLayout(cn_box)
+        for name, key in [("Buchwald-Hartwig (Pd)", "cn_bh"), ("Ullmann (Cu)", "cn_ullmann"), ("Chan-Lam (Cu)", "cn_chanlam")]:
+            cb = QCheckBox(name)
+            cb.stateChanged.connect(self.filter_by_category)
+            self.category_checkboxes[key] = cb
+            cn_l.addWidget(cb)
+        sub_layout.addWidget(cn_box)
+
+        # C-O subcats
+        co_box = QGroupBox("C-O Subtypes")
+        co_l = QHBoxLayout(co_box)
+        for name, key in [("Ullmann Ether (Cu)", "co_ullmann_ether"), ("Mitsunobu", "co_mitsunobu")]:
+            cb = QCheckBox(name)
+            cb.stateChanged.connect(self.filter_by_category)
+            self.category_checkboxes[key] = cb
+            co_l.addWidget(cb)
+        sub_layout.addWidget(co_box)
+
+        # C-S subcats
+        cs_box = QGroupBox("C-S Subtypes")
+        cs_l = QHBoxLayout(cs_box)
+        for name, key in [("Thioether Coupling (Pd)", "cs_thioether")]:
+            cb = QCheckBox(name)
+            cb.stateChanged.connect(self.filter_by_category)
+            self.category_checkboxes[key] = cb
+            cs_l.addWidget(cb)
+        sub_layout.addWidget(cs_box)
+
+        category_layout.addLayout(sub_layout)
+
         filter_layout.addLayout(category_layout)
         layout.addWidget(filter_group)
         
@@ -733,19 +779,84 @@ class SampleReactionsBrowser(QDialog):
         filtered = []
         
         try:
-            if self.category_checkboxes["buchwald_hartwig"].isChecked():
-                filtered.extend(get_buchwald_hartwig_reactions())
-            if self.category_checkboxes["coupling"].isChecked():
+            # Quick toggles
+            coupling_only = self.category_checkboxes["coupling_only"].isChecked()
+            non_coupling = self.category_checkboxes["non_coupling"].isChecked()
+
+            # Family selections
+            cc = self.category_checkboxes["cc"].isChecked()
+            cn = self.category_checkboxes["cn"].isChecked()
+            co = self.category_checkboxes["co"].isChecked()
+            cs = self.category_checkboxes["cs"].isChecked()
+
+            # Subcategory selections
+            cc_sub = [
+                ("Suzuki", self.category_checkboxes["cc_suzuki"].isChecked()),
+                ("Stille", self.category_checkboxes["cc_stille"].isChecked()),
+                ("Sonogashira", self.category_checkboxes["cc_sonogashira"].isChecked()),
+                ("Heck", self.category_checkboxes["cc_heck"].isChecked()),
+                ("Negishi", self.category_checkboxes["cc_negishi"].isChecked()),
+                ("Kumada", self.category_checkboxes["cc_kumada"].isChecked()),
+            ]
+
+            cn_sub = [
+                ("Buchwald-Hartwig", self.category_checkboxes["cn_bh"].isChecked()),
+                ("Ullmann C-N", self.category_checkboxes["cn_ullmann"].isChecked()),
+                ("Chan-Lam", self.category_checkboxes["cn_chanlam"].isChecked()),
+            ]
+
+            co_sub = [
+                ("Ullmann Ether", self.category_checkboxes["co_ullmann_ether"].isChecked()),
+                ("Mitsunobu", self.category_checkboxes["co_mitsunobu"].isChecked()),
+            ]
+
+            cs_sub = [
+                ("C-S Coupling", self.category_checkboxes["cs_thioether"].isChecked()),
+                ("Thioether Formation", self.category_checkboxes["cs_thioether"].isChecked()),
+            ]
+
+            # Helper to add if any of tokens in reaction string
+            def add_by_tokens(tokens):
+                for r in self.all_reactions:
+                    if any(tok in r for tok in tokens):
+                        filtered.append(r)
+
+            # Coupling-only toggle
+            if coupling_only:
+                from sample_reactions import get_coupling_reactions
                 filtered.extend(get_coupling_reactions())
-            if self.category_checkboxes["reduction"].isChecked():
+
+            # Family level
+            if cc:
+                add_by_tokens(["Suzuki", "Stille", "Sonogashira", "Heck", "Negishi", "Kumada"])
+            if cn:
+                add_by_tokens(["Buchwald-Hartwig", "Ullmann C-N", "Chan-Lam"])
+            if co:
+                add_by_tokens(["Ullmann Ether", "Mitsunobu"])
+            if cs:
+                add_by_tokens(["C-S Coupling", "Thioether Formation"])
+
+            # Subcategories
+            if any(chk for _, chk in cc_sub):
+                add_by_tokens([name for name, chk in cc_sub if chk])
+            if any(chk for _, chk in cn_sub):
+                add_by_tokens([name for name, chk in cn_sub if chk])
+            if any(chk for _, chk in co_sub):
+                add_by_tokens([name for name, chk in co_sub if chk])
+            if any(chk for _, chk in cs_sub):
+                add_by_tokens([name for name, chk in cs_sub if chk])
+
+            # Non-coupling quick toggle (common other categories)
+            if non_coupling:
+                from sample_reactions import (
+                    get_reduction_reactions, get_oxidation_reactions,
+                    get_substitution_reactions, get_elimination_reactions,
+                    get_cycloaddition_reactions,
+                )
                 filtered.extend(get_reduction_reactions())
-            if self.category_checkboxes["oxidation"].isChecked():
                 filtered.extend(get_oxidation_reactions())
-            if self.category_checkboxes["substitution"].isChecked():
                 filtered.extend(get_substitution_reactions())
-            if self.category_checkboxes["elimination"].isChecked():
                 filtered.extend(get_elimination_reactions())
-            if self.category_checkboxes["cycloaddition"].isChecked():
                 filtered.extend(get_cycloaddition_reactions())
         except Exception as e:
             print(f"Error filtering by category: {e}")
@@ -875,21 +986,23 @@ Notes:
         reaction_lower = reaction.lower()
         
         if "suzuki" in reaction_lower:
-            return "Suzuki-Miyaura Coupling"
+            return "Suzuki-Miyaura Coupling (Pd)"
         elif "stille" in reaction_lower:
-            return "Stille Coupling"
+            return "Stille Coupling (Pd)"
         elif "sonogashira" in reaction_lower:
-            return "Sonogashira Coupling"
+            return "Sonogashira Coupling (Pd)"
         elif "heck" in reaction_lower:
-            return "Heck Reaction"
+            return "Heck Reaction (Pd)"
         elif "negishi" in reaction_lower:
-            return "Negishi Coupling"
+            return "Negishi Coupling (Pd)"
         elif "buchwald" in reaction_lower or "hartwig" in reaction_lower:
-            return "Buchwald-Hartwig Amination"
+            return "Buchwald-Hartwig Amination (Pd)"
         elif "chan-lam" in reaction_lower:
-            return "Chan-Lam Coupling"
-        elif "ullmann" in reaction_lower:
-            return "Ullmann Reaction"
+            return "Chan-Lam Coupling (Cu)"
+        elif "ullmann ether" in reaction_lower:
+            return "Ullmann Reaction (Cu)"
+        elif "ullmann c-n" in reaction_lower or "ullmann" in reaction_lower:
+            return "Ullmann Reaction (Cu)"
         elif "esterification" in reaction_lower:
             return "Esterification"
         elif "amidation" in reaction_lower:
@@ -2574,6 +2687,18 @@ Alternative Catalysts in this Family:"""
         """Format general recommendations"""
         recommendations = result.get('recommendations', {})
         
+        # Build a minimal display type with metal if we can infer from selected type
+        def _display_general_type():
+            selected = result.get('selected_reaction_type') or ''
+            low = selected.lower()
+            if any(k in low for k in ["suzuki", "stille", "sonogashira", "heck", "negishi", "buchwald", "hartwig"]):
+                return f"{selected} (Pd)" if selected else "Pd"
+            if any(k in low for k in ["chan-lam", "ullmann"]):
+                return f"{selected} (Cu)" if selected else "Cu"
+            if "kumada" in low:
+                return f"{selected} (Ni)" if selected else "Ni"
+            return selected or "Unknown"
+
         text = f"""General Reaction Analysis
 
 Reaction: {result['reaction_smiles']}
@@ -2604,10 +2729,39 @@ appropriate dataset is available.
         """Format enhanced ligand and solvent recommendations"""
         recommendations = result.get('recommendations', {})
         
+        # Build a clearer detected reaction type with metal annotation when possible
+        def _display_reaction_type():
+            rt = recommendations.get('reaction_type', 'Unknown') or 'Unknown'
+            origin = recommendations.get('detected_from') or result.get('selected_reaction_type') or ''
+            def _metal_for(name: str | None):
+                if not name:
+                    return None
+                low = name.lower()
+                if 'ullmann' in low:
+                    return 'Cu'
+                if 'chan-lam' in low:
+                    return 'Cu'
+                if 'kumada' in low:
+                    return 'Ni'
+                if 'buchwald' in low or 'hartwig' in low:
+                    return 'Pd'
+                if any(k in low for k in ['suzuki', 'stille', 'sonogashira', 'heck', 'negishi']):
+                    return 'Pd'
+                if 'c-o' in low and 'ullmann' in low:
+                    return 'Cu'
+                if 'c-s' in low:
+                    return 'Pd'
+                return None
+            metal = _metal_for(rt) or _metal_for(origin) or ('Pd' if (rt or '').lower() == 'cross-coupling' else None)
+            if metal:
+                name_part = rt if (rt and rt.lower() not in ['cross-coupling', 'general organic reaction']) else ''
+                return f"{name_part} ({metal})" if name_part else f"{metal}"
+            return rt
+
         text = f"""🧪 ENHANCED REACTION CONDITION RECOMMENDATIONS
 
 Reaction: {result['reaction_smiles']}
-Detected Type: {recommendations.get('reaction_type', 'Unknown')}
+Detected Type: {_display_reaction_type()}
 Status: {result['status']}
 
 """

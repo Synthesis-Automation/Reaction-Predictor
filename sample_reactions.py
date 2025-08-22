@@ -52,6 +52,10 @@ SAMPLE_REACTIONS = [
     "Ic1ccc(C=O)cc1.Nc1ccccc1>>O=Cc1ccc(Nc2ccccc2)cc1 (B-H - Aldehyde substrate)",
     "Brc1ccc2ccccc2c1.NCC>>CCNc1ccc2ccccc2c1 (B-H - Naphthylamine)",
     "Clc1nc2ccccc2[nH]1.Nc1ccccc1>>c1ccc(Nc2nc3ccccc3[nH]2)cc1 (B-H - Benzimidazole)",
+
+    # Ullmann C-N (Copper-catalyzed N-arylation / Goldberg-type)
+    "Brc1ccccc1.NH2c1ccccc1>>c1ccc(Nc2ccccc2)cc1 (Ullmann C-N - Aniline formation)",
+    "Clc1ccc(C)cc1.NH2C(C)C>>Cc1ccc(NC(C)C)cc1 (Ullmann C-N - Alkylamine coupling)",
     
     # Chan-Lam Coupling (C-N)
     "c1ccccc1B(O)O.Nc1ccccc1>>[O]>>c1ccc(Nc2ccccc2)cc1 (Chan-Lam - Oxidative)",
@@ -61,8 +65,8 @@ SAMPLE_REACTIONS = [
     # ═══════════════════════════════════════════════════════════
     
     # Ullmann Ether Synthesis
-    "Brc1ccccc1.Oc1ccccc1>>c1ccc(Oc2ccccc2)cc1 (Ullmann - Diphenyl ether)",
-    "Ic1ccncc1.OCC>>CCOc1ccncc1 (Ullmann - Ethyl pyridyl ether)",
+    "Brc1ccccc1.Oc1ccccc1>>c1ccc(Oc2ccccc2)cc1 (Ullmann Ether - Diphenyl ether)",
+    "Ic1ccncc1.OCC>>CCOc1ccncc1 (Ullmann Ether - Ethyl pyridyl ether)",
     
     # ═══════════════════════════════════════════════════════════
     # ESTERIFICATION & AMIDATION
@@ -124,6 +128,14 @@ SAMPLE_REACTIONS = [
     "CCBr.N#C>>CCC#N (SN2 - Nitrile formation)",
     "CCCCBr.Oc1ccccc1>>CCCCOc1ccccc1 (SN2 - Phenoxide)",
     "CH3I.SC>>CCSC (SN2 - Thioether formation)",
+    
+    # ═══════════════════════════════════════════════════════════
+    # C-S COUPLING REACTIONS (Thioether formation via coupling)
+    # ═══════════════════════════════════════════════════════════
+    
+    # Pd-catalyzed arylation of thiols (generic examples)
+    "Brc1ccccc1.SCc1ccccc1>>c1ccc(S-c2ccccc2)cc1 (C-S Coupling - Thioether Formation)",
+    "Clc1ccc(C)cc1.SCc1ccccc1>>Cc1ccc(S-c2ccccc2)cc1 (C-S Coupling - Thioether Formation)",
     
     # SN1 Reactions  
     "CC(C)(C)Br.O>>CC(C)(C)O (SN1 - tert-Butyl)",
@@ -341,6 +353,26 @@ def get_coupling_reactions():
     """Get only coupling reaction examples"""
     return [r for r in SAMPLE_REACTIONS if any(coupling in r for coupling in 
             ["Suzuki", "Stille", "Sonogashira", "Heck", "Negishi", "Buchwald-Hartwig", "Chan-Lam", "Ullmann"])]
+
+def get_cc_coupling_reactions():
+    """Get C-C coupling examples (Suzuki, Stille, Sonogashira, Heck, Negishi, Kumada)"""
+    tokens = ["Suzuki", "Stille", "Sonogashira", "Heck", "Negishi", "Kumada"]
+    return [r for r in SAMPLE_REACTIONS if any(t in r for t in tokens)]
+
+def get_cn_coupling_reactions():
+    """Get C-N coupling examples (Buchwald-Hartwig, Ullmann C-N, Chan-Lam)"""
+    tokens = ["Buchwald-Hartwig", "Ullmann C-N", "Chan-Lam"]
+    return [r for r in SAMPLE_REACTIONS if any(t in r for t in tokens)]
+
+def get_co_coupling_reactions():
+    """Get C-O coupling examples (Ullmann Ether, Mitsunobu)"""
+    tokens = ["Ullmann Ether", "Mitsunobu"]
+    return [r for r in SAMPLE_REACTIONS if any(t in r for t in tokens)]
+
+def get_cs_coupling_reactions():
+    """Get C-S coupling examples (Thioether Formation)"""
+    tokens = ["C-S Coupling", "Thioether Formation"]
+    return [r for r in SAMPLE_REACTIONS if any(t in r for t in tokens)]
 
 def get_reduction_reactions():
     """Get only reduction reaction examples"""
