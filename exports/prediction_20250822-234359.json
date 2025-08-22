@@ -1,0 +1,448 @@
+{
+  "meta": {
+    "generated_at": "2025-08-22T23:43:59",
+    "analysis_type": "enhanced",
+    "status": "Enhanced recommendations generated successfully"
+  },
+  "input": {
+    "reaction_smiles": "Brc1ccccc1.Nc1nccs1>>c1ccc(Nc2nccs2)cc1",
+    "selected_reaction_type": "Auto detect reaction type"
+  },
+  "detection": {
+    "reaction_type": "Cross-Coupling"
+  },
+  "dataset": {
+    "ligands_available": 123,
+    "solvents_available": 52,
+    "reaction_types_supported": [
+      "Cross-Coupling",
+      "Hydrogenation",
+      "Metathesis",
+      "C-H_Activation",
+      "Carbonylation"
+    ]
+  },
+  "recommendations": {
+    "combined": [
+      {
+        "ligand": "XPhos",
+        "ligand_compatibility": 0.9,
+        "solvent": "THF",
+        "solvent_abbreviation": "THF",
+        "solvent_compatibility": 0.9,
+        "combined_score": 1.0,
+        "recommendation_confidence": "High",
+        "typical_conditions": {
+          "temperature": "80-120°C",
+          "time": "4-24 hours",
+          "atmosphere": "Inert (N₂ or Ar)",
+          "base": "K₂CO₃ or Cs₂CO₃",
+          "catalyst_loading": "1-5 mol%"
+        },
+        "synergy_bonus": 0.1,
+        "suggested_base": null
+      },
+      {
+        "ligand": "SPhos",
+        "ligand_compatibility": 0.9,
+        "solvent": "Dimethylformamide",
+        "solvent_abbreviation": "DMF",
+        "solvent_compatibility": 0.9,
+        "combined_score": 0.9,
+        "recommendation_confidence": "High",
+        "typical_conditions": {
+          "temperature": "80-120°C",
+          "time": "4-24 hours",
+          "atmosphere": "Inert (N₂ or Ar)",
+          "base": "K₂CO₃ or Cs₂CO₃",
+          "catalyst_loading": "1-5 mol%"
+        },
+        "synergy_bonus": 0.0,
+        "suggested_base": null
+      },
+      {
+        "ligand": "SPhos",
+        "ligand_compatibility": 0.9,
+        "solvent": "THF",
+        "solvent_abbreviation": "THF",
+        "solvent_compatibility": 0.9,
+        "combined_score": 0.9,
+        "recommendation_confidence": "High",
+        "typical_conditions": {
+          "temperature": "80-120°C",
+          "time": "4-24 hours",
+          "atmosphere": "Inert (N₂ or Ar)",
+          "base": "K₂CO₃ or Cs₂CO₃",
+          "catalyst_loading": "1-5 mol%"
+        },
+        "synergy_bonus": 0.0,
+        "suggested_base": null
+      },
+      {
+        "ligand": "SPhos",
+        "ligand_compatibility": 0.9,
+        "solvent": "N-Methyl-2-pyrrolidone",
+        "solvent_abbreviation": "NMP",
+        "solvent_compatibility": 0.9,
+        "combined_score": 0.9,
+        "recommendation_confidence": "High",
+        "typical_conditions": {
+          "temperature": "80-120°C",
+          "time": "4-24 hours",
+          "atmosphere": "Inert (N₂ or Ar)",
+          "base": "K₂CO₃ or Cs₂CO₃",
+          "catalyst_loading": "1-5 mol%"
+        },
+        "synergy_bonus": 0.0,
+        "suggested_base": null
+      },
+      {
+        "ligand": "XPhos",
+        "ligand_compatibility": 0.9,
+        "solvent": "Dimethylformamide",
+        "solvent_abbreviation": "DMF",
+        "solvent_compatibility": 0.9,
+        "combined_score": 0.9,
+        "recommendation_confidence": "High",
+        "typical_conditions": {
+          "temperature": "80-120°C",
+          "time": "4-24 hours",
+          "atmosphere": "Inert (N₂ or Ar)",
+          "base": "K₂CO₃ or Cs₂CO₃",
+          "catalyst_loading": "1-5 mol%"
+        },
+        "synergy_bonus": 0.0,
+        "suggested_base": null
+      }
+    ],
+    "ligands": [
+      {
+        "ligand": "SPhos",
+        "compatibility_score": 0.9,
+        "applications": "Buchwald-Hartwig amination",
+        "reaction_suitability": "Cross-Coupling"
+      },
+      {
+        "ligand": "XPhos",
+        "compatibility_score": 0.9,
+        "applications": "Suzuki-Miyaura coupling",
+        "reaction_suitability": "Cross-Coupling"
+      },
+      {
+        "ligand": "RuPhos",
+        "compatibility_score": 0.9,
+        "applications": "Buchwald-Hartwig amination",
+        "reaction_suitability": "Cross-Coupling"
+      },
+      {
+        "ligand": "BrettPhos",
+        "compatibility_score": 0.9,
+        "applications": "Challenging cross-coupling",
+        "reaction_suitability": "Cross-Coupling"
+      },
+      {
+        "ligand": "tBuXPhos",
+        "compatibility_score": 0.9,
+        "applications": "Sterically hindered substrates",
+        "reaction_suitability": "Cross-Coupling"
+      }
+    ],
+    "solvents": [
+      {
+        "solvent": "Dimethylformamide",
+        "abbreviation": "DMF",
+        "compatibility_score": 0.9,
+        "applications": "Cross-coupling, amide formation",
+        "reaction_suitability": "Cross-Coupling"
+      },
+      {
+        "solvent": "THF",
+        "abbreviation": "THF",
+        "compatibility_score": 0.9,
+        "applications": "Cross-coupling, organometallic",
+        "reaction_suitability": "Cross-Coupling"
+      },
+      {
+        "solvent": "N-Methyl-2-pyrrolidone",
+        "abbreviation": "NMP",
+        "compatibility_score": 0.9,
+        "applications": "Polar aprotic reactions",
+        "reaction_suitability": "Cross-Coupling"
+      },
+      {
+        "solvent": "MeTHF",
+        "abbreviation": "MeTHF",
+        "compatibility_score": 0.9,
+        "applications": "Green THF alternative",
+        "reaction_suitability": "Cross-Coupling"
+      },
+      {
+        "solvent": "Acetonitrile",
+        "abbreviation": "MeCN",
+        "compatibility_score": 0.8,
+        "applications": "Cross-coupling, C-H activation",
+        "reaction_suitability": "Cross-Coupling"
+      }
+    ],
+    "alternatives": {
+      "budget_friendly_ligands": [
+        {
+          "rank": 1,
+          "ligand": "SPhos",
+          "compatibility_score": 0.9,
+          "applications": "Buchwald-Hartwig amination",
+          "reaction_suitability": "Cross-Coupling"
+        },
+        {
+          "rank": 2,
+          "ligand": "XPhos",
+          "compatibility_score": 0.9,
+          "applications": "Suzuki-Miyaura coupling",
+          "reaction_suitability": "Cross-Coupling"
+        },
+        {
+          "rank": 3,
+          "ligand": "RuPhos",
+          "compatibility_score": 0.9,
+          "applications": "Buchwald-Hartwig amination",
+          "reaction_suitability": "Cross-Coupling"
+        }
+      ],
+      "low_boiling_solvents": [
+        {
+          "rank": 2,
+          "solvent": "THF",
+          "abbreviation": "THF",
+          "compatibility_score": 0.9,
+          "applications": "Cross-coupling, organometallic",
+          "reaction_suitability": "Cross-Coupling"
+        },
+        {
+          "rank": 4,
+          "solvent": "MeTHF",
+          "abbreviation": "MeTHF",
+          "compatibility_score": 0.9,
+          "applications": "Green THF alternative",
+          "reaction_suitability": "Cross-Coupling"
+        },
+        {
+          "rank": 5,
+          "solvent": "Acetonitrile",
+          "abbreviation": "MeCN",
+          "compatibility_score": 0.8,
+          "applications": "Cross-coupling, C-H activation",
+          "reaction_suitability": "Cross-Coupling"
+        }
+      ],
+      "green_solvents": [
+        {
+          "rank": 2,
+          "solvent": "THF",
+          "abbreviation": "THF",
+          "compatibility_score": 0.9,
+          "applications": "Cross-coupling, organometallic",
+          "reaction_suitability": "Cross-Coupling"
+        },
+        {
+          "rank": 4,
+          "solvent": "MeTHF",
+          "abbreviation": "MeTHF",
+          "compatibility_score": 0.9,
+          "applications": "Green THF alternative",
+          "reaction_suitability": "Cross-Coupling"
+        },
+        {
+          "rank": 5,
+          "solvent": "Acetonitrile",
+          "abbreviation": "MeCN",
+          "compatibility_score": 0.8,
+          "applications": "Cross-coupling, C-H activation",
+          "reaction_suitability": "Cross-Coupling"
+        }
+      ]
+    }
+  },
+  "top_conditions": [
+    {
+      "reaction": {
+        "smiles": "Brc1ccccc1.Nc1nccs1>>c1ccc(Nc2nccs2)cc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Brc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Nc1nccs1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "Pd(OAc)2",
+          "cas": "3375-31-3",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "XPhos",
+          "cas": "98327-87-8",
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "K₂CO₃ or Cs₂CO₃",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "THF",
+          "abbreviation": "THF",
+          "cas": "109-99-9",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-120°C",
+        "time": "4-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    },
+    {
+      "reaction": {
+        "smiles": "Brc1ccccc1.Nc1nccs1>>c1ccc(Nc2nccs2)cc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Brc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Nc1nccs1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "Pd(OAc)2",
+          "cas": "3375-31-3",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "SPhos",
+          "cas": "161265-03-8",
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "K₂CO₃ or Cs₂CO₃",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "Dimethylformamide",
+          "abbreviation": "DMF",
+          "cas": "68-12-2",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-120°C",
+        "time": "4-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    },
+    {
+      "reaction": {
+        "smiles": "Brc1ccccc1.Nc1nccs1>>c1ccc(Nc2nccs2)cc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Brc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Nc1nccs1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "Pd(OAc)2",
+          "cas": "3375-31-3",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "SPhos",
+          "cas": "161265-03-8",
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "K₂CO₃ or Cs₂CO₃",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "THF",
+          "abbreviation": "THF",
+          "cas": "109-99-9",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-120°C",
+        "time": "4-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    }
+  ],
+  "related_reactions": [
+    {
+      "reaction_smiles": "Clc1nc(Cl)nc(N)n1.NCCc1ccccc1>>NCCc1ccccc1.Nc1nc(NCCc2ccccc2)nc(N)n1",
+      "yield": 65.4,
+      "catalyst": "Pd(OAc)2",
+      "ligand": "XantPhos",
+      "similarity": 0.64
+    },
+    {
+      "reaction_smiles": "Brc1ccc(C)cc1.CN(C)C>>CN(C)c1ccc(C)cc1",
+      "yield": 92.5,
+      "catalyst": "Pd2(dba)3",
+      "ligand": "XPhos",
+      "similarity": 0.87
+    }
+  ]
+}
