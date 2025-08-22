@@ -101,10 +101,10 @@ class EnhancedRecommendationEngine:
             "Chan-Lam Coupling": "Cross-Coupling",
             "C-N Coupling - Chan-Lam": "Cross-Coupling",
             # Ullmann variants
-            "Ullmann Ether Synthesis": "Cross-Coupling",
-            "Ullmann Reaction": "Cross-Coupling",
-            "C-N Coupling - Ullmann": "Cross-Coupling",
-            "C-O Coupling - Ullmann Ether": "Cross-Coupling",
+            "Ullmann Ether Synthesis": "Ullmann",
+            "Ullmann Reaction": "Ullmann",
+            "C-N Coupling - Ullmann": "Ullmann",
+            "C-O Coupling - Ullmann Ether": "Ullmann",
             # Other categories
             "Hydrogenation": "Hydrogenation",
             "Carbonylation": "Carbonylation",
@@ -178,7 +178,8 @@ class EnhancedRecommendationEngine:
             result.update(enhanced_recs)
             
             # Try to get base engine recommendations as supplementary info
-            if self.base_engine:
+            # Suppress Buchwald analysis for Ullmann selections/detections
+            if self.base_engine and (actual_reaction_type or "").lower() != "ullmann":
                 try:
                     base_recs = self.base_engine.get_recommendations(reaction_smiles, reaction_type)
                     if base_recs and base_recs.get('analysis_type') == 'buchwald_hartwig':
@@ -208,9 +209,12 @@ class EnhancedRecommendationEngine:
         }
         
         try:
+            # Normalize scoring type while preserving display type
+            scoring_type = 'Cross-Coupling' if (reaction_type or '').lower() == 'ullmann' else reaction_type
+
             # Get top ligands for this reaction type
             ligands = recommend_ligands_for_reaction(
-                reaction_type=reaction_type,
+                reaction_type=scoring_type,
                 top_n=5,
                 min_compatibility=0.4
             )
@@ -218,7 +222,7 @@ class EnhancedRecommendationEngine:
             
             # Get top solvents for this reaction type
             solvents = recommend_solvents_for_reaction(
-                reaction_type=reaction_type,
+                reaction_type=scoring_type,
                 top_n=5,
                 min_compatibility=0.4
             )
@@ -413,6 +417,14 @@ class EnhancedRecommendationEngine:
 • Consider base choice: K₂CO₃ for most substrates, Cs₂CO₃ for difficult cases
 • Temperature typically 80-120°C depending on substrate reactivity
 • Degassing is critical - use Schlenk techniques or glovebox
+            """,
+            'Ullmann': """
+💡 Ullmann Coupling Optimization Tips:
+• Copper sources: CuI, CuBr, Cu(OAc)₂, Cu₂O; often with simple ligands
+• Ligands: diamines (e.g., ethylenediamine), amino acids (e.g., L-proline), phenanthroline
+• Bases: K₂CO₃, Cs₂CO₃, K₃PO₄, KOtBu; water sometimes beneficial
+• Solvents: DMSO, DMF, toluene, dioxane; 80–140°C typical
+• For C–O/C–N: substrate electronics impact rates; consider stronger base for aryl chlorides
             """,
             'Hydrogenation': """
 💡 Hydrogenation Optimization Tips:

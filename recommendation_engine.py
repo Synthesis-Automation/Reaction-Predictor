@@ -12,6 +12,7 @@ from abc import ABC, abstractmethod
 from typing import Dict, List, Optional, Tuple
 import json
 import os
+from dataset_registry import resolve_dataset_path
 
 class ReactionRecommender(ABC):
     """Base class for reaction condition recommenders"""
@@ -622,8 +623,9 @@ def create_recommendation_engine(data_dir: str = "data") -> RecommendationEngine
     
     engine = RecommendationEngine()
     
-    # Add Buchwald-Hartwig recommender if data is available
-    buchwald_path = os.path.join(data_dir, "buchwald_reactions.csv")
+    # Add Buchwald-Hartwig recommender if data is available (resolve via registry)
+    base_dir = os.path.dirname(__file__)
+    buchwald_path = resolve_dataset_path("C-N Coupling - Buchwald-Hartwig", base_dir) or os.path.join(data_dir, "buchwald_reactions.csv")
     if os.path.exists(buchwald_path):
         buchwald_rec = BuchwaldHartwigRecommender()
         engine.add_recommender(buchwald_rec, buchwald_path)

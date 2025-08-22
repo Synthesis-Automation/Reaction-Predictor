@@ -1932,6 +1932,7 @@ class SimpleReactionGUI(QMainWindow):
             import json
             import os
             import hashlib
+            from dataset_registry import resolve_dataset_path
             
             # Try to import RDKit for similarity calculations
             try:
@@ -1942,31 +1943,18 @@ class SimpleReactionGUI(QMainWindow):
                 rdkit_available = False
                 print("RDKit not available - using fallback similarity")
             
-            # Select dataset based on reaction_type hint
+            # Resolve dataset using centralized registry
             base_dir = os.path.dirname(__file__)
-            rt = (reaction_type or "").lower() if isinstance(reaction_type, str) else ""
-
-            # Candidate paths for each dataset
-            buchwald_candidates = [
-                os.path.join(base_dir, 'data', 'buchwald_reactions.csv'),
-                os.path.join(base_dir, 'data', 'reaction_dataset', 'buchwald_reactions.csv')
-            ]
-            ullmann_candidates = [
-                os.path.join(base_dir, 'data', 'Ullman_2024_full.csv'),
-                os.path.join(base_dir, 'data', 'reaction_dataset', 'Ullman_2024_full.csv')
-            ]
-
-            candidates = ullmann_candidates if 'ullmann' in rt else buchwald_candidates
-
-            dataset_path = next((p for p in candidates if os.path.exists(p)), None)
-            if dataset_path is None:
-                # Try the other dataset type as a fallback
-                alt_candidates = buchwald_candidates if candidates is ullmann_candidates else ullmann_candidates
-                dataset_path = next((p for p in alt_candidates if os.path.exists(p)), None)
-
+            dataset_path = resolve_dataset_path(reaction_type, base_dir)
             if not dataset_path:
                 print("No reaction dataset found (checked Buchwald and Ullmann).")
                 return self.get_mock_related_reactions(input_smiles)
+
+            # Briefly inform which dataset is used
+            try:
+                self.statusBar().showMessage(f"Related reactions source: {os.path.basename(dataset_path)}")
+            except Exception:
+                pass
             
             # Read the dataset
             df = pd.read_csv(dataset_path)
