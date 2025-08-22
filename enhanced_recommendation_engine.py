@@ -203,18 +203,19 @@ class EnhancedRecommendationEngine:
         recommendations = {
             'ligand_recommendations': [],
             'solvent_recommendations': [],
+            'base_recommendations': [],
             'combined_conditions': [],
             'property_based_alternatives': {},
             'reaction_specific_notes': ""
         }
         
         try:
-            # Normalize scoring type while preserving display type
+            # Normalize scoring mapping for internal parsing, but pass original type to allow Ullmann boosts
             scoring_type = 'Cross-Coupling' if (reaction_type or '').lower() == 'ullmann' else reaction_type
 
             # Get top ligands for this reaction type
             ligands = recommend_ligands_for_reaction(
-                reaction_type=scoring_type,
+                reaction_type=reaction_type,
                 top_n=5,
                 min_compatibility=0.4
             )
@@ -222,14 +223,31 @@ class EnhancedRecommendationEngine:
             
             # Get top solvents for this reaction type
             solvents = recommend_solvents_for_reaction(
-                reaction_type=scoring_type,
+                reaction_type=reaction_type,
                 top_n=5,
                 min_compatibility=0.4
             )
             recommendations['solvent_recommendations'] = solvents
             
+            # Try to get base recommendations if available
+            try:
+                from reagents.base import recommend_bases_for_reaction  # type: ignore
+                bases = recommend_bases_for_reaction(
+                    reaction_type=reaction_type,
+                    top_n=5,
+                    min_compatibility=0.4
+                )
+                recommendations['base_recommendations'] = bases
+            except Exception:
+                bases = []
+
             # Create combined condition recommendations
             combined_conditions = self._create_combined_conditions(ligands, solvents, reaction_type)
+            # Attach first base as a suggestion if present
+            if bases:
+                suggested = bases[0].get('base')
+                for cc in combined_conditions:
+                    cc['suggested_base'] = suggested
             recommendations['combined_conditions'] = combined_conditions
             
             # Get property-based alternatives
@@ -306,6 +324,13 @@ class EnhancedRecommendationEngine:
                 ('BINAP', 'Toluene'): 0.05,
                 ('PPh3', 'THF'): 0.05
             },
+            'Ullmann': {
+                ('1,10-Phenanthroline', 'DMSO'): 0.10,
+                ("2,2'-Bipyridine", 'DMSO'): 0.10,
+                ('L-Proline', 'DMSO'): 0.08,
+                ('Ethylenediamine', 'DMF'): 0.08,
+                ('DMEDA', 'Toluene'): 0.06,
+            },
             'Hydrogenation': {
                 ('BINAP', 'Ethanol'): 0.15,
                 ('Tol-BINAP', 'Methanol'): 0.15,
@@ -333,6 +358,14 @@ class EnhancedRecommendationEngine:
                 'atmosphere': 'Inert (N₂ or Ar)',
                 'base': 'K₂CO₃ or Cs₂CO₃',
                 'catalyst_loading': '1-5 mol%'
+            },
+            'Ullmann': {
+                'temperature': '80-140°C',
+                'time': '6-24 hours',
+                'atmosphere': 'Inert (N₂ or Ar)',
+                'base': 'K₂CO₃, Cs₂CO₃, K₃PO₄ or KOtBu',
+                'catalyst_loading': '5-20 mol% Cu',
+                'additives': 'Ligands: phen, bipy, L-proline, diamines'
             },
             'Hydrogenation': {
                 'temperature': '20-80°C',

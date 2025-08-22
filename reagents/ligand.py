@@ -215,6 +215,9 @@ def parse_reaction_compatibility(compatibility_str, reaction_type):
         "Carbonylation",
     ]
 
+    # Map specialized types to base scoring buckets
+    if isinstance(reaction_type, str) and reaction_type.lower() == 'ullmann':
+        reaction_type = 'Cross-Coupling'
     if reaction_type not in reaction_types:
         return 0.5
 
@@ -284,19 +287,81 @@ def recommend_ligands_for_reaction(target_ligand=None, reaction_type="Cross-Coup
                 compatible = [l for l in compatible if l["index"] != target_idx]
                 compatible.sort(key=lambda x: (x["compatibility"] * 0.6 + x.get("similarity", 0) * 0.4), reverse=True)
 
+    # Domain-specific adjustment: Ullmann reactions favor N-based ligands; penalize phosphines
+    def _is_phosphine(name: str) -> bool:
+        n = (name or "").lower()
+        tokens = [
+            'phos', 'phosphine', 'pph3', 'binap', 'dppf', 'dppp', 'dppe', 'xantphos', 'johnphos', 'davephos', 'pc y3', 'p(cy)3', 'ptbu', 'p(tbu)3'
+        ]
+        return any(t in n for t in tokens)
+
+    def _is_n_ligand(name: str) -> bool:
+        n = (name or "").lower()
+        tokens = [
+            'phen', 'phenanthroline', 'bipy', "bipyridine", 'proline', 'en', 'ethylenediamine', 'dmeda', 'diamine', 'pyridine'
+        ]
+        return any(t in n for t in tokens)
+
+    if isinstance(reaction_type, str) and 'ullmann' in reaction_type.lower():
+        for lig in compatible:
+            nm = lig.get('name', '')
+            boost = 0.0
+            if _is_n_ligand(nm):
+                boost += 0.2
+            if _is_phosphine(nm):
+                boost -= 0.2
+            lig['adjusted'] = max(0.0, min(1.0, lig['compatibility'] + boost))
+        # Sort by adjusted score if present
+        compatible.sort(key=lambda x: x.get('adjusted', x['compatibility']), reverse=True)
+    else:
+        compatible.sort(key=lambda x: x["compatibility"], reverse=True)
+
     recs = []
     for i, lig in enumerate(compatible[:top_n]):
         rec = {
             "rank": i + 1,
             "ligand": lig["name"],
-            "compatibility_score": round(lig["compatibility"], 3),
+            "compatibility_score": round(lig.get('adjusted', lig["compatibility"]), 3),
             "applications": lig["applications"],
             "reaction_suitability": reaction_type,
         }
         if "similarity" in lig:
             rec["similarity_score"] = round(lig["similarity"], 3)
-            rec["combined_score"] = round(lig["compatibility"] * 0.6 + lig.get("similarity", 0) * 0.4, 3)
+            base_comp = lig.get('adjusted', lig["compatibility"])
+            rec["combined_score"] = round(base_comp * 0.6 + lig.get("similarity", 0) * 0.4, 3)
         recs.append(rec)
+
+    # Ensure presence of at least some N-ligands for Ullmann
+    if isinstance(reaction_type, str) and 'ullmann' in reaction_type.lower():
+        n_count = sum(1 for r in recs if _is_n_ligand(r.get('ligand', '')))
+        if n_count < max(1, top_n // 2):
+            preferred = ["1,10-Phenanthroline", "2,2'-Bipyridine", "L-Proline", "Ethylenediamine", "DMEDA"]
+            existing_names = {r['ligand'] for r in recs}
+            for name in preferred:
+                if name in existing_names:
+                    continue
+                # Only add if present in DB (to keep consistency), otherwise add curated placeholder
+                row = df[df['Ligand'] == name]
+                if not row.empty:
+                    recs.append({
+                        "rank": len(recs) + 1,
+                        "ligand": name,
+                        "compatibility_score": 0.8,
+                        "applications": row.iloc[0].get("Typical_Applications", "Ullmann Cu-catalyzed"),
+                        "reaction_suitability": reaction_type,
+                    })
+                else:
+                    recs.append({
+                        "rank": len(recs) + 1,
+                        "ligand": name,
+                        "compatibility_score": 0.75,
+                        "applications": "Ullmann Cu-catalyzed",
+                        "reaction_suitability": reaction_type,
+                        "source": "curated"
+                    })
+                n_count += 1
+                if n_count >= max(1, top_n // 2):
+                    break
     return recs
 
 

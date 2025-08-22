@@ -227,6 +227,10 @@ def parse_solvent_reaction_compatibility(compatibility_str, reaction_type):
         "Carbonylation",
     ]
 
+    # Map specialized types to base scoring buckets
+    if isinstance(reaction_type, str) and reaction_type.lower() == 'ullmann':
+        reaction_type = 'Cross-Coupling'
+
     if reaction_type not in reaction_types:
         return 0.5
 
