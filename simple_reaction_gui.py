@@ -46,8 +46,6 @@ def create_reaction_image(reaction_smiles: str, width: int = 600, height: int = 
     try:
         from rdkit import Chem
         from rdkit.Chem import rdDepictor, AllChem
-        from rdkit.Chem.Draw import rdMolDraw2D
-        from rdkit.Chem.Draw.MolDrawing import DrawingOptions
         
         print(f"Creating reaction image for: '{reaction_smiles}'")
         
@@ -2237,25 +2235,11 @@ class SimpleReactionGUI(QMainWindow):
 
         self.results_text.setPlainText(results_text)
 
-        # Export a well-structured JSON for external apps
-        try:
-            export = self._build_export_payload(result)
-            export_dir = os.path.join(os.getcwd(), 'exports')
-            os.makedirs(export_dir, exist_ok=True)
-            ts = time.strftime('%Y%m%d-%H%M%S')
-            out_path = os.path.join(export_dir, f'prediction_{ts}.json')
-            with open(out_path, 'w', encoding='utf-8') as f:
-                json.dump(export, f, ensure_ascii=False, indent=2)
-            self.statusBar().showMessage(f"Prediction completed • Exported JSON: {os.path.basename(out_path)}")
-        except Exception as e:
-            self.statusBar().showMessage(f"Prediction completed • JSON export failed: {e}")
-
-        # Related reactions display
+        # Related reactions (compute before export so we can include in files)
         related_reactions = result.get('recommendations', {}).get('related_reactions', [])
         if not related_reactions:
             reaction_smiles = result.get('reaction_smiles', '')
             if reaction_smiles:
-                # Determine the best available reaction type hint
                 rt_hint = (
                     result.get('recommendations', {}).get('reaction_type')
                     or result.get('reaction_type')
@@ -2270,9 +2254,24 @@ class SimpleReactionGUI(QMainWindow):
                         'coupling' in detected_type.lower()):
                         related_reactions = self.get_mock_related_reactions(reaction_smiles)
 
+        # Export a well-structured JSON (no separate HTML export)
+        try:
+            export_dir = os.path.join(os.getcwd(), 'exports')
+            os.makedirs(export_dir, exist_ok=True)
+            ts = time.strftime('%Y%m%d-%H%M%S')
+
+            export = self._build_export_payload(result, related_reactions=related_reactions)
+            out_path = os.path.join(export_dir, f'prediction_{ts}.json')
+            with open(out_path, 'w', encoding='utf-8') as f:
+                json.dump(export, f, ensure_ascii=False, indent=2)
+            self.statusBar().showMessage(f"Prediction completed • Exported JSON: {os.path.basename(out_path)}")
+        except Exception as e:
+            self.statusBar().showMessage(f"Prediction completed • JSON export failed: {e}")
+
+        # Related reactions display
         self.display_related_reactions(related_reactions)
 
-    def _build_export_payload(self, result: dict) -> dict:
+    def _build_export_payload(self, result: dict, related_reactions=None) -> dict:
         """Convert internal result into a clean, stable JSON payload.
 
         Schema:
@@ -2287,7 +2286,8 @@ class SimpleReactionGUI(QMainWindow):
               solvents: [ { solvent, abbreviation, compatibility_score, applications, reaction_suitability } ],
               alternatives: { budget_friendly_ligands, low_boiling_solvents, green_solvents }
             },
-            related_reactions: [ { reaction_smiles, yield, catalyst, ligand, solvent, temperature, time, similarity, reaction_id } ]
+            'top_conditions': [ for top 3, a single 'chemicals' list with all required components (starting materials, metal precursor, ligand, base, solvent) and 'conditions' with time/temperature ],
+            'related_reactions': [ { reaction_smiles, yield, catalyst, ligand, solvent, temperature, time, similarity, reaction_id, reference } ]
           }
         """
         recs = result.get('recommendations', {}) or {}
@@ -2304,6 +2304,7 @@ class SimpleReactionGUI(QMainWindow):
                 'recommendation_confidence': c.get('recommendation_confidence'),
                 'typical_conditions': c.get('typical_conditions', {}),
                 'synergy_bonus': c.get('synergy_bonus', 0),
+                'suggested_base': c.get('suggested_base')
             })
 
         ligands = []
@@ -2331,7 +2332,68 @@ class SimpleReactionGUI(QMainWindow):
             if key in alt:
                 alternatives[key] = alt[key]
 
-        related = recs.get('related_reactions', []) or []
+        related = related_reactions or recs.get('related_reactions', []) or []
+
+    # Build top 3 detailed conditions as a flat chemicals list
+        def _split_smiles(sm: str):
+            try:
+                lhs, rhs = (sm or '').split('>>', 1)
+                reactants = [t for t in lhs.split('.') if t]
+                product = rhs
+                return reactants, product
+            except Exception:
+                return [], sm
+
+        def _solvent_cas(name: str | None):
+            try:
+                from reagents.solvent import create_solvent_dataframe  # type: ignore
+                df = create_solvent_dataframe()
+                if name and 'Solvent' in df.columns and 'CAS Number' in df.columns:
+                    row = df[df['Solvent'] == name]
+                    if not row.empty:
+                        return row.iloc[0].get('CAS Number')
+            except Exception:
+                pass
+            return None
+
+        rxn_smiles = result.get('reaction_smiles', '')
+        reactants, _ = _split_smiles(rxn_smiles)
+        detected_type = recs.get('reaction_type') or result.get('reaction_type') or ''
+
+        def _default_metal_precursor(rt: str):
+            if isinstance(rt, str) and rt.lower() == 'ullmann':
+                return {'name': 'CuI', 'cas': '7681-65-4', 'smiles': None, 'equivalents': None}
+            else:
+                return {'name': 'Pd(OAc)2', 'cas': '3375-31-3', 'smiles': None, 'equivalents': None}
+
+        top_conditions = []
+        for c in (recs.get('combined_conditions', []) or [])[:3]:
+            conditions = c.get('typical_conditions', {}) or {}
+            base_name = c.get('suggested_base') or conditions.get('base')
+            chemicals = []
+            # Starting materials from reactants
+            for smi in reactants:
+                chemicals.append({'name': None, 'cas': None, 'smiles': smi, 'equivalents': None, 'role': 'starting_material'})
+            # Metal precursor (based on detected type)
+            mp = _default_metal_precursor(detected_type)
+            chemicals.append({**mp, 'role': 'metal_precursor'})
+            # Ligand
+            chemicals.append({'name': c.get('ligand'), 'cas': None, 'smiles': None, 'equivalents': None, 'role': 'ligand'})
+            # Base
+            if base_name:
+                chemicals.append({'name': base_name, 'cas': None, 'smiles': None, 'equivalents': None, 'role': 'base'})
+            # Solvent
+            chemicals.append({'name': c.get('solvent'), 'abbreviation': c.get('solvent_abbreviation'), 'cas': _solvent_cas(c.get('solvent')), 'smiles': None, 'equivalents': None, 'role': 'solvent'})
+
+            top_conditions.append({
+                'reaction': {'smiles': rxn_smiles},
+                'chemicals': chemicals,
+                'conditions': {
+                    'temperature': conditions.get('temperature'),
+                    'time': conditions.get('time'),
+                    'atmosphere': conditions.get('atmosphere'),
+                }
+            })
 
         payload = {
             'meta': {
@@ -2353,6 +2415,7 @@ class SimpleReactionGUI(QMainWindow):
                 'solvents': solvents,
                 'alternatives': alternatives,
             },
+            'top_conditions': top_conditions,
             'related_reactions': related,
         }
         return payload

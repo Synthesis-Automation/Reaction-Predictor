@@ -1,0 +1,46 @@
+{
+  "meta": {
+    "generated_at": "2025-08-22T16:35:59",
+    "analysis_type": "enhanced",
+    "status": "Enhanced recommendations generated successfully"
+  },
+  "input": {
+    "reaction_smiles": "Clc1ccccc1.Nc1ccccc1>>c1ccc(Nc2ccccc2)cc1",
+    "selected_reaction_type": "C-N Coupling - Ullmann"
+  },
+  "detection": {
+    "reaction_type": "Ullmann"
+  },
+  "dataset": {
+    "ligands_available": 123,
+    "solvents_available": 52,
+    "reaction_types_supported": [
+      "Cross-Coupling",
+      "Hydrogenation",
+      "Metathesis",
+      "C-H_Activation",
+      "Carbonylation"
+    ]
+  },
+  "recommendations": [{
+    "reagent":[{
+        "name": "A",
+        "smile": "C1=CC=C(C=C1)N1CCCCC1",
+        "cas_no": "123-45-6",
+        "equivalent": 1.0
+      }],
+
+      "typical_conditions": {
+          "temperature": "80-140°C",
+          "time": "6-24 hours",
+          "atmosphere": "Inert (N₂ or Ar)",
+          "base": "K₂CO₃, Cs₂CO₃, K₃PO₄ or KOtBu",
+          "catalyst_loading": "5-20 mol% Cu",
+          "additives": "Ligands: phen, bipy, L-proline, diamines"
+        },
+      }
+    ],
+
+    
+  ]
+}

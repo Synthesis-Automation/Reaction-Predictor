@@ -1,0 +1,461 @@
+{
+  "meta": {
+    "generated_at": "2025-08-22T17:32:41",
+    "analysis_type": "enhanced",
+    "status": "Enhanced recommendations generated successfully"
+  },
+  "input": {
+    "reaction_smiles": "Brc1ccccc1.NCC(=O)OC>>COC(=O)CNc1ccccc1",
+    "selected_reaction_type": "C-N Coupling - Ullmann"
+  },
+  "detection": {
+    "reaction_type": "Ullmann"
+  },
+  "dataset": {
+    "ligands_available": 123,
+    "solvents_available": 52,
+    "reaction_types_supported": [
+      "Cross-Coupling",
+      "Hydrogenation",
+      "Metathesis",
+      "C-H_Activation",
+      "Carbonylation"
+    ]
+  },
+  "recommendations": {
+    "combined": [
+      {
+        "ligand": "BenzP*",
+        "ligand_compatibility": 1.0,
+        "solvent": "Acetic Acid",
+        "solvent_abbreviation": "AcOH",
+        "solvent_compatibility": 0.5,
+        "combined_score": 0.75,
+        "recommendation_confidence": "Medium",
+        "typical_conditions": {
+          "temperature": "80-140°C",
+          "time": "6-24 hours",
+          "atmosphere": "Inert (N₂ or Ar)",
+          "base": "K₂CO₃, Cs₂CO₃, K₃PO₄ or KOtBu",
+          "catalyst_loading": "5-20 mol% Cu",
+          "additives": "Ligands: phen, bipy, L-proline, diamines"
+        },
+        "synergy_bonus": 0.0,
+        "suggested_base": "K2CO3"
+      },
+      {
+        "ligand": "BenzP*",
+        "ligand_compatibility": 1.0,
+        "solvent": "Acetone",
+        "solvent_abbreviation": "Me2CO",
+        "solvent_compatibility": 0.5,
+        "combined_score": 0.75,
+        "recommendation_confidence": "Medium",
+        "typical_conditions": {
+          "temperature": "80-140°C",
+          "time": "6-24 hours",
+          "atmosphere": "Inert (N₂ or Ar)",
+          "base": "K₂CO₃, Cs₂CO₃, K₃PO₄ or KOtBu",
+          "catalyst_loading": "5-20 mol% Cu",
+          "additives": "Ligands: phen, bipy, L-proline, diamines"
+        },
+        "synergy_bonus": 0.0,
+        "suggested_base": "K2CO3"
+      },
+      {
+        "ligand": "BenzP*",
+        "ligand_compatibility": 1.0,
+        "solvent": "Acetonitrile",
+        "solvent_abbreviation": "MeCN",
+        "solvent_compatibility": 0.5,
+        "combined_score": 0.75,
+        "recommendation_confidence": "Medium",
+        "typical_conditions": {
+          "temperature": "80-140°C",
+          "time": "6-24 hours",
+          "atmosphere": "Inert (N₂ or Ar)",
+          "base": "K₂CO₃, Cs₂CO₃, K₃PO₄ or KOtBu",
+          "catalyst_loading": "5-20 mol% Cu",
+          "additives": "Ligands: phen, bipy, L-proline, diamines"
+        },
+        "synergy_bonus": 0.0,
+        "suggested_base": "K2CO3"
+      },
+      {
+        "ligand": "IPent",
+        "ligand_compatibility": 1.0,
+        "solvent": "Acetic Acid",
+        "solvent_abbreviation": "AcOH",
+        "solvent_compatibility": 0.5,
+        "combined_score": 0.75,
+        "recommendation_confidence": "Medium",
+        "typical_conditions": {
+          "temperature": "80-140°C",
+          "time": "6-24 hours",
+          "atmosphere": "Inert (N₂ or Ar)",
+          "base": "K₂CO₃, Cs₂CO₃, K₃PO₄ or KOtBu",
+          "catalyst_loading": "5-20 mol% Cu",
+          "additives": "Ligands: phen, bipy, L-proline, diamines"
+        },
+        "synergy_bonus": 0.0,
+        "suggested_base": "K2CO3"
+      },
+      {
+        "ligand": "IPent",
+        "ligand_compatibility": 1.0,
+        "solvent": "Acetone",
+        "solvent_abbreviation": "Me2CO",
+        "solvent_compatibility": 0.5,
+        "combined_score": 0.75,
+        "recommendation_confidence": "Medium",
+        "typical_conditions": {
+          "temperature": "80-140°C",
+          "time": "6-24 hours",
+          "atmosphere": "Inert (N₂ or Ar)",
+          "base": "K₂CO₃, Cs₂CO₃, K₃PO₄ or KOtBu",
+          "catalyst_loading": "5-20 mol% Cu",
+          "additives": "Ligands: phen, bipy, L-proline, diamines"
+        },
+        "synergy_bonus": 0.0,
+        "suggested_base": "K2CO3"
+      }
+    ],
+    "ligands": [
+      {
+        "ligand": "BenzP*",
+        "compatibility_score": 1.0,
+        "applications": "Cross-coupling",
+        "reaction_suitability": "Ullmann"
+      },
+      {
+        "ligand": "IPent",
+        "compatibility_score": 1.0,
+        "applications": "Metathesis",
+        "reaction_suitability": "Ullmann"
+      },
+      {
+        "ligand": "BIPHEP",
+        "compatibility_score": 0.8,
+        "applications": "Asymmetric reactions",
+        "reaction_suitability": "Ullmann"
+      },
+      {
+        "ligand": "MeO-BIPHEP",
+        "compatibility_score": 0.8,
+        "applications": "Asymmetric reactions",
+        "reaction_suitability": "Ullmann"
+      },
+      {
+        "ligand": "FerroTANE",
+        "compatibility_score": 0.8,
+        "applications": "Asymmetric catalysis",
+        "reaction_suitability": "Ullmann"
+      }
+    ],
+    "solvents": [
+      {
+        "solvent": "Acetic Acid",
+        "abbreviation": "AcOH",
+        "compatibility_score": 0.5,
+        "applications": "Carbonylation, esterification",
+        "reaction_suitability": "Ullmann"
+      },
+      {
+        "solvent": "Acetone",
+        "abbreviation": "Me2CO",
+        "compatibility_score": 0.5,
+        "applications": "Cross-coupling, extraction",
+        "reaction_suitability": "Ullmann"
+      },
+      {
+        "solvent": "Acetonitrile",
+        "abbreviation": "MeCN",
+        "compatibility_score": 0.5,
+        "applications": "Cross-coupling, C-H activation",
+        "reaction_suitability": "Ullmann"
+      },
+      {
+        "solvent": "Benzene",
+        "abbreviation": "PhH",
+        "compatibility_score": 0.5,
+        "applications": "C-H activation, aromatic chemistry",
+        "reaction_suitability": "Ullmann"
+      },
+      {
+        "solvent": "1-Butanol",
+        "abbreviation": "BuOH",
+        "compatibility_score": 0.5,
+        "applications": "Hydrogenation, extraction",
+        "reaction_suitability": "Ullmann"
+      }
+    ],
+    "alternatives": {
+      "budget_friendly_ligands": [
+        {
+          "rank": 3,
+          "ligand": "BIPHEP",
+          "compatibility_score": 0.8,
+          "applications": "Asymmetric reactions",
+          "reaction_suitability": "Ullmann"
+        },
+        {
+          "rank": 4,
+          "ligand": "MeO-BIPHEP",
+          "compatibility_score": 0.8,
+          "applications": "Asymmetric reactions",
+          "reaction_suitability": "Ullmann"
+        },
+        {
+          "rank": 10,
+          "ligand": "IAd",
+          "compatibility_score": 0.8,
+          "applications": "Metathesis",
+          "reaction_suitability": "Ullmann"
+        }
+      ],
+      "low_boiling_solvents": [
+        {
+          "rank": 2,
+          "solvent": "Acetone",
+          "abbreviation": "Me2CO",
+          "compatibility_score": 0.5,
+          "applications": "Cross-coupling, extraction",
+          "reaction_suitability": "Ullmann"
+        },
+        {
+          "rank": 3,
+          "solvent": "Acetonitrile",
+          "abbreviation": "MeCN",
+          "compatibility_score": 0.5,
+          "applications": "Cross-coupling, C-H activation",
+          "reaction_suitability": "Ullmann"
+        },
+        {
+          "rank": 4,
+          "solvent": "Benzene",
+          "abbreviation": "PhH",
+          "compatibility_score": 0.5,
+          "applications": "C-H activation, aromatic chemistry",
+          "reaction_suitability": "Ullmann"
+        }
+      ],
+      "green_solvents": [
+        {
+          "rank": 1,
+          "solvent": "Acetic Acid",
+          "abbreviation": "AcOH",
+          "compatibility_score": 0.5,
+          "applications": "Carbonylation, esterification",
+          "reaction_suitability": "Ullmann"
+        },
+        {
+          "rank": 2,
+          "solvent": "Acetone",
+          "abbreviation": "Me2CO",
+          "compatibility_score": 0.5,
+          "applications": "Cross-coupling, extraction",
+          "reaction_suitability": "Ullmann"
+        },
+        {
+          "rank": 3,
+          "solvent": "Acetonitrile",
+          "abbreviation": "MeCN",
+          "compatibility_score": 0.5,
+          "applications": "Cross-coupling, C-H activation",
+          "reaction_suitability": "Ullmann"
+        }
+      ]
+    }
+  },
+  "top_conditions": [
+    {
+      "reaction": {
+        "smiles": "Brc1ccccc1.NCC(=O)OC>>COC(=O)CNc1ccccc1"
+      },
+      "starting_materials": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Brc1ccccc1",
+          "equivalents": null
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "NCC(=O)OC",
+          "equivalents": null
+        }
+      ],
+      "catalyst": {
+        "metal_precursor": {
+          "name": "CuI",
+          "cas": "7681-65-4",
+          "smiles": null,
+          "equivalents": null
+        },
+        "ligand": {
+          "name": "BenzP*",
+          "cas": null,
+          "smiles": null,
+          "equivalents": null
+        }
+      },
+      "additives": [
+        {
+          "role": "base",
+          "name": "K2CO3",
+          "cas": null,
+          "smiles": null,
+          "equivalents": null
+        }
+      ],
+      "solvent": {
+        "name": "Acetic Acid",
+        "abbreviation": "AcOH",
+        "cas": "64-19-7",
+        "smiles": null,
+        "volume_ml": null
+      },
+      "conditions": {
+        "temperature": "80-140°C",
+        "time": "6-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    },
+    {
+      "reaction": {
+        "smiles": "Brc1ccccc1.NCC(=O)OC>>COC(=O)CNc1ccccc1"
+      },
+      "starting_materials": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Brc1ccccc1",
+          "equivalents": null
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "NCC(=O)OC",
+          "equivalents": null
+        }
+      ],
+      "catalyst": {
+        "metal_precursor": {
+          "name": "CuI",
+          "cas": "7681-65-4",
+          "smiles": null,
+          "equivalents": null
+        },
+        "ligand": {
+          "name": "BenzP*",
+          "cas": null,
+          "smiles": null,
+          "equivalents": null
+        }
+      },
+      "additives": [
+        {
+          "role": "base",
+          "name": "K2CO3",
+          "cas": null,
+          "smiles": null,
+          "equivalents": null
+        }
+      ],
+      "solvent": {
+        "name": "Acetone",
+        "abbreviation": "Me2CO",
+        "cas": "67-64-1",
+        "smiles": null,
+        "volume_ml": null
+      },
+      "conditions": {
+        "temperature": "80-140°C",
+        "time": "6-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    },
+    {
+      "reaction": {
+        "smiles": "Brc1ccccc1.NCC(=O)OC>>COC(=O)CNc1ccccc1"
+      },
+      "starting_materials": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Brc1ccccc1",
+          "equivalents": null
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "NCC(=O)OC",
+          "equivalents": null
+        }
+      ],
+      "catalyst": {
+        "metal_precursor": {
+          "name": "CuI",
+          "cas": "7681-65-4",
+          "smiles": null,
+          "equivalents": null
+        },
+        "ligand": {
+          "name": "BenzP*",
+          "cas": null,
+          "smiles": null,
+          "equivalents": null
+        }
+      },
+      "additives": [
+        {
+          "role": "base",
+          "name": "K2CO3",
+          "cas": null,
+          "smiles": null,
+          "equivalents": null
+        }
+      ],
+      "solvent": {
+        "name": "Acetonitrile",
+        "abbreviation": "MeCN",
+        "cas": "75-05-8",
+        "smiles": null,
+        "volume_ml": null
+      },
+      "conditions": {
+        "temperature": "80-140°C",
+        "time": "6-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    }
+  ],
+  "related_reactions": [
+    {
+      "reaction_smiles": "Brc1ccccc1 . CC(=O)c1n[nH]c2cc(Cl)ccc12>>CC(=O)c1nn(-c2ccccc2)c2cc(Cl)ccc12",
+      "similarity": 0.3237833594976452,
+      "yield": 82,
+      "catalyst": "Cuprous iodide",
+      "ligand": "L-Proline",
+      "solvent": "DMSO",
+      "temperature": 120.0,
+      "time": 2.0,
+      "reference": "Organic Letters (2024), 26(5), 1046-1050. | Li, Jianan; et al | Organic Letters (2024), 26(5), 1046-1050.",
+      "reaction_id": "31-614-CAS-40106798"
+    },
+    {
+      "reaction_smiles": "Brc1ccccc1 . Cc1ccc(C)c2c1NCCC2C(=O)O>>Cc1ccc(C)c2c1C(C(=O)O)CCN2c1ccccc1",
+      "similarity": 0.3135792778649922,
+      "yield": 84,
+      "catalyst": "Cuprous iodide",
+      "ligand": "Pyridine",
+      "solvent": "DMF",
+      "temperature": 120.0,
+      "time": 13.0,
+      "reference": "Organic Letters (2024), 26(5), 1046-1050. | Li, Jianan; et al | Organic Letters (2024), 26(5), 1046-1050.",
+      "reaction_id": "31-614-CAS-42120045"
+    }
+  ],
+  "related_reactions_file": "exports\\related_20250822-173241.html"
+}
