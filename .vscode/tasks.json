@@ -1,30 +1,21 @@
 {
+	// VS Code Tasks for running smokes reliably on Windows PowerShell
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "Quick Ullmann Ligand Smoke Test",
+			"label": "Smoke: Ullmann (PYTHONPATH)",
 			"type": "shell",
-			"command": "C:/Users/zbs/AppData/Local/Programs/Python/Python312/python.exe",
+			"command": "python",
 			"args": [
-				"-c",
-				"from enhanced_recommendation_engine import create_recommendation_engine; e=create_recommendation_engine(); recs=e.get_recommendations('Brc1ccccc1.NH2c1ccccc1>>Nc1ccccc1','C-N Coupling - Ullmann'); ligs=recs.get('ligand_recommendations',[])[:5]; print('TOP', [(r['ligand'], r.get('compatibility_score')) for r in ligs]); print('TYPE', recs.get('reaction_type'))"
+				"scripts/smoke_ullmann.py"
 			],
-			"problemMatcher": [
-				"$tsc"
-			],
-			"group": "test"
-		},
-		{
-			"label": "Run Ullmann Smoke (PYTHONPATH)",
-			"type": "shell",
-			"command": "powershell",
-			"args": [
-				"-NoProfile",
-				"-NonInteractive",
-				"-Command",
-				"$env:PYTHONPATH='.'; & C:/Users/zbs/AppData/Local/Programs/Python/Python312/python.exe scripts/smoke_ullmann.py"
-			],
-			"group": "test"
+			"options": {
+				"env": {
+					"PYTHONPATH": "."
+				}
+			},
+			"group": "test",
+			"problemMatcher": []
 		}
 	]
 }

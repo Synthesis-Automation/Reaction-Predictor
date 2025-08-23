@@ -224,8 +224,10 @@ class EnhancedRecommendationEngine:
             # Normalize scoring mapping for internal parsing, but pass original type to allow Ullmann boosts
             scoring_type = 'Cross-Coupling' if (reaction_type or '').lower() == 'ullmann' else reaction_type
 
-            # Evidence-aware context: mine dataset for ligands used in similar reactions (if available)
+            # Evidence-aware context: mine dataset for ligands/solvents/bases used in similar reactions (if available)
             evidence_ligands = self._harvest_evidence_ligands(reaction_type)
+            evidence_solvents = self._harvest_evidence_solvents(reaction_type)
+            evidence_bases = self._harvest_evidence_bases(reaction_type)
 
             # Get top ligands for this reaction type, with evidence-aware boost
             ligands = recommend_ligands_for_reaction(
@@ -236,11 +238,12 @@ class EnhancedRecommendationEngine:
             )
             recommendations['ligand_recommendations'] = ligands
             
-            # Get top solvents for this reaction type
+            # Get top solvents for this reaction type (pass evidence for gentle boost)
             solvents = recommend_solvents_for_reaction(
                 reaction_type=reaction_type,
                 top_n=5,
-                min_compatibility=0.4
+                min_compatibility=0.4,
+                evidence_solvents=evidence_solvents or None
             )
             recommendations['solvent_recommendations'] = solvents
             
@@ -252,6 +255,40 @@ class EnhancedRecommendationEngine:
                     top_n=5,
                     min_compatibility=0.4
                 )
+                # Apply evidence-aware gentle boost to bases if we have any
+                try:
+                    if evidence_bases:
+                        # Normalize weights
+                        max_w = max(float(v) for v in evidence_bases.values()) if evidence_bases else 0.0
+                        if max_w > 0:
+                            def _canon_base(nm: str) -> str:
+                                s = (nm or '').strip()
+                                # favor formula inside parentheses if present
+                                if '(' in s and ')' in s:
+                                    inner = s[s.rfind('(')+1:s.rfind(')')].strip()
+                                    if inner:
+                                        s = inner
+                                return s.lower()
+
+                            ev_map = { _canon_base(k): float(v) for k, v in evidence_bases.items() }
+                            boosted = []
+                            for b in bases:
+                                name = b.get('base') or ''
+                                key = _canon_base(str(name))
+                                w = ev_map.get(key, 0.0)
+                                adjusted = b.get('compatibility_score', 0.0)
+                                if w > 0:
+                                    norm = w / max_w
+                                    boost = 0.05 + 0.10 * float(norm)
+                                    adjusted = max(0.0, min(1.0, adjusted + boost))
+                                nb = dict(b)
+                                nb['compatibility_score'] = round(adjusted, 3)
+                                boosted.append(nb)
+                            # Re-rank
+                            boosted.sort(key=lambda x: x.get('compatibility_score', 0.0), reverse=True)
+                            bases = boosted
+                except Exception:
+                    pass
                 recommendations['base_recommendations'] = bases
             except Exception:
                 bases = []
@@ -337,6 +374,95 @@ class EnhancedRecommendationEngine:
                     # ignore a bad file
                     continue
             # retain top few
+            if evidence:
+                top = sorted(evidence.items(), key=lambda kv: kv[1], reverse=True)[:10]
+                return {k: float(v) for k, v in top}
+        except Exception:
+            pass
+        return evidence
+
+    def _harvest_evidence_solvents(self, reaction_type: str) -> dict:
+        """Collect frequency map of solvents from built-in datasets for this reaction type."""
+        evidence: dict[str, float] = {}
+        try:
+            data_dir = os.path.join(_ROOT, 'data', 'reaction_dataset')
+            if not os.path.isdir(data_dir):
+                return evidence
+            for fname in os.listdir(data_dir):
+                if not fname.lower().endswith('.csv'):
+                    continue
+                path = os.path.join(data_dir, fname)
+                try:
+                    import csv
+                    with open(path, 'r', encoding='utf-8') as f:
+                        reader = csv.DictReader(f)
+                        for row in reader:
+                            rtype = (row.get('ReactionType') or '').strip()
+                            if not rtype or rtype.lower() != (reaction_type or '').lower():
+                                continue
+                            raw = row.get('Solvent') or row.get('SOLName') or ''
+                            if not raw:
+                                continue
+                            s = str(raw).strip().strip('[]').replace('"', '').replace("'", '')
+                            parts = [p.strip() for p in s.split(',') if p.strip()]
+                            items = parts if parts else ([s] if s else [])
+                            for it in items:
+                                if not it:
+                                    continue
+                                name = it
+                                evidence[name] = evidence.get(name, 0) + 1
+                except Exception:
+                    continue
+            if evidence:
+                top = sorted(evidence.items(), key=lambda kv: kv[1], reverse=True)[:10]
+                return {k: float(v) for k, v in top}
+        except Exception:
+            pass
+        return evidence
+
+    def _harvest_evidence_bases(self, reaction_type: str) -> dict:
+        """Collect frequency map of bases from built-in datasets for this reaction type.
+
+        The datasets may store bases under different columns: ReagentRaw/ReagentRole or RGTName, etc.
+        We'll look for common base tokens and increment counts by base name.
+        """
+        evidence: dict[str, float] = {}
+        try:
+            data_dir = os.path.join(_ROOT, 'data', 'reaction_dataset')
+            if not os.path.isdir(data_dir):
+                return evidence
+            base_tokens = ['k2co3', 'cs2co3', 'k3po4', 'kotbu', 'naotbu', 'na2co3', 'koh', 'tbuok', 'ko-tbu', 'triethylamine', 'et3n']
+            def _maybe_add(text: str):
+                if not text:
+                    return
+                s = str(text).strip().strip('[]').replace('"', '').replace("'", '')
+                parts = [p.strip() for p in s.split(',') if p.strip()]
+                items = parts if parts else ([s] if s else [])
+                for it in items:
+                    low = it.lower()
+                    for tok in base_tokens:
+                        if tok in low:
+                            evidence[it] = evidence.get(it, 0) + 1
+                            break
+
+            for fname in os.listdir(data_dir):
+                if not fname.lower().endswith('.csv'):
+                    continue
+                path = os.path.join(data_dir, fname)
+                try:
+                    import csv
+                    with open(path, 'r', encoding='utf-8') as f:
+                        reader = csv.DictReader(f)
+                        for row in reader:
+                            rtype = (row.get('ReactionType') or '').strip()
+                            if not rtype or rtype.lower() != (reaction_type or '').lower():
+                                continue
+                            # check common columns
+                            _maybe_add(row.get('ReagentRaw') or '')
+                            _maybe_add(row.get('RGTName') or '')
+                            _maybe_add(row.get('Base') or '')
+                except Exception:
+                    continue
             if evidence:
                 top = sorted(evidence.items(), key=lambda kv: kv[1], reverse=True)[:10]
                 return {k: float(v) for k, v in top}

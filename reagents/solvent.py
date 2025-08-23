@@ -263,22 +263,50 @@ def calculate_solvent_weighted_similarity(solvent1_features, solvent2_features, 
     return similarity
 
 
-def recommend_solvents_for_reaction(target_solvent=None, reaction_type="Cross-Coupling", top_n=5, min_compatibility=0.3):
+def recommend_solvents_for_reaction(target_solvent=None, reaction_type="Cross-Coupling", top_n=5, min_compatibility=0.3, evidence_solvents=None):
     df = create_solvent_dataframe()
 
     compatible_solvents = []
+    # Prepare case-insensitive evidence set
+    evidence_map = {}
+    if evidence_solvents and isinstance(evidence_solvents, dict):
+        try:
+            evidence_map = {str(k).lower(): float(v) for k, v in evidence_solvents.items()}
+        except Exception:
+            evidence_map = {}
+
     for idx, row in df.iterrows():
+        name = row.get("Solvent", row.get("name", ""))
         compatibility = parse_solvent_reaction_compatibility(row.get("Reaction_Compatibility", ""), reaction_type)
-        if compatibility >= min_compatibility:
+        in_evidence = str(name).lower() in evidence_map if name else False
+        if compatibility >= min_compatibility or in_evidence:
             compatible_solvents.append({
                 "index": idx,
-                "name": row.get("Solvent", row.get("name", "")),
+                "name": name,
                 "compatibility": compatibility,
                 "applications": row.get("Typical_Applications", ""),
                 "abbreviation": row.get("Abbreviation", ""),
+                "_in_evidence": in_evidence,
             })
 
     compatible_solvents.sort(key=lambda x: x["compatibility"], reverse=True)
+
+    # Apply evidence-aware gentle boost 0.05..0.15 for solvents observed in datasets
+    if evidence_map:
+        try:
+            max_w = max(evidence_map.values()) if evidence_map else 0.0
+        except Exception:
+            max_w = 0.0
+        if max_w > 0:
+            for s in compatible_solvents:
+                nm = str(s.get("name", ""))
+                w = evidence_map.get(nm.lower(), 0.0)
+                if w > 0:
+                    norm = w / max_w
+                    boost = 0.05 + 0.10 * float(norm)
+                    s["adjusted"] = max(0.0, min(1.0, s.get("compatibility", 0.0) + boost))
+        # Re-sort by adjusted score if any applied
+        compatible_solvents.sort(key=lambda x: x.get("adjusted", x["compatibility"]), reverse=True)
 
     if target_solvent:
         target_idx = None
@@ -302,7 +330,11 @@ def recommend_solvents_for_reaction(target_solvent=None, reaction_type="Cross-Co
                         solvent["similarity"] = 0
 
                 compatible_solvents = [s for s in compatible_solvents if s["index"] != target_idx]
-                compatible_solvents.sort(key=lambda x: (x["compatibility"] * 0.6 + x.get("similarity", 0) * 0.4), reverse=True)
+                # If adjusted present, prefer it in combo score
+                def _combo_key(x):
+                    base = x.get("adjusted", x["compatibility"])
+                    return (base * 0.6 + x.get("similarity", 0) * 0.4)
+                compatible_solvents.sort(key=_combo_key, reverse=True)
 
     recommendations = []
     for i, solvent in enumerate(compatible_solvents[:top_n]):
@@ -310,13 +342,14 @@ def recommend_solvents_for_reaction(target_solvent=None, reaction_type="Cross-Co
             "rank": i + 1,
             "solvent": solvent["name"],
             "abbreviation": solvent["abbreviation"],
-            "compatibility_score": round(solvent["compatibility"], 3),
+            "compatibility_score": round(solvent.get("adjusted", solvent["compatibility"]), 3),
             "applications": solvent["applications"],
             "reaction_suitability": reaction_type,
         }
         if "similarity" in solvent:
             rec["similarity_score"] = round(solvent["similarity"], 3)
-            rec["combined_score"] = round(solvent["compatibility"] * 0.6 + solvent.get("similarity", 0) * 0.4, 3)
+            base_comp = solvent.get("adjusted", solvent["compatibility"])
+            rec["combined_score"] = round(base_comp * 0.6 + solvent.get("similarity", 0) * 0.4, 3)
         recommendations.append(rec)
 
     return recommendations

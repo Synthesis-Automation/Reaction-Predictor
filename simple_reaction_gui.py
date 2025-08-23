@@ -2,7 +2,7 @@
 Simple Reaction Condition Predictor GUI - Basic Edition
 ======================================================
 
-This GUI provides basic reaction condition prediction interface for organic chemistry:
+This GUI provides a basic interface for reaction condition prediction in organic chemistry:
 - Simple SMILES input interface
 - Reaction type selection
 - Basic dark-themed UI
@@ -459,7 +459,7 @@ class SampleReactionsBrowser(QDialog):
         # Sub-categories per family
         sub_layout = QHBoxLayout()
         # C-C subcats
-        cc_box = QGroupBox("C-C Subtypes")
+        cc_box = QGroupBox("C-C Couplings")
         cc_l = QHBoxLayout(cc_box)
         for name, key in [("Suzuki (Pd)", "cc_suzuki"), ("Stille (Pd)", "cc_stille"), ("Sonogashira (Pd)", "cc_sonogashira"), ("Heck (Pd)", "cc_heck"), ("Negishi (Pd)", "cc_negishi"), ("Kumada (Ni)", "cc_kumada")]:
             cb = QCheckBox(name)
@@ -469,7 +469,7 @@ class SampleReactionsBrowser(QDialog):
         sub_layout.addWidget(cc_box)
 
         # C-N subcats
-        cn_box = QGroupBox("C-N Subtypes")
+        cn_box = QGroupBox("C-N Couplings")
         cn_l = QHBoxLayout(cn_box)
         for name, key in [("Buchwald-Hartwig (Pd)", "cn_bh"), ("Ullmann (Cu)", "cn_ullmann"), ("Chan-Lam (Cu)", "cn_chanlam")]:
             cb = QCheckBox(name)
@@ -479,7 +479,7 @@ class SampleReactionsBrowser(QDialog):
         sub_layout.addWidget(cn_box)
 
         # C-O subcats
-        co_box = QGroupBox("C-O Subtypes")
+        co_box = QGroupBox("C-O Couplings")
         co_l = QHBoxLayout(co_box)
         for name, key in [("Ullmann Ether (Cu)", "co_ullmann_ether"), ("Mitsunobu", "co_mitsunobu")]:
             cb = QCheckBox(name)
@@ -489,7 +489,7 @@ class SampleReactionsBrowser(QDialog):
         sub_layout.addWidget(co_box)
 
         # C-S subcats
-        cs_box = QGroupBox("C-S Subtypes")
+        cs_box = QGroupBox("C-S Couplings")
         cs_l = QHBoxLayout(cs_box)
         for name, key in [("Thioether Coupling (Pd)", "cs_thioether")]:
             cb = QCheckBox(name)
@@ -505,33 +505,34 @@ class SampleReactionsBrowser(QDialog):
         
         # Reactions list and details splitter
         content_splitter = QSplitter(Qt.Orientation.Horizontal)
-        
+
         # Reactions list
         list_group = QGroupBox("Reactions List")
         list_layout = QVBoxLayout(list_group)
-        
+
         self.reactions_list = QListWidget()
         self.reactions_list.setMinimumWidth(500)  # Increased from 400 to 500
         self.reactions_list.itemClicked.connect(self.on_reaction_selected)
         self.reactions_list.itemDoubleClicked.connect(self.on_reaction_double_clicked)
         list_layout.addWidget(self.reactions_list)
-        
+
         # Stats label
         self.stats_label = QLabel("Total reactions: 0")
         self.stats_label.setStyleSheet("color: #CCCCCC; font-style: italic;")
         list_layout.addWidget(self.stats_label)
-        
+
         content_splitter.addWidget(list_group)
-        
+
         # Reaction details
         details_group = QGroupBox("Reaction Details")
         details_layout = QVBoxLayout(details_group)
-        
+
         # Reaction image display
         self.details_image_label = QLabel()
-        self.details_image_label.setMinimumHeight(200)  # Increased from 150
-        self.details_image_label.setMaximumHeight(280)  # Increased from 200
+        self.details_image_label.setMinimumHeight(200)
+        self.details_image_label.setMaximumHeight(280)
         self.details_image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.details_image_label.setScaledContents(True)
         self.details_image_label.setStyleSheet("""
             QLabel {
                 background-color: #404040;
@@ -541,38 +542,38 @@ class SampleReactionsBrowser(QDialog):
                 font-style: italic;
             }
         """)
-        self.details_image_label.setText("Select a reaction to view structure")
+        self.details_image_label.setText("Select a reaction to view the structure")
         details_layout.addWidget(self.details_image_label)
-        
+
         # Text details
         self.details_text = QTextEdit()
-        self.details_text.setMinimumWidth(450)  # Increased from 350
-        self.details_text.setMinimumHeight(200)  # Increased from 150
+        self.details_text.setMinimumWidth(450)
+        self.details_text.setMinimumHeight(200)
         self.details_text.setReadOnly(True)
         self.details_text.setPlaceholderText("Select a reaction to view details...")
         details_layout.addWidget(self.details_text)
-        
+
         content_splitter.addWidget(details_group)
-        content_splitter.setSizes([500, 600])  # Adjusted proportions: 500 for list, 600 for details
-        
+        content_splitter.setSizes([500, 600])
+
         layout.addWidget(content_splitter)
-        
+
         # Buttons
         button_layout = QHBoxLayout()
-        
+
         self.select_button = QPushButton("Select Reaction")
         self.select_button.setMinimumHeight(35)
         self.select_button.clicked.connect(self.select_reaction)
         self.select_button.setEnabled(False)
-        
+
         cancel_button = QPushButton("Cancel")
         cancel_button.setMinimumHeight(35)
         cancel_button.clicked.connect(self.reject)
-        
+
         button_layout.addStretch()
         button_layout.addWidget(self.select_button)
         button_layout.addWidget(cancel_button)
-        
+
         layout.addLayout(button_layout)
         
         # Apply dark theme
@@ -815,7 +816,7 @@ class SampleReactionsBrowser(QDialog):
                 ("Thioether Formation", self.category_checkboxes["cs_thioether"].isChecked()),
             ]
 
-            # Helper to add if any of tokens in reaction string
+            # Helper: add a reaction if it contains any of the tokens
             def add_by_tokens(tokens):
                 for r in self.all_reactions:
                     if any(tok in r for tok in tokens):
@@ -890,7 +891,7 @@ class SampleReactionsBrowser(QDialog):
         if not reaction or reaction.startswith("Select a sample"):
             self.details_text.clear()
             self.details_image_label.clear()
-            self.details_image_label.setText("Select a reaction to view structure")
+            self.details_image_label.setText("Select a reaction to view the structure")
             return
         
         # Parse reaction to extract clean SMILES (before any description)
@@ -935,15 +936,21 @@ class SampleReactionsBrowser(QDialog):
         
         # Update reaction image
         try:
-            if smiles_part and ">>" in smiles_part:
-                # Create reaction image for the details view (larger size to utilize more space)
-                pixmap = create_reaction_image(smiles_part, 580, 200)  # Increased from 480x150 to 580x200
-                
-                if pixmap and not pixmap.isNull():
-                    self.details_image_label.setPixmap(pixmap)
+            # Try full image first; on failure, display a placeholder
+            if smiles_part:
+                pixmap = None
+                if ">>" in smiles_part:
+                    pixmap = create_reaction_image(smiles_part, 580, 200)
+                # If primary draw failed or not a strict reaction string, try placeholder
+                if not pixmap or pixmap.isNull():
+                    placeholder = create_placeholder_image(smiles_part, 580, 200)
+                    if placeholder and not placeholder.isNull():
+                        self.details_image_label.setPixmap(placeholder)
+                    else:
+                        self.details_image_label.clear()
+                        self.details_image_label.setText("Could not generate reaction image")
                 else:
-                    self.details_image_label.clear()
-                    self.details_image_label.setText("Could not generate reaction image")
+                    self.details_image_label.setPixmap(pixmap)
             else:
                 self.details_image_label.clear()
                 self.details_image_label.setText("Invalid reaction format")
@@ -1234,41 +1241,45 @@ class SmilesDrawingDialog(QDialog):
         self.setWindowTitle("Draw Chemical Structure")
         self.setModal(True)
         self.resize(500, 300)
-        
+
         layout = QVBoxLayout(self)
-        
+
         # Instructions
-        instructions = QLabel("""
+        instructions = QLabel(
+            """
 <h3>Chemical Structure Drawing</h3>
-<p>This will open a web-based molecular editor where you can:</p>
+<p>This opens a web-based molecular editor where you can:</p>
 <ul>
 <li>Draw molecules and reactions using the JSME editor</li>
 <li>Use the "Get SMILES" button to see the SMILES string</li>
 <li>Use the "Save to Python" button to send the structure back to this application</li>
-<li>Close the browser window when finished</li>
+<li>Close the browser window when you're finished</li>
 </ul>
-<p><b>Note:</b> Make sure to click "Save to Python" in the web editor before closing!</p>
-""")
+<p><b>Note:</b> Be sure to click "Save to Python" in the web editor before closing.</p>
+"""
+        )
         instructions.setWordWrap(True)
-        instructions.setStyleSheet("QLabel { color: #ffffff; background-color: #3c3c3c; padding: 15px; border-radius: 5px; }")
+        instructions.setStyleSheet(
+            "QLabel { color: #ffffff; background-color: #3c3c3c; padding: 15px; border-radius: 5px; }"
+        )
         layout.addWidget(instructions)
-        
+
         # Status label
-        self.status_label = QLabel("Ready to launch structure editor...")
+        self.status_label = QLabel("Ready to launch the structure editor...")
         self.status_label.setStyleSheet("color: #4CAF50; font-weight: bold; padding: 10px;")
         layout.addWidget(self.status_label)
-        
+
         # Progress bar
         self.progress_bar = QProgressBar()
         self.progress_bar.setVisible(False)
         layout.addWidget(self.progress_bar)
-        
+
         # Current SMILES display
         smiles_layout = QVBoxLayout()
         smiles_label = QLabel("Current SMILES:")
         smiles_label.setStyleSheet("font-weight: bold; color: #ffffff;")
         smiles_layout.addWidget(smiles_label)
-        
+
         self.smiles_display = QTextEdit()
         self.smiles_display.setMaximumHeight(80)
         self.smiles_display.setPlaceholderText("No structure drawn yet...")
@@ -1277,30 +1288,31 @@ class SmilesDrawingDialog(QDialog):
             self.smiles_display.setPlainText(self.initial_smiles)
         smiles_layout.addWidget(self.smiles_display)
         layout.addLayout(smiles_layout)
-        
+
         # Buttons
         button_layout = QHBoxLayout()
-        
+
         self.launch_button = QPushButton("Launch Structure Editor")
         self.launch_button.clicked.connect(self.launch_editor)
         self.launch_button.setMinimumHeight(40)
         button_layout.addWidget(self.launch_button)
-        
+
         self.ok_button = QPushButton("Use This Structure")
         self.ok_button.clicked.connect(self.accept)
         self.ok_button.setEnabled(False)
         self.ok_button.setMinimumHeight(40)
         button_layout.addWidget(self.ok_button)
-        
+
         self.cancel_button = QPushButton("Cancel")
         self.cancel_button.clicked.connect(self.reject)
         self.cancel_button.setMinimumHeight(40)
         button_layout.addWidget(self.cancel_button)
-        
+
         layout.addLayout(button_layout)
-        
+
         # Apply dark theme
-        self.setStyleSheet("""
+        self.setStyleSheet(
+            """
             QDialog {
                 background-color: #2b2b2b;
                 color: #ffffff;
@@ -1325,7 +1337,8 @@ class SmilesDrawingDialog(QDialog):
                 color: #ffffff;
                 border-radius: 3px;
             }
-        """)
+            """
+        )
     
     def launch_editor(self):
         """Launch the web-based structure editor"""
@@ -1890,26 +1903,36 @@ class SimpleReactionGUI(QMainWindow):
                 try:
                     # Create reaction image with wider width to prevent overlap
                     pixmap = create_reaction_image(reaction_smiles, 480, 140)
-                    
-                    if pixmap and not pixmap.isNull():
-                        image_label = QLabel()
-                        image_label.setPixmap(pixmap)
-                        image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-                        image_label.setStyleSheet("""
+
+                    image_label = QLabel()
+                    image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                    image_label.setStyleSheet(
+                        """
                             QLabel {
                                 background-color: white;
                                 border: 1px solid #777777;
                                 border-radius: 3px;
                                 padding: 5px;
                             }
-                        """)
+                        """
+                    )
+                    image_label.setScaledContents(True)
+
+                    if pixmap and not pixmap.isNull():
+                        image_label.setPixmap(pixmap)
                         container_layout.addWidget(image_label)
                     else:
-                        # Fallback if image creation fails
-                        fallback_label = QLabel("Could not generate reaction image")
-                        fallback_label.setStyleSheet("color: #CCCCCC; font-style: italic; text-align: center;")
-                        fallback_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-                        container_layout.addWidget(fallback_label)
+                        # Fallback to placeholder pixmap
+                        placeholder = create_placeholder_image(reaction_smiles, 480, 140)
+                        if placeholder and not placeholder.isNull():
+                            image_label.setPixmap(placeholder)
+                            container_layout.addWidget(image_label)
+                        else:
+                            # Final textual fallback
+                            fallback_label = QLabel("Could not generate reaction image")
+                            fallback_label.setStyleSheet("color: #CCCCCC; font-style: italic; text-align: center;")
+                            fallback_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                            container_layout.addWidget(fallback_label)
                 except Exception as e:
                     print(f"Error creating image for related reaction {i}: {e}")
                     error_label = QLabel("Error generating image")
