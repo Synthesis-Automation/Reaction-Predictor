@@ -493,6 +493,8 @@ class EnhancedRecommendationEngine:
                                 'ReactionID': row.get('ReactionID') or '',
                                 'ReactionType': row.get('ReactionType') or '',
                                 'CondKey': row.get('CondKey') or '',
+                                'ReactantSMILES': rs,
+                                'ProductSMILES': ps,
                                 'Ligand': row.get('Ligand') or '',
                                 'ReagentRaw': row.get('ReagentRaw') or '',
                                 'ReagentRole': row.get('ReagentRole') or '',
@@ -627,7 +629,11 @@ class EnhancedRecommendationEngine:
                 'ReactionID': h.get('ReactionID'),
                 'ReactionType': h.get('ReactionType'),
                 'CondKey': h.get('CondKey'),
-                'similarity': round(float(h.get('similarity') or 0.0), 3)
+                'similarity': round(float(h.get('similarity') or 0.0), 3),
+                'reactant_smiles': h.get('ReactantSMILES') or '',
+                'product_smiles': h.get('ProductSMILES') or '',
+                'reaction_smiles': (f"{h.get('ReactantSMILES')}>>{h.get('ProductSMILES')}"
+                                    if (h.get('ReactantSMILES') and h.get('ProductSMILES')) else None)
             } for h in top_hits[:10]]
 
             # Create combined suggestions for convenience

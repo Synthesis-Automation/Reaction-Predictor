@@ -2426,6 +2426,35 @@ class SimpleReactionGUI(QMainWindow):
                 )
                 related_reactions = self.get_related_reactions_from_dataset(reaction_smiles, reaction_type=rt_hint)
                 if not related_reactions:
+                    # Fallback: build simple cards from general similarity hits if available
+                    try:
+                        gen = result.get('recommendations', {}).get('general_recommendations')
+                        hits = (gen or {}).get('top_hits') or []
+                        built = []
+                        for h in hits[:4]:
+                            rxn = h.get('reaction_smiles')
+                            if not rxn:
+                                rs = h.get('reactant_smiles') or ''
+                                ps = h.get('product_smiles') or ''
+                                rxn = f"{rs}>>{ps}" if (rs and ps) else None
+                            if not rxn:
+                                continue
+                            built.append({
+                                'reaction_smiles': rxn,
+                                'similarity': h.get('similarity'),
+                                'yield': None,
+                                'catalyst': 'N/A',
+                                'ligand': 'N/A',
+                                'solvent': 'N/A',
+                                'temperature': None,
+                                'time': None,
+                                'reference': h.get('ReactionType') or '',
+                                'reaction_id': h.get('ReactionID') or ''
+                            })
+                        if built:
+                            related_reactions = built
+                    except Exception:
+                        pass
                     detected_type = result.get('recommendations', {}).get('reaction_type', '')
                     if (analysis_type == 'buchwald_hartwig' or 
                         'buchwald' in detected_type.lower() or 
@@ -2732,6 +2761,34 @@ class SimpleReactionGUI(QMainWindow):
             'top_conditions': top_conditions,
             'related_reactions': related,
         }
+
+        # Optionally embed general, cross-dataset similarity suggestions if present
+        try:
+            # Engine may attach general at top-level (result['general_recommendations'])
+            gen = (result.get('general_recommendations')
+                   or (recs.get('general_recommendations') if isinstance(recs, dict) else {})) or {}
+            if gen:
+                payload['general'] = {
+                    'ligands': [
+                        {'ligand': it.get('ligand'), 'score': it.get('compatibility_score')}
+                        for it in (gen.get('ligand_recommendations') or [])
+                    ],
+                    'solvents': [
+                        {
+                            'solvent': it.get('solvent'),
+                            'abbreviation': it.get('abbreviation'),
+                            'score': it.get('compatibility_score')
+                        }
+                        for it in (gen.get('solvent_recommendations') or [])
+                    ],
+                    'bases': [
+                        {'base': it.get('base'), 'score': it.get('compatibility_score')}
+                        for it in (gen.get('base_recommendations') or [])
+                    ],
+                    'top_hits': gen.get('top_hits') or []
+                }
+        except Exception:
+            pass
         return payload
     
     def _format_buchwald_recommendations(self, result):
@@ -3067,6 +3124,36 @@ Status: {result['status']}
         if guidance:
             text += f"\n{guidance}\n"
         
+        # If available, append a compact section with cross-dataset similarity suggestions
+        gen = (recommendations.get('general_recommendations') if isinstance(recommendations, dict) else None)
+        if gen:
+            try:
+                text += "\n🔎 Cross-dataset similarity suggestions (Auto-detect helper):\n"
+                # Ligands
+                ligs = gen.get('ligand_recommendations') or []
+                if ligs:
+                    text += "  • Ligands: " + ", ".join(
+                        f"{it.get('ligand')} (score {it.get('compatibility_score')})" for it in ligs[:5]
+                    ) + "\n"
+                # Solvents
+                sols = gen.get('solvent_recommendations') or []
+                if sols:
+                    text += "  • Solvents: " + ", ".join(
+                        f"{it.get('solvent')} ({it.get('abbreviation')}) (score {it.get('compatibility_score')})" for it in sols[:5]
+                    ) + "\n"
+                # Bases
+                bases = gen.get('base_recommendations') or []
+                if bases:
+                    text += "  • Bases: " + ", ".join(
+                        f"{it.get('base')} (score {it.get('compatibility_score')})" for it in bases[:5]
+                    ) + "\n"
+                hits = gen.get('top_hits') or []
+                if hits:
+                    text += f"  • Similarity hits referenced: {len(hits)} (showing up to 10 in export)\n"
+                text += "\n"
+            except Exception:
+                pass
+
         # Add footer
         text += f"""
 📚 REFERENCES & NOTES:

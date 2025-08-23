@@ -2,7 +2,26 @@
 
 A GUI and CLI toolkit for reaction condition prediction with an enhanced recommendation engine, dataset-aware boosts, and a comprehensive sample browser (including Ullmann and Buchwald-Hartwig scopes).
 
+## What changed (2025-08-24)
+
+- Auto‑detect: added cross‑dataset similarity fallback using RDKit (Morgan FPs) to suggest ligands/solvents/bases and surface top related hits across all CSV datasets.
+  - GUI shows a compact "Cross‑dataset similarity suggestions" section.
+  - Related Reactions panel now falls back to these hits if dataset‑specific lookup finds none.
+  - Export JSON includes a `general` block with suggestions and `top_hits` (each with `reaction_smiles`).
+- Ullmann path refinements: demoted phosphines/NHCs (e.g., BenzP*, FerroTANE), added QUINAP penalty, and boosted N‑ligands (phen/bipy/L‑proline/diamines) with evidence support.
+- Evidence‑aware boosting expanded to ligands, solvents, and bases, mined from local CSVs or analytics when available.
+- GUI browser focus on coupling reactions: family/subtype filters and metal‑tagged labels (e.g., "Suzuki (Pd)", "Ullmann (Cu)"); detected type display includes metal.
+- Solvent module cleanup: removed import‑time Excel side effects; Excel export is opt‑in via scripts.
+- Export polish: simplified JSON with top_conditions; optional `dataset.analytics` snippet; new `general` block for Auto‑detect helper.
+
 ## 🆕 What's New
+
+### General cross-dataset similarity (Auto‑detect)
+
+- When the reaction type is left as Auto‑detect, the engine scans all CSVs under `data/reaction_dataset/` using RDKit similarity to surface:
+  - Suggested ligands/solvents/bases (normalized 0..1 scores)
+  - Top related reaction hits (now including `reaction_smiles`)
+- The GUI shows a compact "Cross‑dataset similarity suggestions" block, and will fall back to these hits to populate the Related Reactions panel if dataset‑specific search yields none.
 
 ### Enhanced Visual Reaction Browser
 
@@ -29,6 +48,11 @@ A GUI and CLI toolkit for reaction condition prediction with an enhanced recomme
 
 - GUI reaction labels normalized and mapped to internal types (e.g., "C-N Coupling - Ullmann" → `Ullmann`)
 - Ullmann-specific solvent/base heuristics plus evidence-aware nudges
+- Metal‑tagged labels throughout the browser (e.g., "Suzuki (Pd)", "Ullmann (Cu)") for clarity
+
+### Solvent module cleanup
+
+- Removed import‑time Excel writes; solvent Excel export is opt‑in via scripts.
 
 ## 📁 Project Structure
 
@@ -101,6 +125,8 @@ If imports fail in your shell, set PYTHONPATH to the repo root when launching:
 
 ```powershell
 $env:PYTHONPATH='.'; python simple_reaction_gui.py
+
+Tip: Leave Reaction Type on "Auto‑detect" to see the cross‑dataset similarity helper alongside enhanced recommendations.
 ```
 
 ### 3) CLI: predict_cli.py usage
@@ -117,6 +143,12 @@ Run with inline JSON (PowerShell):
 
 ```powershell
 python predict_cli.py '{"reaction_smiles":"Brc1ccccc1.Nc1ccccc1>>c1ccc(Nc2ccccc2)cc1","selected_reaction_type":"C-N Coupling - Ullmann"}'
+
+Auto‑detect mode (shows `general` block in export):
+
+```powershell
+python predict_cli.py '{"reaction_smiles":"Brc1ccccc1.NH2c1ccccc1>>Nc1ccccc1","selected_reaction_type":"Auto-detect"}'
+```
 ```
 
 Read from a file and write output to exports (PowerShell):
@@ -140,6 +172,7 @@ Output (simplified):
 - dataset (includes `analytics` when available)
 - top_conditions (up to 3 flattened sets with CAS where possible)
 - related_reactions
+- general (Auto‑detect helper): top ligands/solvents/bases and up to 10 similarity hits (with `reaction_smiles`)
 
 Notes:
 
@@ -204,6 +237,11 @@ Both the GUI and CLI emit a simplified JSON without a `recommendations` section.
 - `top_conditions`: up to 3 flattened condition sets (with CAS when available)
 - `dataset.analytics`: dataset-driven summary (when available), including top ligands/solvents/bases, best pairs, numeric_stats (temperature_c, time_h, yield_pct), and typical_catalyst_loading if observed in suggestions
 - `related_reactions`
+- `general` (when Auto‑detect is used):
+  - `ligands[]`, `solvents[]`, `bases[]` with normalized scores
+  - `top_hits[]` with `ReactionID`, `ReactionType`, `CondKey`, `similarity`, and `reaction_smiles`
+
+The GUI will also use `general.top_hits` to populate the Related Reactions panel when dataset lookup finds no matches.
 
 The `dataset.analytics` block is sourced from `data/analytics/<Type>/latest.json` (currently `Ullmann`). Generate it via the analyzer (see Dataset analytics section below).
 
