@@ -79,6 +79,13 @@ def _load_input() -> dict:
         except Exception:
             pass
 
+    # Direct single-arg JSON
+    if filtered and len(filtered) == 1 and filtered[0].lstrip().startswith('{'):
+        try:
+            return json.loads(filtered[0])
+        except Exception:
+            pass
+
     # Join remaining non-flag args and try parse as JSON
     if filtered:
         try:
@@ -88,6 +95,42 @@ def _load_input() -> dict:
         except Exception:
             # fall through to stdin
             pass
+
+    # Extract JSON between outermost braces from the raw argv string (handles tokenized JSON)
+    try:
+        raw = " ".join(args)
+        start = raw.find('{')
+        end = raw.rfind('}')
+        if start != -1 and end != -1 and end > start:
+            candidate = raw[start:end+1]
+            try:
+                return json.loads(candidate)
+            except Exception:
+                # Heuristic: coerce loose dict style into valid JSON
+                import re
+                loose = candidate
+                # Quote keys: key: -> "key":
+                loose = re.sub(r'([A-Za-z0-9_\-]+)\s*:', r'"\1":', loose)
+                # Quote string values that are unquoted (until comma or closing brace)
+                def _qval(m):
+                    val = m.group(1).strip()
+                    # already quoted or a number/boolean/null
+                    if val.startswith('"') or re.fullmatch(r'-?\d+(?:\.\d+)?', val) or val in ('true','false','null'):
+                        return ':' + m.group(1)
+                    # wrap with quotes, escape existing quotes if any
+                    return ': "' + val.replace('"', '\\"') + '"'
+                loose = re.sub(r':\s*([^\",}][^,}]*)', _qval, loose)
+                return json.loads(loose)
+    except Exception:
+        pass
+
+    # Environment variable fallback
+    try:
+        env_payload = os.environ.get('PREDICT_JSON')
+        if env_payload:
+            return json.loads(env_payload)
+    except Exception:
+        pass
 
     # Read stdin only if piped (avoid blocking when interactive)
     try:
