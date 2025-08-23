@@ -20,58 +20,15 @@ def build_export_payload(result: dict, related_reactions: Optional[list] = None)
         input: { reaction_smiles, selected_reaction_type },
         detection: { reaction_type },
         dataset: { ligands_available, solvents_available, reaction_types_supported },
-        recommendations: {
-          combined: [ { ligand, ligand_compatibility, solvent, abbreviation, solvent_compatibility, combined_score, synergy_bonus, recommendation_confidence, typical_conditions, suggested_base } ],
-          ligands: [ { ligand, compatibility_score, applications, reaction_suitability } ],
-          solvents: [ { solvent, abbreviation, compatibility_score, applications, reaction_suitability } ],
-          alternatives: { budget_friendly_ligands, low_boiling_solvents, green_solvents }
-        },
         top_conditions: [ for top 3, a single 'chemicals' list with all required components (starting materials, metal precursor, ligand, base, solvent) and 'conditions' with time/temperature ],
+    analytics: { source, top: { ligands[], solvents[], bases[] }, cooccurrence: { best_ligand_solvent, best_base_solvent }, numeric_stats: { temperature_c, time_h, yield_pct }, typical_catalyst_loading },
         related_reactions: [ { reaction_smiles, yield, catalyst, ligand, solvent, temperature, time, similarity, reaction_id, reference } ]
       }
     """
 
     recs = result.get('recommendations', {}) or {}
 
-    combined = []
-    for c in recs.get('combined_conditions', []) or []:
-        combined.append({
-            'ligand': c.get('ligand'),
-            'ligand_compatibility': c.get('ligand_compatibility'),
-            'solvent': c.get('solvent'),
-            'solvent_abbreviation': c.get('solvent_abbreviation'),
-            'solvent_compatibility': c.get('solvent_compatibility'),
-            'combined_score': c.get('combined_score'),
-            'recommendation_confidence': c.get('recommendation_confidence'),
-            'typical_conditions': c.get('typical_conditions', {}),
-            'synergy_bonus': c.get('synergy_bonus', 0),
-            'suggested_base': c.get('suggested_base'),
-        })
-
-    ligands = []
-    for l in recs.get('ligand_recommendations', []) or []:
-        ligands.append({
-            'ligand': l.get('ligand'),
-            'compatibility_score': l.get('compatibility_score'),
-            'applications': l.get('applications'),
-            'reaction_suitability': l.get('reaction_suitability'),
-        })
-
-    solvents = []
-    for s in recs.get('solvent_recommendations', []) or []:
-        solvents.append({
-            'solvent': s.get('solvent'),
-            'abbreviation': s.get('abbreviation'),
-            'compatibility_score': s.get('compatibility_score'),
-            'applications': s.get('applications'),
-            'reaction_suitability': s.get('reaction_suitability'),
-        })
-
-    alternatives = {}
-    alt = recs.get('property_based_alternatives', {}) or {}
-    for key in ('budget_friendly_ligands', 'low_boiling_solvents', 'green_solvents'):
-        if key in alt:
-            alternatives[key] = alt[key]
+    # We no longer include the detailed 'recommendations' block in the export.
 
     related = related_reactions or recs.get('related_reactions', []) or []
 
@@ -199,7 +156,7 @@ def build_export_payload(result: dict, related_reactions: Optional[list] = None)
             }
         })
 
-    # Optional: attach a compact analytics snippet (Milestone 3)
+    # Optional: attach a compact analytics snippet (expanded)
     def _load_analytics_snippet(rt: str):
         try:
             if not isinstance(rt, str) or rt.strip().lower() != 'ullmann':
@@ -212,6 +169,7 @@ def build_export_payload(result: dict, related_reactions: Optional[list] = None)
                 summ = json.load(f)
             top = (summ.get('top') or {})
             co = (summ.get('cooccurrence') or {})
+            nums = (summ.get('numeric_stats') or {})
             def _simple(items, n=3):
                 out = []
                 for it in (items or [])[:n]:
@@ -231,7 +189,7 @@ def build_export_payload(result: dict, related_reactions: Optional[list] = None)
                     'pct': first.get('pct'),
                     'count': first.get('count')
                 }
-            return {
+            snippet = {
                 'source': 'Ullmann',
                 'top': {
                     'ligands': _simple(top.get('ligands')),
@@ -241,12 +199,35 @@ def build_export_payload(result: dict, related_reactions: Optional[list] = None)
                 'cooccurrence': {
                     'best_ligand_solvent': _best(co.get('ligand_solvent')),
                     'best_base_solvent': _best(co.get('base_solvent')),
+                },
+                'numeric_stats': {
+                    'temperature_c': nums.get('temperature_c'),
+                    'time_h': nums.get('time_h'),
+                    'yield_pct': nums.get('yield_pct'),
                 }
             }
+            # Try to add a typical catalyst_loading string if available from combined conditions
+            try:
+                for c in (recs.get('combined_conditions') or []):
+                    tc = c.get('typical_conditions') or {}
+                    if tc.get('catalyst_loading'):
+                        snippet['typical_catalyst_loading'] = tc.get('catalyst_loading')
+                        break
+            except Exception:
+                pass
+            return snippet
         except Exception:
             return None
 
     analytics_snippet = _load_analytics_snippet(detected_type)
+
+    # Build dataset block and embed analytics (if available)
+    dataset_block = recs.get('dataset_info', {}) or {}
+    if not isinstance(dataset_block, dict):
+        dataset_block = {}
+    if analytics_snippet:
+        dataset_block = dict(dataset_block)
+        dataset_block['analytics'] = analytics_snippet
 
     payload = {
         'meta': {
@@ -260,17 +241,9 @@ def build_export_payload(result: dict, related_reactions: Optional[list] = None)
         },
         'detection': {
             'reaction_type': recs.get('reaction_type'),
-        },
-        'dataset': recs.get('dataset_info', {}),
-        'recommendations': {
-            'combined': combined,
-            'ligands': ligands,
-            'solvents': solvents,
-            'alternatives': alternatives,
-        },
+    },
+    'dataset': dataset_block,
         'top_conditions': top_conditions,
         'related_reactions': related,
     }
-    if analytics_snippet:
-        payload['analytics'] = analytics_snippet
     return payload

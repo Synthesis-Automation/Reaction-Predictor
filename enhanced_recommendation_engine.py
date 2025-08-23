@@ -53,7 +53,17 @@ class EnhancedRecommendationEngine:
                 'bases': True,
                 'ligands': True,  # Milestone 3: enable ligand priors
             },
-            'w_freq': 0.15,
+            # Base weight (fallback) and per-category overrides for frequency priors
+            'w_freq': 0.30,
+            'w_freq_solvents': 0.45,
+            'w_freq_bases': 0.40,
+            'w_freq_ligands': 0.35,
+            # Soft penalty: down-weight items not supported by analytics (pct < min_support_pct)
+            'soft_penalty': True,
+            'penalty_factor': 0.85,
+            'penalty_factor_solvents': 0.85,
+            'penalty_factor_bases': 0.85,
+            'penalty_factor_ligands': 0.88,
             'min_support_pct': 0.01,  # ignore items <1% support
         }
         if BASE_ENGINE_AVAILABLE:
@@ -435,7 +445,7 @@ class EnhancedRecommendationEngine:
 
             # Build lookup
             pri_map = { _canon(k): float(v) for k, v in pri.items() }
-            w = float(self._analytics_cfg.get('w_freq', 0.15) or 0.15)
+            w = float(self._analytics_cfg.get('w_freq_solvents', self._analytics_cfg.get('w_freq', 0.30)))
             min_pct = float(self._analytics_cfg.get('min_support_pct', 0.01) or 0.01)
             boosted: List[Dict] = []
             for s in solvents:
@@ -443,8 +453,12 @@ class EnhancedRecommendationEngine:
                 key = _canon(str(s.get('solvent') or ''))
                 pct = pri_map.get(key, 0.0)
                 adj = base_score
-                if pct >= min_pct and base_score > 0:
-                    adj = min(1.0, base_score * (1.0 + w * math.sqrt(pct)))
+                if base_score > 0:
+                    if pct >= min_pct:
+                        adj = min(1.0, base_score * (1.0 + w * math.sqrt(pct)))
+                    elif self._analytics_cfg.get('soft_penalty', True):
+                        pen = float(self._analytics_cfg.get('penalty_factor_solvents', self._analytics_cfg.get('penalty_factor', 0.85)))
+                        adj = max(0.0, base_score * pen)
                 ns = dict(s)
                 ns['compatibility_score'] = round(adj, 3)
                 boosted.append(ns)
@@ -472,7 +486,7 @@ class EnhancedRecommendationEngine:
                 return s.lower().replace(' ', '')
 
             pri_map = { _canon_base(k): float(v) for k, v in pri.items() }
-            w = float(self._analytics_cfg.get('w_freq', 0.15) or 0.15)
+            w = float(self._analytics_cfg.get('w_freq_bases', self._analytics_cfg.get('w_freq', 0.30)))
             min_pct = float(self._analytics_cfg.get('min_support_pct', 0.01) or 0.01)
             out: List[Dict] = []
             for b in bases:
@@ -480,8 +494,12 @@ class EnhancedRecommendationEngine:
                 key = _canon_base(str(b.get('base') or ''))
                 pct = pri_map.get(key, 0.0)
                 adj = base_score
-                if pct >= min_pct and base_score > 0:
-                    adj = min(1.0, base_score * (1.0 + w * math.sqrt(pct)))
+                if base_score > 0:
+                    if pct >= min_pct:
+                        adj = min(1.0, base_score * (1.0 + w * math.sqrt(pct)))
+                    elif self._analytics_cfg.get('soft_penalty', True):
+                        pen = float(self._analytics_cfg.get('penalty_factor_bases', self._analytics_cfg.get('penalty_factor', 0.85)))
+                        adj = max(0.0, base_score * pen)
                 nb = dict(b)
                 nb['compatibility_score'] = round(adj, 3)
                 out.append(nb)
@@ -505,7 +523,7 @@ class EnhancedRecommendationEngine:
                 return (nm or '').strip().casefold()
 
             pri_map = { _canon(k): float(v) for k, v in pri.items() }
-            w = float(self._analytics_cfg.get('w_freq', 0.15) or 0.15)
+            w = float(self._analytics_cfg.get('w_freq_ligands', self._analytics_cfg.get('w_freq', 0.30)))
             min_pct = float(self._analytics_cfg.get('min_support_pct', 0.01) or 0.01)
             out: List[Dict] = []
             for L in ligands:
@@ -513,8 +531,12 @@ class EnhancedRecommendationEngine:
                 key = _canon(str(L.get('ligand') or ''))
                 pct = pri_map.get(key, 0.0)
                 adj = base_score
-                if pct >= min_pct and base_score > 0:
-                    adj = min(1.0, base_score * (1.0 + w * math.sqrt(pct)))
+                if base_score > 0:
+                    if pct >= min_pct:
+                        adj = min(1.0, base_score * (1.0 + w * math.sqrt(pct)))
+                    elif self._analytics_cfg.get('soft_penalty', True):
+                        pen = float(self._analytics_cfg.get('penalty_factor_ligands', self._analytics_cfg.get('penalty_factor', 0.85)))
+                        adj = max(0.0, base_score * pen)
                 nL = dict(L)
                 nL['compatibility_score'] = round(adj, 3)
                 out.append(nL)

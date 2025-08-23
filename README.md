@@ -103,6 +103,104 @@ If imports fail in your shell, set PYTHONPATH to the repo root when launching:
 $env:PYTHONPATH='.'; python simple_reaction_gui.py
 ```
 
+### 3) CLI: predict_cli.py usage
+
+Use the CLI to generate a structured JSON export from the terminal.
+
+Set PYTHONPATH (PowerShell):
+
+```powershell
+$env:PYTHONPATH='.'
+```
+
+Run with inline JSON (PowerShell):
+
+```powershell
+python predict_cli.py '{"reaction_smiles":"Brc1ccccc1.Nc1ccccc1>>c1ccc(Nc2ccccc2)cc1","selected_reaction_type":"C-N Coupling - Ullmann"}'
+```
+
+Read from a file and write output to exports (PowerShell):
+
+```powershell
+Get-Content .\input.json | python predict_cli.py | Set-Content -Path .\exports\prediction.json -Encoding utf8
+```
+
+Input payload (minimum):
+
+```json
+{
+  "reaction_smiles": "<reactant(s)>><product>",
+  "selected_reaction_type": "C-N Coupling - Ullmann"
+}
+```
+
+Output (simplified):
+- meta, input, detection
+- dataset (includes `analytics` when available)
+- top_conditions (up to 3 flattened sets with CAS where possible)
+- related_reactions
+
+Notes:
+- `dataset.analytics` is loaded from `data/analytics/<Type>/latest.json` (currently `Ullmann`).
+- Generate analytics via the VS Code tasks or `scripts/analyze_dataset.py`.
+
+#### Capture output in other apps
+
+`predict_cli.py` writes only JSON to stdout. Feed input via argv or stdin and capture stdout as a UTF‑8 string.
+
+- PowerShell
+
+```powershell
+$env:PYTHONPATH='.'
+$payload = '{"reaction_smiles":"R>>P","selected_reaction_type":"C-N Coupling - Ullmann"}'
+$json = python predict_cli.py $payload; $json = ($json -join "`n"); $json
+
+# Or from file
+$json = Get-Content .\input.json | python predict_cli.py; $json = ($json -join "`n"); $json
+```
+
+- Python
+
+```python
+import subprocess
+payload = '{"reaction_smiles":"R>>P","selected_reaction_type":"C-N Coupling - Ullmann"}'
+out = subprocess.run([
+  'python','predict_cli.py', payload
+], capture_output=True, text=True, encoding='utf-8').stdout
+```
+
+- Node.js
+
+```js
+const { execFileSync } = require('child_process');
+const payload = '{"reaction_smiles":"R>>P","selected_reaction_type":"C-N Coupling - Ullmann"}';
+const out = execFileSync('python', ['predict_cli.py', payload], { encoding: 'utf8' });
+```
+
+- C# (.NET)
+
+```csharp
+using System.Diagnostics;
+var payload = "{\"reaction_smiles\":\"R>>P\",\"selected_reaction_type\":\"C-N Coupling - Ullmann\"}";
+var psi = new ProcessStartInfo("python", $"predict_cli.py \"{payload}\"")
+{ RedirectStandardOutput = true, UseShellExecute = false };
+using var p = Process.Start(psi)!;
+string json = p.StandardOutput.ReadToEnd();
+p.WaitForExit();
+```
+
+Tip: Check exit code (0 = success) and parse JSON on your side.
+
+### Export JSON (Simplified)
+
+Both the GUI and CLI emit a simplified JSON without a `recommendations` section. It focuses on:
+- `meta`, `input`, `detection`, `dataset`
+- `top_conditions`: up to 3 flattened condition sets (with CAS when available)
+- `dataset.analytics`: dataset-driven summary (when available), including top ligands/solvents/bases, best pairs, numeric_stats (temperature_c, time_h, yield_pct), and typical_catalyst_loading if observed in suggestions
+- `related_reactions`
+
+The `dataset.analytics` block is sourced from `data/analytics/<Type>/latest.json` (currently `Ullmann`). Generate it via the analyzer (see Dataset analytics section below).
+
 ## 🎯 Buchwald-Hartwig Collection Features
 
 ### Accessing the Collection

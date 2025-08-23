@@ -2406,21 +2406,16 @@ class SimpleReactionGUI(QMainWindow):
     def _build_export_payload(self, result: dict, related_reactions=None) -> dict:
         """Convert internal result into a clean, stable JSON payload.
 
-        Schema:
-          {
-            meta: { generated_at, analysis_type, status },
-            input: { reaction_smiles, selected_reaction_type },
-            detection: { reaction_type },
-            dataset: { ligands_available, solvents_available, reaction_types_supported },
-            recommendations: {
-              combined: [ { ligand, ligand_compatibility, solvent, solvent_abbreviation, solvent_compatibility, combined_score, recommendation_confidence, typical_conditions: { temperature, time, atmosphere, catalyst_loading, base, additives }, synergy_bonus } ],
-              ligands: [ { ligand, compatibility_score, applications, reaction_suitability } ],
-              solvents: [ { solvent, abbreviation, compatibility_score, applications, reaction_suitability } ],
-              alternatives: { budget_friendly_ligands, low_boiling_solvents, green_solvents }
-            },
-            'top_conditions': [ for top 3, a single 'chemicals' list with all required components (starting materials, metal precursor, ligand, base, solvent) and 'conditions' with time/temperature ],
-            'related_reactions': [ { reaction_smiles, yield, catalyst, ligand, solvent, temperature, time, similarity, reaction_id, reference } ]
-          }
+                Schema:
+                    {
+                        meta: { generated_at, analysis_type, status },
+                        input: { reaction_smiles, selected_reaction_type },
+                        detection: { reaction_type },
+                        dataset: { ligands_available, solvents_available, reaction_types_supported },
+                        top_conditions: [ for top 3, a single 'chemicals' list with all required components (starting materials, metal precursor, ligand, base, solvent) and 'conditions' with time/temperature ],
+                        analytics: { source, top: { ligands[], solvents[], bases[] }, cooccurrence: { best_ligand_solvent, best_base_solvent }, numeric_stats: { temperature_c, time_h, yield_pct }, typical_catalyst_loading },
+                        related_reactions: [ { reaction_smiles, yield, catalyst, ligand, solvent, temperature, time, similarity, reaction_id, reference } ]
+                    }
         """
         recs = result.get('recommendations', {}) or {}
 
@@ -2595,6 +2590,78 @@ class SimpleReactionGUI(QMainWindow):
                 }
             })
 
+        # Optional analytics snippet (Ullmann) if available
+        def _load_analytics_snippet(rt: str | None):
+            try:
+                if not isinstance(rt, str) or rt.strip().lower() != 'ullmann':
+                    return None
+                base = os.path.join(os.path.dirname(__file__), 'data', 'analytics', 'Ullmann')
+                latest = os.path.join(base, 'latest.json')
+                if not os.path.exists(latest):
+                    return None
+                with open(latest, 'r', encoding='utf-8') as f:
+                    summ = json.load(f)
+                top = (summ.get('top') or {})
+                co = (summ.get('cooccurrence') or {})
+                nums = (summ.get('numeric_stats') or {})
+                def _simple(items, n=3):
+                    out = []
+                    for it in (items or [])[:n]:
+                        out.append({
+                            'name': it.get('name'),
+                            'pct': it.get('pct'),
+                            'count': it.get('count')
+                        })
+                    return out
+                def _best(pair_list):
+                    if not pair_list:
+                        return None
+                    first = pair_list[0]
+                    return {
+                        'a': first.get('a'),
+                        'b': first.get('b'),
+                        'pct': first.get('pct'),
+                        'count': first.get('count')
+                    }
+                snippet = {
+                    'source': 'Ullmann',
+                    'top': {
+                        'ligands': _simple(top.get('ligands')),
+                        'solvents': _simple(top.get('solvents')),
+                        'bases': _simple(top.get('bases')),
+                    },
+                    'cooccurrence': {
+                        'best_ligand_solvent': _best(co.get('ligand_solvent')),
+                        'best_base_solvent': _best(co.get('base_solvent')),
+                    },
+                    'numeric_stats': {
+                        'temperature_c': nums.get('temperature_c'),
+                        'time_h': nums.get('time_h'),
+                        'yield_pct': nums.get('yield_pct'),
+                    }
+                }
+                try:
+                    for c in (recs.get('combined_conditions') or []):
+                        tc = c.get('typical_conditions') or {}
+                        if tc.get('catalyst_loading'):
+                            snippet['typical_catalyst_loading'] = tc.get('catalyst_loading')
+                            break
+                except Exception:
+                    pass
+                return snippet
+            except Exception:
+                return None
+
+        analytics_snippet = _load_analytics_snippet(detected_type)
+
+        # Embed analytics inside dataset for simplified schema
+        dataset_block = recs.get('dataset_info', {}) or {}
+        if not isinstance(dataset_block, dict):
+            dataset_block = {}
+        if analytics_snippet:
+            dataset_block = dict(dataset_block)
+            dataset_block['analytics'] = analytics_snippet
+
         payload = {
             'meta': {
                 'generated_at': time.strftime('%Y-%m-%dT%H:%M:%S'),
@@ -2608,13 +2675,7 @@ class SimpleReactionGUI(QMainWindow):
             'detection': {
                 'reaction_type': recs.get('reaction_type'),
             },
-            'dataset': recs.get('dataset_info', {}),
-            'recommendations': {
-                'combined': combined,
-                'ligands': ligands,
-                'solvents': solvents,
-                'alternatives': alternatives,
-            },
+            'dataset': dataset_block,
             'top_conditions': top_conditions,
             'related_reactions': related,
         }
