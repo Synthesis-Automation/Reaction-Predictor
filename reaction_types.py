@@ -9,7 +9,7 @@ for reaction type selection and specialized analysis.
 # Comprehensive reaction type categories for the dropdown
 REACTION_TYPES = [
     "Auto detect reaction type",
-    "───────── Specific Reaction Types ─────────",
+    "───────── Cross Coupling Reactions ─────────",
     "C-C Coupling - Suzuki-Miyaura (Pd)",
     "C-C Coupling - Stille (Pd)",
     "C-C Coupling - Sonogashira (Pd)", 
@@ -18,10 +18,13 @@ REACTION_TYPES = [
     "C-C Coupling - Kumada (Ni)",
     "C-N Coupling - Buchwald-Hartwig (Pd)",
     "C-N Coupling - Ullmann (Cu)",
-    "C-N Coupling - Chan-Lam (Cu)",
-    "C-O Coupling - Ullmann Ether (Cu)",
-    "C-O Coupling - Mitsunobu",
-    "C-S Coupling - Thioether Formation (Pd)",
+    "C-N Coupling - (Ni)",
+    "C-N Coupling - (other metals)",
+    "C-O Coupling - Ullmann (Cu)",
+    "C-S Coupling - (all metals)",
+    "C-P Coupling - (all metals)",
+    "C-N Oxidative Coupling - Chan-Lam (Cu)",
+
     "───────── Substitution Reactions ─────────",
     "SN1 - Nucleophilic Substitution (1st order)",
     "SN2 - Nucleophilic Substitution (2nd order)", 
@@ -117,7 +120,9 @@ REACTION_TYPES = [
     "Hell-Volhard-Zelinsky",
     "Sandmeyer Reaction",
     "Birch Reduction",
-    "Baeyer-Villiger Oxidation"
+    "Baeyer-Villiger Oxidation",
+    "Mitsunobu",
+
 ]
 
 def get_reaction_types():

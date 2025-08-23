@@ -25,7 +25,10 @@ DATASET_MAP: Dict[str, str] = {
 
     # Ullmann (C-N and C-O variants share the same dataset file for now)
     "C-N Coupling - Ullmann": "Ullman_2024_full.csv",
+    # Old label kept for back-compat in samples/docs
     "C-O Coupling - Ullmann Ether": "Ullman_2024_full.csv",
+    # New reorganized label (metal in parentheses removed via normalization below)
+    "C-O Coupling - Ullmann": "Ullman_2024_full.csv",
     "Ullmann Reaction": "Ullman_2024_full.csv",
     "Ullmann Ether Synthesis": "Ullman_2024_full.csv",
 }
@@ -34,6 +37,10 @@ DATASET_MAP: Dict[str, str] = {
 KEYWORD_FALLBACKS: List[tuple[str, str]] = [
     ("ullmann", "Ullman_2024_full.csv"),
     ("buchwald", "buchwald_reactions.csv"),
+    # Treat generic cross-coupling and Chan-Lam as falling back to the
+    # Buchwald dataset for similarity browsing when nothing else is available
+    ("cross-coupling", "buchwald_reactions.csv"),
+    ("chan-lam", "buchwald_reactions.csv"),
 ]
 
 
@@ -57,9 +64,19 @@ def resolve_dataset_path(reaction_type: Optional[str], base_dir: Optional[str] =
 
     label = (reaction_type or "").strip()
 
+    # Normalize labels like "C-N Coupling - Buchwald-Hartwig (Pd)" ->
+    # "C-N Coupling - Buchwald-Hartwig" to tolerate metal tags in UI labels
+    try:
+        if label.endswith(')') and ' (' in label:
+            label_base = label[: label.rfind(' (')]
+        else:
+            label_base = label
+    except Exception:
+        label_base = label
+
     # Direct match
-    if label in DATASET_MAP:
-        basename = DATASET_MAP[label]
+    if label_base in DATASET_MAP:
+        basename = DATASET_MAP[label_base]
         for p in _candidate_paths(base_dir, basename):
             if os.path.exists(p):
                 return p

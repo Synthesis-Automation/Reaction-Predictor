@@ -106,13 +106,16 @@ class EnhancedRecommendationEngine:
             "C-C Coupling - Stille": "Cross-Coupling",
             "Negishi Coupling": "Cross-Coupling",
             "C-C Coupling - Negishi": "Cross-Coupling",
+            # Chan-Lam oxidative C-N coupling
             "Chan-Lam Coupling": "Cross-Coupling",
+            "C-N Oxidative Coupling - Chan-Lam": "Cross-Coupling",
             "C-N Coupling - Chan-Lam": "Cross-Coupling",
             # Ullmann variants
             "Ullmann Ether Synthesis": "Ullmann",
             "Ullmann Reaction": "Ullmann",
             "C-N Coupling - Ullmann": "Ullmann",
             "C-O Coupling - Ullmann Ether": "Ullmann",
+            "C-O Coupling - Ullmann": "Ullmann",
             # Other categories
             "Hydrogenation": "Hydrogenation",
             "Carbonylation": "Carbonylation",

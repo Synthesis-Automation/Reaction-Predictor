@@ -986,23 +986,23 @@ Notes:
         reaction_lower = reaction.lower()
         
         if "suzuki" in reaction_lower:
-            return "Suzuki-Miyaura Coupling (Pd)"
+            return "C-C Coupling - Suzuki-Miyaura (Pd)"
         elif "stille" in reaction_lower:
-            return "Stille Coupling (Pd)"
+            return "C-C Coupling - Stille (Pd)"
         elif "sonogashira" in reaction_lower:
-            return "Sonogashira Coupling (Pd)"
+            return "C-C Coupling - Sonogashira (Pd)"
         elif "heck" in reaction_lower:
-            return "Heck Reaction (Pd)"
+            return "C-C Coupling - Heck (Pd)"
         elif "negishi" in reaction_lower:
-            return "Negishi Coupling (Pd)"
+            return "C-C Coupling - Negishi (Pd)"
         elif "buchwald" in reaction_lower or "hartwig" in reaction_lower:
-            return "Buchwald-Hartwig Amination (Pd)"
+            return "C-N Coupling - Buchwald-Hartwig (Pd)"
         elif "chan-lam" in reaction_lower:
-            return "Chan-Lam Coupling (Cu)"
+            return "C-N Oxidative Coupling - Chan-Lam (Cu)"
         elif "ullmann ether" in reaction_lower:
-            return "Ullmann Reaction (Cu)"
+            return "C-O Coupling - Ullmann (Cu)"
         elif "ullmann c-n" in reaction_lower or "ullmann" in reaction_lower:
-            return "Ullmann Reaction (Cu)"
+            return "C-N Coupling - Ullmann (Cu)"
         elif "esterification" in reaction_lower:
             return "Esterification"
         elif "amidation" in reaction_lower:
@@ -3142,21 +3142,23 @@ specific condition recommendations for different reaction types.
             desc_lower = description.lower()
             
             if "suzuki" in desc_lower:
-                return "Suzuki-Miyaura Coupling"
+                return "C-C Coupling - Suzuki-Miyaura"
             elif "stille" in desc_lower:
-                return "Stille Coupling"
+                return "C-C Coupling - Stille"
             elif "sonogashira" in desc_lower:
-                return "Sonogashira Coupling"
+                return "C-C Coupling - Sonogashira"
             elif "heck" in desc_lower:
-                return "Heck Coupling"
+                return "C-C Coupling - Heck"
             elif "negishi" in desc_lower:
-                return "Negishi Coupling"
+                return "C-C Coupling - Negishi"
             elif "buchwald" in desc_lower or "hartwig" in desc_lower or "b-h" in desc_lower:
-                return "Buchwald-Hartwig Amination"
+                return "C-N Coupling - Buchwald-Hartwig"
             elif "chan-lam" in desc_lower:
-                return "Chan-Lam Coupling"
+                return "C-N Oxidative Coupling - Chan-Lam"
+            elif "ullmann ether" in desc_lower:
+                return "C-O Coupling - Ullmann"
             elif "ullmann" in desc_lower:
-                return "Ullmann Ether Synthesis"
+                return "C-N Coupling - Ullmann"
             elif "esterification" in desc_lower:
                 return "Esterification"
             elif "amidation" in desc_lower:
