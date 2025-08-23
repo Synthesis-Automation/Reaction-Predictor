@@ -15,7 +15,8 @@ from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QGridLayout, QLabel, QLineEdit, QPushButton, QTextEdit, QComboBox,
     QGroupBox, QMessageBox, QFrame, QDialog, QListWidget, QListWidgetItem,
-    QSplitter, QCheckBox, QScrollArea, QProgressBar, QSizePolicy
+    QSplitter, QCheckBox, QScrollArea, QProgressBar, QSizePolicy,
+    QGraphicsDropShadowEffect
 )
 from PyQt6.QtCore import Qt, QThread, pyqtSignal, QUrl, QTimer, QMutex
 from PyQt6.QtGui import QFont, QPalette, QColor, QPixmap, QImage
@@ -1609,10 +1610,55 @@ class SimpleReactionGUI(QMainWindow):
         buttons_layout = QVBoxLayout(buttons_widget)
         buttons_layout.setContentsMargins(10, 0, 0, 0)
         
-        # Predict button
-        self.predict_button = QPushButton("Predict Conditions")
-        self.predict_button.setMinimumHeight(40)
-        self.predict_button.setMaximumWidth(180)
+        # Predict button (make it prominent)
+        self.predict_button = QPushButton("Predict Conditions ▶")
+        self.predict_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        # Size and font emphasis
+        self.predict_button.setMinimumHeight(48)
+        self.predict_button.setMaximumWidth(220)
+        pf = self.predict_button.font()
+        try:
+            pf.setPointSize(pf.pointSize() + 2)
+        except Exception:
+            pass
+        pf.setBold(True)
+        self.predict_button.setFont(pf)
+        # Visual style
+        self.predict_button.setStyleSheet(
+            """
+            QPushButton {
+                background-color: #2E7D32; /* green */
+                color: #FFFFFF;
+                font-weight: 600;
+                border-radius: 8px;
+                padding: 10px 16px;
+                border: 1px solid #1B5E20;
+            }
+            QPushButton:hover {
+                background-color: #388E3C;
+            }
+            QPushButton:pressed {
+                background-color: #1B5E20;
+            }
+            QPushButton:disabled {
+                background-color: #4D4D4D;
+                border-color: #3A3A3A;
+                color: #BBBBBB;
+            }
+            """
+        )
+        # Subtle shadow to lift the button
+        try:
+            shadow = QGraphicsDropShadowEffect(self)
+            shadow.setBlurRadius(16)
+            shadow.setOffset(0, 2)
+            shadow.setColor(QColor(0, 0, 0, 180))
+            self.predict_button.setGraphicsEffect(shadow)
+        except Exception:
+            pass
+        # Usability helpers
+        self.predict_button.setToolTip("Run condition prediction (Ctrl+Enter)")
+        self.predict_button.setShortcut("Ctrl+Return")
         self.predict_button.clicked.connect(self.run_prediction)
         
         # Clear button
@@ -2353,7 +2399,7 @@ class SimpleReactionGUI(QMainWindow):
     def on_prediction_finished(self, result):
         """Handle prediction completion with enhanced results"""
         self.predict_button.setEnabled(True)
-        self.predict_button.setText("Predict Conditions")
+        self.predict_button.setText("Predict Conditions ▶")
 
         # Choose formatter based on analysis type
         analysis_type = result.get('analysis_type')
@@ -3058,13 +3104,11 @@ specific condition recommendations for different reaction types.
     def on_prediction_error(self, error_message):
         """Handle prediction error"""
         self.predict_button.setEnabled(True)
-        self.predict_button.setText("Predict Conditions")
-        
+        self.predict_button.setText("Predict Conditions ▶")
         self.results_text.setPlainText(f"Error occurred during prediction:\n\n{error_message}")
         self.statusBar().showMessage("Prediction failed")
-        
         QMessageBox.critical(self, "Prediction Error", error_message)
-    
+
     def on_prediction_progress(self, value):
         """Handle prediction progress updates"""
         self.statusBar().showMessage(f"Processing... {value}%")
