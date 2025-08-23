@@ -246,4 +246,14 @@ def build_export_payload(result: dict, related_reactions: Optional[list] = None)
         'top_conditions': top_conditions,
         'related_reactions': related,
     }
+
+    # Include cross-dataset general suggestions when available (GUI parity)
+    general = result.get('general_recommendations') or recs.get('general_recommendations')
+    if isinstance(general, dict) and general:
+        payload['general'] = {
+            'ligands': general.get('ligands', [])[:20],
+            'solvents': general.get('solvents', [])[:20],
+            'bases': general.get('bases', [])[:20],
+            'top_hits': general.get('top_hits', [])[:50],
+        }
     return payload

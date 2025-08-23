@@ -155,7 +155,8 @@ def _extract_output_path() -> str | None:
 def main() -> int:
     payload = _load_input()
     reaction_smiles = payload.get('reaction_smiles') or ''
-    selected_type = payload.get('selected_reaction_type') or 'Auto-detect'
+    # Normalize reaction type: treat missing/empty/whitespace as Auto-detect
+    selected_type = (payload.get('selected_reaction_type') or '').strip() or 'Auto-detect'
 
     # Guard: no input provided
     if not reaction_smiles:
@@ -184,8 +185,13 @@ def main() -> int:
             'property_based_alternatives': recs.get('property_based_alternatives', {}),
             'dataset_info': recs.get('dataset_info', {}),
             'related_reactions': recs.get('related_reactions', []),
+            'general_recommendations': recs.get('general_recommendations', {}),
         }
     }
+
+    # Also attach general_recommendations at the top level for exporters that look there
+    if recs.get('general_recommendations'):
+        result['general_recommendations'] = recs['general_recommendations']
 
     export = build_export_payload(result)
 
