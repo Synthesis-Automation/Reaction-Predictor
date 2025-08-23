@@ -135,12 +135,14 @@ Input payload (minimum):
 ```
 
 Output (simplified):
+
 - meta, input, detection
 - dataset (includes `analytics` when available)
 - top_conditions (up to 3 flattened sets with CAS where possible)
 - related_reactions
 
 Notes:
+
 - `dataset.analytics` is loaded from `data/analytics/<Type>/latest.json` (currently `Ullmann`).
 - Generate analytics via the VS Code tasks or `scripts/analyze_dataset.py`.
 
@@ -172,9 +174,12 @@ out = subprocess.run([
 - Node.js
 
 ```js
-const { execFileSync } = require('child_process');
-const payload = '{"reaction_smiles":"R>>P","selected_reaction_type":"C-N Coupling - Ullmann"}';
-const out = execFileSync('python', ['predict_cli.py', payload], { encoding: 'utf8' });
+const { execFileSync } = require("child_process");
+const payload =
+  '{"reaction_smiles":"R>>P","selected_reaction_type":"C-N Coupling - Ullmann"}';
+const out = execFileSync("python", ["predict_cli.py", payload], {
+  encoding: "utf8",
+});
 ```
 
 - C# (.NET)
@@ -194,6 +199,7 @@ Tip: Check exit code (0 = success) and parse JSON on your side.
 ### Export JSON (Simplified)
 
 Both the GUI and CLI emit a simplified JSON without a `recommendations` section. It focuses on:
+
 - `meta`, `input`, `detection`, `dataset`
 - `top_conditions`: up to 3 flattened condition sets (with CAS when available)
 - `dataset.analytics`: dataset-driven summary (when available), including top ligands/solvents/bases, best pairs, numeric_stats (temperature_c, time_h, yield_pct), and typical_catalyst_loading if observed in suggestions
@@ -235,11 +241,14 @@ The `dataset.analytics` block is sourced from `data/analytics/<Type>/latest.json
 - Heteroaryl: 12 pyridine/thiazole/furan examples
 - Sterically Hindered: 9 ortho-substituted difficult cases
 - Pharmaceutical: 3 drug-like intermediate examples
+
 # Test the collection
+
 python test_buchwald_collection.py
 
 python demo_buchwald_browser.py
-```
+
+````
 
 
 ```text
@@ -255,18 +264,21 @@ This repo includes a first-pass analytics pipeline (Ullmann only for now) to com
 ```powershell
 $env:PYTHONPATH='.'
 python scripts/analyze_dataset.py --reaction-type "Ullmann"
-```
+````
 
 Artifacts will be written under `data/analytics/Ullmann/<timestamp>/summary.json` and `data/analytics/Ullmann/latest.json`.
 
 Brc1ccccc1C.Nc1ccccc1>>Cc1ccccc1Nc1ccccc1
 
 # Heteroaryl substrate
+
 Brc1ccncc1.Nc1ccccc1>>c1ccc(Nc2ccncc2)cc1
 
 # Pharmaceutical intermediate
+
 Brc1ccc(S(=O)(=O)N)cc1.Nc1ccccc1>>NS(=O)(=O)c1ccc(Nc2ccccc2)cc1
-```
+
+````
 
 ## 📋 System Requirements
 
@@ -284,7 +296,7 @@ If you get import errors:
 ```text
 ImportError: No module named 'reaction_types'
 ImportError: No module named 'sample_reactions'
-```
+````
 
 Solution: Ensure these files are in the same directory as `simple_reaction_gui.py`.
 

@@ -54,8 +54,19 @@ SAMPLE_REACTIONS = [
     "Clc1nc2ccccc2[nH]1.Nc1ccccc1>>c1ccc(Nc2nc3ccccc3[nH]2)cc1 (B-H - Benzimidazole)",
 
     # Ullmann C-N (Copper-catalyzed N-arylation / Goldberg-type)
-    "Brc1ccccc1.NH2c1ccccc1>>c1ccc(Nc2ccccc2)cc1 (Ullmann C-N - Aniline formation)",
-    "Clc1ccc(C)cc1.NH2C(C)C>>Cc1ccc(NC(C)C)cc1 (Ullmann C-N - Alkylamine coupling)",
+    # Fixed SMILES for amines so both reactants parse and render
+    "Brc1ccccc1.Nc1ccccc1>>c1ccc(Nc2ccccc2)cc1 (Ullmann C-N - Aniline formation)",
+    "Clc1ccc(C)cc1.CC(N)C>>Cc1ccc(NC(C)C)cc1 (Ullmann C-N - Isopropylamine coupling)",
+    # Additional focused Ullmann examples
+    "Brc1ccccc1.CN>>c1ccc(NC)cc1 (Ullmann C-N - Methylamine coupling)",
+    "Brc1ccccc1.CCN>>c1ccc(NCC)cc1 (Ullmann C-N - Ethylamine coupling)",
+    "Brc1ccccc1.N1CCOCC1>>c1ccc(N1CCOCC1)cc1 (Ullmann C-N - Morpholine coupling)",
+    "Brc1ccccc1.N1CCCCC1>>c1ccc(N2CCCCC2)cc1 (Ullmann C-N - Piperidine coupling)",
+    "Clc1ccncc1.Nc1ccccc1>>c1ccc(Nc2ccncc2)cc1 (Ullmann C-N - 4-chloropyridine + aniline)",
+    "Ic1ccccc1.CN(C)C>>CN(C)c1ccccc1 (Ullmann C-N - Dimethylamine with aryl iodide)",
+    "Brc1ccc(OC)cc1.Nc1ccccc1>>COc1ccc(Nc2ccccc2)cc1 (Ullmann C-N - Anisyl bromide + aniline)",
+    "Brc1ccc(C(F)(F)F)cc1.CN(C)C>>CN(C)c1ccc(C(F)(F)F)cc1 (Ullmann C-N - CF3 aryl + dimethylamine)",
+    "Brc1ccncc1.NC(C)C>>c1ccc(NC(C)C)cn1 (Ullmann C-N - Heteroaryl bromide + i-PrNH2)",
     
     # Chan-Lam Coupling (C-N)
     "c1ccccc1B(O)O.Nc1ccccc1>>[O]>>c1ccc(Nc2ccccc2)cc1 (Chan-Lam - Oxidative)",
