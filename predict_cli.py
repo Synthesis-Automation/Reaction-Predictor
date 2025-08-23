@@ -23,28 +23,105 @@ from enhanced_recommendation_engine import create_recommendation_engine
 from prediction_export import build_export_payload
 
 
-def _load_input() -> dict:
-    # Try argv first
-    if len(sys.argv) > 1 and sys.argv[1].strip():
-        arg = sys.argv[1]
+def _write_json(obj: dict) -> None:
+    """Write JSON to stdout with UTF-8 safety on Windows consoles.
+
+    Tries text write first; on UnicodeEncodeError falls back to writing UTF-8 bytes.
+    """
+    try:
+        # Prefer UTF-8 where possible
         try:
-            return json.loads(arg)
+            # Python 3.7+: reconfigure stream to utf-8 if supported
+            sys.stdout.reconfigure(encoding='utf-8')  # type: ignore[attr-defined]
         except Exception:
             pass
-    # Fallback to stdin
+        s = json.dumps(obj, ensure_ascii=False)
+        try:
+            sys.stdout.write(s)
+        except UnicodeEncodeError:
+            # Fallback: write UTF-8 bytes directly
+            sys.stdout.buffer.write(s.encode('utf-8'))
+    except Exception:
+        # Last-resort ASCII-safe output
+        sys.stdout.write(json.dumps(obj, ensure_ascii=True))
+
+
+def _load_input() -> dict:
+    """Load input JSON from one of:
+    - --input-file/-f <path>
+    - JSON passed as CLI args (joined)
+    - stdin (only if not a TTY)
+    """
+    args = sys.argv[1:]
+
+    # Parse known flags (-f/--input-file, -o/--output-file) and filter others for JSON
+    file_path: str | None = None
+    filtered: list[str] = []
+    i = 0
+    while i < len(args):
+        a = args[i]
+        if a in ("-f", "--input-file") and i + 1 < len(args):
+            file_path = args[i + 1]
+            i += 2
+            continue
+        if a in ("-o", "--output-file") and i + 1 < len(args):
+            # skip output flag from JSON join
+            i += 2
+            continue
+        filtered.append(a)
+        i += 1
+
+    # File flag support
+    if file_path:
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                return json.loads(f.read())
+        except Exception:
+            pass
+
+    # Join remaining non-flag args and try parse as JSON
+    if filtered:
+        try:
+            joined = " ".join(filtered).strip()
+            if joined:
+                return json.loads(joined)
+        except Exception:
+            # fall through to stdin
+            pass
+
+    # Read stdin only if piped (avoid blocking when interactive)
     try:
-        data = sys.stdin.read()
-        if data.strip():
-            return json.loads(data)
+        if not sys.stdin.isatty():
+            data = sys.stdin.read()
+            if data and data.strip():
+                return json.loads(data)
     except Exception:
         pass
     return {}
+
+
+def _extract_output_path() -> str | None:
+    """Extract --output-file/-o path from argv if provided."""
+    args = sys.argv[1:]
+    for i, a in enumerate(args):
+        if a in ("-o", "--output-file") and i + 1 < len(args):
+            return args[i + 1]
+    return None
 
 
 def main() -> int:
     payload = _load_input()
     reaction_smiles = payload.get('reaction_smiles') or ''
     selected_type = payload.get('selected_reaction_type') or 'Auto-detect'
+
+    # Guard: no input provided
+    if not reaction_smiles:
+        _write_json({
+            'analysis_type': 'error',
+            'status': 'failed',
+            'error': 'No input provided. Pass JSON via argument, --input-file, or stdin.'
+        })
+        return 2
 
     engine = create_recommendation_engine()
     recs = engine.get_recommendations(reaction_smiles, selected_type)
@@ -68,7 +145,18 @@ def main() -> int:
     }
 
     export = build_export_payload(result)
-    sys.stdout.write(json.dumps(export, ensure_ascii=False))
+
+    # If --output-file is provided, write UTF-8 to that file as well
+    out_path = _extract_output_path()
+    if out_path:
+        try:
+            with open(out_path, 'w', encoding='utf-8') as f:
+                json.dump(export, f, ensure_ascii=False)
+        except Exception:
+            # ignore file write errors; still write to stdout
+            pass
+
+    _write_json(export)
     return 0
 
 
