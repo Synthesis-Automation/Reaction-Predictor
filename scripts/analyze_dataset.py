@@ -14,13 +14,23 @@ from analytics.aggregate import run_and_export_ullmann
 
 def main():
     parser = argparse.ArgumentParser(description="Analyze reaction datasets and export analytics.")
-    parser.add_argument("--reaction-type", default="Ullmann", help="Reaction type to analyze (Milestone 1 supports Ullmann)")
+    parser.add_argument("--reaction-type", default="Ullmann", help="Reaction type to analyze (currently supports Ullmann)")
     parser.add_argument("--out-dir", default=REPO_ROOT, help="Output base directory (repo root by default)")
+    parser.add_argument("--no-json", action="store_true", help="Do not write JSON outputs")
+    parser.add_argument("--no-csv", action="store_true", help="Do not write CSV outputs")
+    parser.add_argument("--top-limit", type=int, default=None, help="Limit number of top items per category in outputs")
+    parser.add_argument("--co-limit", type=int, default=None, help="Limit number of co-occurrence rows per pair list")
     args = parser.parse_args()
 
     rt = args.reaction_type
     if rt.lower().startswith("ullmann"):
-        out = run_and_export_ullmann(args.out_dir)
+        out = run_and_export_ullmann(
+            args.out_dir,
+            write_json=not args.no_json,
+            write_csv=not args.no_csv,
+            top_limit=args.top_limit,
+            co_limit=args.co_limit,
+        )
         print(out)
     else:
         print(f"Unsupported reaction type for Milestone 1: {rt}")

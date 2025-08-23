@@ -16,6 +16,31 @@
 			},
 			"group": "test",
 			"problemMatcher": []
+		},
+		{
+			"label": "Analytics: Ullmann (full)",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"scripts/analyze_dataset.py",
+				"--reaction-type",
+				"Ullmann"
+			],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Analytics: Ullmann (trimmed)",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"scripts/analyze_dataset.py",
+				"--reaction-type","Ullmann",
+				"--top-limit","5",
+				"--co-limit","20"
+			],
+			"group": "build",
+			"problemMatcher": []
 		}
 	]
 }

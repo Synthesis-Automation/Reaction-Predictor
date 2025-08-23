@@ -2803,6 +2803,68 @@ Status: {result['status']}
 
 """
 
+        # Optional analytics snippet (Ullmann) if available
+        def _load_analytics_snippet(rt: str | None):
+            try:
+                if not isinstance(rt, str) or rt.strip().lower() != 'ullmann':
+                    return None
+                base = os.path.join(os.path.dirname(__file__), 'data', 'analytics', 'Ullmann')
+                latest = os.path.join(base, 'latest.json')
+                if not os.path.exists(latest):
+                    return None
+                with open(latest, 'r', encoding='utf-8') as f:
+                    summ = json.load(f)
+                top = (summ.get('top') or {})
+                co = (summ.get('cooccurrence') or {})
+                return {
+                    'ligands': top.get('ligands') or [],
+                    'solvents': top.get('solvents') or [],
+                    'bases': top.get('bases') or [],
+                    'ligand_solvent': co.get('ligand_solvent') or [],
+                    'base_solvent': co.get('base_solvent') or [],
+                }
+            except Exception:
+                return None
+
+        if dataset_info.get('analytics_loaded'):
+            snip = _load_analytics_snippet(recommendations.get('reaction_type'))
+            if snip:
+                def _fmt_top(items):
+                    out = []
+                    for it in (items or [])[:3]:
+                        name = it.get('name')
+                        pct = it.get('pct')
+                        if pct is not None:
+                            pct = f"{pct*100:.1f}%"
+                        out.append(f"{name} ({pct})")
+                    return ", ".join([s for s in out if s])
+                def _fmt_pair(items):
+                    if not items:
+                        return None
+                    first = items[0]
+                    pct = first.get('pct')
+                    if pct is not None:
+                        pct = f"{pct*100:.1f}%"
+                    return f"{first.get('a')} + {first.get('b')} ({pct})"
+
+                text += "📈 Analytics (Ullmann dataset):\n"
+                tl = _fmt_top(snip.get('ligands'))
+                ts = _fmt_top(snip.get('solvents'))
+                tb = _fmt_top(snip.get('bases'))
+                if tl:
+                    text += f"• Top Ligands: {tl}\n"
+                if ts:
+                    text += f"• Top Solvents: {ts}\n"
+                if tb:
+                    text += f"• Top Bases: {tb}\n"
+                pls = _fmt_pair(snip.get('ligand_solvent'))
+                pbs = _fmt_pair(snip.get('base_solvent'))
+                if pls:
+                    text += f"• Best Ligand–Solvent Pair: {pls}\n"
+                if pbs:
+                    text += f"• Best Base–Solvent Pair: {pbs}\n"
+                text += "\n"
+
         # Combined condition recommendations (top section)
         combined_conditions = recommendations.get('combined_conditions', [])
         if combined_conditions:

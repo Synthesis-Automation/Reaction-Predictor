@@ -246,13 +246,34 @@ def _write_csvs(summary: Dict, version_dir: str) -> None:
             ])
 
 
-def run_and_export_ullmann(out_dir: str) -> str:
+def _trim_summary(summary: Dict, top_limit: int | None = None, co_limit: int | None = None) -> Dict:
+    if not summary:
+        return summary
+    s = json.loads(json.dumps(summary))  # deep copy
+    if top_limit is not None and top_limit > 0:
+        top = s.get("top") or {}
+        for k in ("metals", "ligands", "bases", "solvents"):
+            if isinstance(top.get(k), list):
+                top[k] = top[k][:top_limit]
+        s["top"] = top
+    if co_limit is not None and co_limit > 0:
+        co = s.get("cooccurrence") or {}
+        for k in ("ligand_solvent", "base_solvent", "catalyst_ligand"):
+            if isinstance(co.get(k), list):
+                co[k] = co[k][:co_limit]
+        s["cooccurrence"] = co
+    return s
+
+
+def run_and_export_ullmann(out_dir: str, *, write_json: bool = True, write_csv: bool = True, top_limit: int | None = None, co_limit: int | None = None) -> str:
     path = resolve_dataset_path("Ullmann")
     if not path:
         raise FileNotFoundError("Ullmann dataset not found")
 
     rows = adapt_dataset_for_type("Ullmann", path)
     summary = aggregate_ullmann(rows)
+    # Apply optional trimming for outputs
+    summary = _trim_summary(summary, top_limit=top_limit, co_limit=co_limit)
 
     # Versioned folder and latest.json
     base_out = os.path.join(out_dir, "data", "analytics", "Ullmann")
@@ -260,16 +281,18 @@ def run_and_export_ullmann(out_dir: str) -> str:
     version_dir = os.path.join(base_out, ts)
     os.makedirs(version_dir, exist_ok=True)
 
-    # Write summary.json
-    with open(os.path.join(version_dir, "summary.json"), "w", encoding="utf-8") as f:
-        json.dump(summary, f, indent=2)
-    # Also write CSVs into the version folder
-    _write_csvs(summary, version_dir)
+    # Write JSON and/or CSVs
+    if write_json:
+        with open(os.path.join(version_dir, "summary.json"), "w", encoding="utf-8") as f:
+            json.dump(summary, f, indent=2)
+    if write_csv:
+        _write_csvs(summary, version_dir)
 
-    # Update latest.json
+    # Update latest.json (reflects same trimmed view when limits are used)
     latest_path = os.path.join(base_out, "latest.json")
-    with open(latest_path, "w", encoding="utf-8") as f:
-        json.dump(summary, f, indent=2)
+    if write_json:
+        with open(latest_path, "w", encoding="utf-8") as f:
+            json.dump(summary, f, indent=2)
 
     return latest_path
 
