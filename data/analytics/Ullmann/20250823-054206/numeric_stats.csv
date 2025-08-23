@@ -1,0 +1,4 @@
+metric,median,p25,p75,n
+temperature_c,90.0,65.0,120.0,789
+time_h,14.0,5.5,24.0,782
+yield_pct,76.0,66.0,87.0,799

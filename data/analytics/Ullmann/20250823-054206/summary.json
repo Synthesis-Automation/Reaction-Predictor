@@ -1,0 +1,4198 @@
+{
+  "summary": {
+    "total_rows": 799,
+    "analyzed_rows": 799,
+    "generated_at": "2025-08-23T05:42:06.072552Z",
+    "dataset_versions": {}
+  },
+  "top": {
+    "metals": [
+      {
+        "name": "cu",
+        "count": 799,
+        "pct": 1.0
+      },
+      {
+        "name": "ir",
+        "count": 17,
+        "pct": 0.0213
+      },
+      {
+        "name": "ni",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "name": "rh",
+        "count": 2,
+        "pct": 0.0025
+      }
+    ],
+    "ligands": [
+      {
+        "name": "none",
+        "count": 326,
+        "pct": 0.408
+      },
+      {
+        "name": "1",
+        "count": 125,
+        "pct": 0.1564
+      },
+      {
+        "name": "2benzenediamine",
+        "count": 68,
+        "pct": 0.0851
+      },
+      {
+        "name": "2cyclohexanediamine",
+        "count": 66,
+        "pct": 0.0826
+      },
+      {
+        "name": "l-proline",
+        "count": 53,
+        "pct": 0.0663
+      },
+      {
+        "name": "10phenanthroline",
+        "count": 45,
+        "pct": 0.0563
+      },
+      {
+        "name": "ndimethyl1",
+        "count": 44,
+        "pct": 0.0551
+      },
+      {
+        "name": "n",
+        "count": 42,
+        "pct": 0.0526
+      },
+      {
+        "name": "n13",
+        "count": 39,
+        "pct": 0.0488
+      },
+      {
+        "name": "5bis1",
+        "count": 39,
+        "pct": 0.0488
+      },
+      {
+        "name": "1dimethylethyl1",
+        "count": 39,
+        "pct": 0.0488
+      },
+      {
+        "name": "1biphenyl2yln223",
+        "count": 39,
+        "pct": 0.0488
+      },
+      {
+        "name": "1dimethylethylphenyl1naphthalenyl",
+        "count": 39,
+        "pct": 0.0488
+      },
+      {
+        "name": "ndimethylethylenediamine",
+        "count": 38,
+        "pct": 0.0476
+      },
+      {
+        "name": "n1",
+        "count": 32,
+        "pct": 0.0401
+      },
+      {
+        "name": "4",
+        "count": 31,
+        "pct": 0.0388
+      },
+      {
+        "name": "3",
+        "count": 29,
+        "pct": 0.0363
+      },
+      {
+        "name": "n2bis2phenyl1naphthalenyl",
+        "count": 28,
+        "pct": 0.035
+      },
+      {
+        "name": "2999684170",
+        "count": 26,
+        "pct": 0.0325
+      },
+      {
+        "name": "r",
+        "count": 23,
+        "pct": 0.0288
+      },
+      {
+        "name": "rn",
+        "count": 23,
+        "pct": 0.0288
+      },
+      {
+        "name": "n2dimethyl1",
+        "count": 22,
+        "pct": 0.0275
+      },
+      {
+        "name": "1s",
+        "count": 21,
+        "pct": 0.0263
+      },
+      {
+        "name": "2sn1",
+        "count": 21,
+        "pct": 0.0263
+      },
+      {
+        "name": "transn",
+        "count": 21,
+        "pct": 0.0263
+      },
+      {
+        "name": "5diaza1azonia7phosphatricyclo33113",
+        "count": 18,
+        "pct": 0.0225
+      },
+      {
+        "name": "7decane",
+        "count": 18,
+        "pct": 0.0225
+      },
+      {
+        "name": "14sulfobutyl",
+        "count": 18,
+        "pct": 0.0225
+      },
+      {
+        "name": "innersalt",
+        "count": 18,
+        "pct": 0.0225
+      },
+      {
+        "name": "2diaminocyclohexane",
+        "count": 16,
+        "pct": 0.02
+      },
+      {
+        "name": "polyaniline",
+        "count": 14,
+        "pct": 0.0175
+      },
+      {
+        "name": "18crown6",
+        "count": 14,
+        "pct": 0.0175
+      },
+      {
+        "name": "4bis1",
+        "count": 14,
+        "pct": 0.0175
+      },
+      {
+        "name": "1dimethylethyl2",
+        "count": 14,
+        "pct": 0.0175
+      },
+      {
+        "name": "2bipyridinen1",
+        "count": 14,
+        "pct": 0.0175
+      },
+      {
+        "name": "oc633",
+        "count": 14,
+        "pct": 0.0175
+      },
+      {
+        "name": "hexafluorophosphate111",
+        "count": 14,
+        "pct": 0.0175
+      },
+      {
+        "name": "tris2",
+        "count": 14,
+        "pct": 0.0175
+      },
+      {
+        "name": "2bipyridylrutheniumiichloride",
+        "count": 14,
+        "pct": 0.0175
+      },
+      {
+        "name": "n1bis22pyridinylnphenylc",
+        "count": 12,
+        "pct": 0.015
+      },
+      {
+        "name": "guargum",
+        "count": 12,
+        "pct": 0.015
+      },
+      {
+        "name": "n2",
+        "count": 11,
+        "pct": 0.0138
+      },
+      {
+        "name": "kanamycina",
+        "count": 11,
+        "pct": 0.0138
+      },
+      {
+        "name": "5triazine2",
+        "count": 10,
+        "pct": 0.0125
+      },
+      {
+        "name": "6triamine",
+        "count": 10,
+        "pct": 0.0125
+      },
+      {
+        "name": "n4bis2thienylmethylenen63triethoxysilylpropyl",
+        "count": 10,
+        "pct": 0.0125
+      },
+      {
+        "name": "2",
+        "count": 10,
+        "pct": 0.0125
+      },
+      {
+        "name": "iodine",
+        "count": 10,
+        "pct": 0.0125
+      },
+      {
+        "name": "7diphenyl1",
+        "count": 6,
+        "pct": 0.0075
+      },
+      {
+        "name": "trans1",
+        "count": 6,
+        "pct": 0.0075
+      },
+      {
+        "name": "sodiumbis2ethylhexylsulfosuccinate",
+        "count": 5,
+        "pct": 0.0063
+      },
+      {
+        "name": "2thiophenecarboxylatoo2",
+        "count": 4,
+        "pct": 0.005
+      },
+      {
+        "name": "2bipyridine",
+        "count": 4,
+        "pct": 0.005
+      },
+      {
+        "name": "imidazo1",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "name": "5a1",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "name": "10phenanthrolinium",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "name": "102",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "name": "6bis1methylethylphenyl",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "name": "chloride11",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "name": "ntetramethylethylenediamine",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "name": "n2bis2furanylmethylethanediamide",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "name": "nad",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "name": "6",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "name": "polyoxyethylenesorbitanmonooleate",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "name": "cobaltoxideco3o4",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "name": "pyridine",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "name": "n1bis5fluoro25methyl2pyridinylnphenylc",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "name": "5diphenylphosphino2thiazolamine",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "name": "trispentafluorophenylborane",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "name": "pPh3",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "name": "6tetramethyl3",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "name": "5heptanedione",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "name": "7dimethoxy1",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "name": "potassiumcarbonate",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "3butanediamine",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "ndimethylglycine",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "lhydroxyproline",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "4dimethylaminopyridine",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "iron",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "nonacarbonyldi3selenoxotri",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "2fefe",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "n11",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "1biphenyl2yln22phenyl1naphthalenyl",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "2999684181",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "2999684169",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "n6bis12",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "3triazol4ylmethyl2",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "6pyridinedicarboxamide",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "2dimethylhydrazide",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "sodiumascorbate",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "monohydrate",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "8quinolinesulfonamide",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "n1s",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "2s2dimethylaminocyclohexyl",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "dimethylethylamine",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "21r",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "2r1",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "2cyclohexanediylbisnitrilonmethylidynebis4",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "6bis1",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "1dimethylethylphenolatoo2cobalt",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "picolinicacid",
+        "count": 1,
+        "pct": 0.0013
+      }
+    ],
+    "bases": [
+      {
+        "name": "k2co3",
+        "count": 249,
+        "pct": 0.3116
+      },
+      {
+        "name": "tripotassiumphosphatek3po4",
+        "count": 107,
+        "pct": 0.1339
+      },
+      {
+        "name": "cs2co3",
+        "count": 98,
+        "pct": 0.1227
+      },
+      {
+        "name": "water",
+        "count": 88,
+        "pct": 0.1101
+      },
+      {
+        "name": "potassiumtertbutoxidekotbu",
+        "count": 52,
+        "pct": 0.0651
+      },
+      {
+        "name": "oxygeno2",
+        "count": 48,
+        "pct": 0.0601
+      },
+      {
+        "name": "naome",
+        "count": 42,
+        "pct": 0.0526
+      },
+      {
+        "name": "triethylaminenet3",
+        "count": 37,
+        "pct": 0.0463
+      },
+      {
+        "name": "unresolvedcas26628228",
+        "count": 32,
+        "pct": 0.0401
+      },
+      {
+        "name": "unresolvedcas18027106",
+        "count": 27,
+        "pct": 0.0338
+      },
+      {
+        "name": "koh",
+        "count": 20,
+        "pct": 0.025
+      },
+      {
+        "name": "na2co3",
+        "count": 18,
+        "pct": 0.0225
+      },
+      {
+        "name": "unresolvedcas7553562",
+        "count": 13,
+        "pct": 0.0163
+      },
+      {
+        "name": "unresolvedcas7758114",
+        "count": 12,
+        "pct": 0.015
+      },
+      {
+        "name": "sodiumhydroxidenaoh",
+        "count": 12,
+        "pct": 0.015
+      },
+      {
+        "name": "unresolvedcas7782492",
+        "count": 11,
+        "pct": 0.0138
+      },
+      {
+        "name": "koac",
+        "count": 10,
+        "pct": 0.0125
+      },
+      {
+        "name": "ammoniumchloridenh4cl",
+        "count": 9,
+        "pct": 0.0113
+      },
+      {
+        "name": "unresolvedcas10025873",
+        "count": 8,
+        "pct": 0.01
+      },
+      {
+        "name": "dbu",
+        "count": 8,
+        "pct": 0.01
+      },
+      {
+        "name": "unresolvedcas480637",
+        "count": 7,
+        "pct": 0.0088
+      },
+      {
+        "name": "unresolvedcas7775419",
+        "count": 7,
+        "pct": 0.0088
+      },
+      {
+        "name": "unresolvedcas76051",
+        "count": 6,
+        "pct": 0.0075
+      },
+      {
+        "name": "unresolvedcas1184889",
+        "count": 5,
+        "pct": 0.0063
+      },
+      {
+        "name": "sodiumchloridenacl",
+        "count": 4,
+        "pct": 0.005
+      },
+      {
+        "name": "unresolvedcas84582",
+        "count": 4,
+        "pct": 0.005
+      },
+      {
+        "name": "unresolvedcas10043524",
+        "count": 4,
+        "pct": 0.005
+      },
+      {
+        "name": "1",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "name": "10phenanthroline",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "name": "unresolvedcas1118689",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "name": "unresolvedcas7646697",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "name": "unresolvedcas867447",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "name": "mcpba",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "name": "n",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "name": "ndimethylethylenediaminedmeda",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "name": "unresolvedcas110861",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "name": "unresolvedcas107211",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "name": "unresolvedcas7647010",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "name": "unresolvedcas429414",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "name": "unresolvedcas1118714",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "name": "unresolvedcas75229",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "name": "unresolvedcas39809933",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "name": "lproline",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "unresolvedcas110189",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "naotbu",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "unresolvedcas7447418",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "unresolvedcas2857978",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "unresolvedcas694837",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "unresolvedcas29166721",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "unresolvedcas1207294914",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "unresolvedcas75851499",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "unresolvedcas2615250",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "unresolvedcas109728",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "unresolvedcas77929",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "unresolvedcas1122583",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "dipea",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "edci",
+        "count": 1,
+        "pct": 0.0013
+      }
+    ],
+    "solvents": [
+      {
+        "name": "dmso",
+        "count": 238,
+        "pct": 0.2979
+      },
+      {
+        "name": "dmf",
+        "count": 159,
+        "pct": 0.199
+      },
+      {
+        "name": "toluene",
+        "count": 106,
+        "pct": 0.1327
+      },
+      {
+        "name": "dioxane",
+        "count": 74,
+        "pct": 0.0926
+      },
+      {
+        "name": "water",
+        "count": 63,
+        "pct": 0.0788
+      },
+      {
+        "name": "acn",
+        "count": 54,
+        "pct": 0.0676
+      },
+      {
+        "name": "unresolvedcas25322683",
+        "count": 32,
+        "pct": 0.0401
+      },
+      {
+        "name": "dce",
+        "count": 20,
+        "pct": 0.025
+      },
+      {
+        "name": "isopropanol",
+        "count": 19,
+        "pct": 0.0238
+      },
+      {
+        "name": "unresolvedcas107211",
+        "count": 16,
+        "pct": 0.02
+      },
+      {
+        "name": "unresolvedcas95501",
+        "count": 12,
+        "pct": 0.015
+      },
+      {
+        "name": "dichloromethane",
+        "count": 11,
+        "pct": 0.0138
+      },
+      {
+        "name": "thf",
+        "count": 9,
+        "pct": 0.0113
+      },
+      {
+        "name": "pxylene",
+        "count": 8,
+        "pct": 0.01
+      },
+      {
+        "name": "dmac",
+        "count": 8,
+        "pct": 0.01
+      },
+      {
+        "name": "unresolvedcas108383",
+        "count": 7,
+        "pct": 0.0088
+      },
+      {
+        "name": "unresolvedcas920661",
+        "count": 7,
+        "pct": 0.0088
+      },
+      {
+        "name": "ethylacetate",
+        "count": 5,
+        "pct": 0.0063
+      },
+      {
+        "name": "unresolvedcas111466",
+        "count": 4,
+        "pct": 0.005
+      },
+      {
+        "name": "meoh",
+        "count": 4,
+        "pct": 0.005
+      },
+      {
+        "name": "unresolvedcas7226235",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "name": "xylene",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "name": "unresolvedcas110861",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "name": "dme",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "name": "unresolvedcas95476",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "name": "unresolvedcas96479",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "unresolvedcas626959",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "unresolvedcas109864",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "etoh",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "unresolvedcas101848",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "unresolvedcas462066",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "unresolvedcas60297",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "name": "benzene",
+        "count": 1,
+        "pct": 0.0013
+      }
+    ],
+    "additives": []
+  },
+  "cooccurrence": {
+    "ligand_solvent": [
+      {
+        "a": "none",
+        "b": "dmf",
+        "count": 75,
+        "pct": 0.0939
+      },
+      {
+        "a": "none",
+        "b": "dmso",
+        "count": 69,
+        "pct": 0.0864
+      },
+      {
+        "a": "1",
+        "b": "dmso",
+        "count": 68,
+        "pct": 0.0851
+      },
+      {
+        "a": "2benzenediamine",
+        "b": "dmso",
+        "count": 66,
+        "pct": 0.0826
+      },
+      {
+        "a": "l-proline",
+        "b": "dmso",
+        "count": 53,
+        "pct": 0.0663
+      },
+      {
+        "a": "none",
+        "b": "acn",
+        "count": 38,
+        "pct": 0.0476
+      },
+      {
+        "a": "none",
+        "b": "toluene",
+        "count": 37,
+        "pct": 0.0463
+      },
+      {
+        "a": "n",
+        "b": "toluene",
+        "count": 37,
+        "pct": 0.0463
+      },
+      {
+        "a": "n13",
+        "b": "dmso",
+        "count": 37,
+        "pct": 0.0463
+      },
+      {
+        "a": "5bis1",
+        "b": "dmso",
+        "count": 37,
+        "pct": 0.0463
+      },
+      {
+        "a": "1dimethylethyl1",
+        "b": "dmso",
+        "count": 37,
+        "pct": 0.0463
+      },
+      {
+        "a": "1biphenyl2yln223",
+        "b": "dmso",
+        "count": 37,
+        "pct": 0.0463
+      },
+      {
+        "a": "1dimethylethylphenyl1naphthalenyl",
+        "b": "dmso",
+        "count": 37,
+        "pct": 0.0463
+      },
+      {
+        "a": "ndimethylethylenediamine",
+        "b": "toluene",
+        "count": 36,
+        "pct": 0.0451
+      },
+      {
+        "a": "2cyclohexanediamine",
+        "b": "dioxane",
+        "count": 36,
+        "pct": 0.0451
+      },
+      {
+        "a": "none",
+        "b": "unresolvedcas25322683",
+        "count": 32,
+        "pct": 0.0401
+      },
+      {
+        "a": "1",
+        "b": "dmf",
+        "count": 31,
+        "pct": 0.0388
+      },
+      {
+        "a": "n1",
+        "b": "dmso",
+        "count": 31,
+        "pct": 0.0388
+      },
+      {
+        "a": "n2bis2phenyl1naphthalenyl",
+        "b": "dmso",
+        "count": 28,
+        "pct": 0.035
+      },
+      {
+        "a": "2999684170",
+        "b": "dmf",
+        "count": 26,
+        "pct": 0.0325
+      },
+      {
+        "a": "10phenanthroline",
+        "b": "dmf",
+        "count": 23,
+        "pct": 0.0288
+      },
+      {
+        "a": "r",
+        "b": "dmso",
+        "count": 23,
+        "pct": 0.0288
+      },
+      {
+        "a": "rn",
+        "b": "dmso",
+        "count": 23,
+        "pct": 0.0288
+      },
+      {
+        "a": "ndimethyl1",
+        "b": "dmso",
+        "count": 23,
+        "pct": 0.0288
+      },
+      {
+        "a": "2cyclohexanediamine",
+        "b": "dmso",
+        "count": 23,
+        "pct": 0.0288
+      },
+      {
+        "a": "1",
+        "b": "toluene",
+        "count": 21,
+        "pct": 0.0263
+      },
+      {
+        "a": "1s",
+        "b": "dioxane",
+        "count": 21,
+        "pct": 0.0263
+      },
+      {
+        "a": "2sn1",
+        "b": "dioxane",
+        "count": 21,
+        "pct": 0.0263
+      },
+      {
+        "a": "n2dimethyl1",
+        "b": "dioxane",
+        "count": 21,
+        "pct": 0.0263
+      },
+      {
+        "a": "none",
+        "b": "isopropanol",
+        "count": 19,
+        "pct": 0.0238
+      },
+      {
+        "a": "none",
+        "b": "dioxane",
+        "count": 18,
+        "pct": 0.0225
+      },
+      {
+        "a": "3",
+        "b": "water",
+        "count": 18,
+        "pct": 0.0225
+      },
+      {
+        "a": "5diaza1azonia7phosphatricyclo33113",
+        "b": "water",
+        "count": 18,
+        "pct": 0.0225
+      },
+      {
+        "a": "7decane",
+        "b": "water",
+        "count": 18,
+        "pct": 0.0225
+      },
+      {
+        "a": "14sulfobutyl",
+        "b": "water",
+        "count": 18,
+        "pct": 0.0225
+      },
+      {
+        "a": "innersalt",
+        "b": "water",
+        "count": 18,
+        "pct": 0.0225
+      },
+      {
+        "a": "none",
+        "b": "unresolvedcas107211",
+        "count": 16,
+        "pct": 0.02
+      },
+      {
+        "a": "transn",
+        "b": "dioxane",
+        "count": 15,
+        "pct": 0.0188
+      },
+      {
+        "a": "ndimethyl1",
+        "b": "dioxane",
+        "count": 15,
+        "pct": 0.0188
+      },
+      {
+        "a": "polyaniline",
+        "b": "dmso",
+        "count": 14,
+        "pct": 0.0175
+      },
+      {
+        "a": "4",
+        "b": "acn",
+        "count": 13,
+        "pct": 0.0163
+      },
+      {
+        "a": "4bis1",
+        "b": "acn",
+        "count": 13,
+        "pct": 0.0163
+      },
+      {
+        "a": "1dimethylethyl2",
+        "b": "acn",
+        "count": 13,
+        "pct": 0.0163
+      },
+      {
+        "a": "2bipyridinen1",
+        "b": "acn",
+        "count": 13,
+        "pct": 0.0163
+      },
+      {
+        "a": "oc633",
+        "b": "acn",
+        "count": 13,
+        "pct": 0.0163
+      },
+      {
+        "a": "hexafluorophosphate111",
+        "b": "acn",
+        "count": 13,
+        "pct": 0.0163
+      },
+      {
+        "a": "n1bis22pyridinylnphenylc",
+        "b": "acn",
+        "count": 12,
+        "pct": 0.015
+      },
+      {
+        "a": "guargum",
+        "b": "dmf",
+        "count": 12,
+        "pct": 0.015
+      },
+      {
+        "a": "1",
+        "b": "water",
+        "count": 11,
+        "pct": 0.0138
+      },
+      {
+        "a": "2diaminocyclohexane",
+        "b": "toluene",
+        "count": 11,
+        "pct": 0.0138
+      },
+      {
+        "a": "kanamycina",
+        "b": "water",
+        "count": 11,
+        "pct": 0.0138
+      },
+      {
+        "a": "18crown6",
+        "b": "unresolvedcas95501",
+        "count": 10,
+        "pct": 0.0125
+      },
+      {
+        "a": "none",
+        "b": "water",
+        "count": 9,
+        "pct": 0.0113
+      },
+      {
+        "a": "tris2",
+        "b": "dce",
+        "count": 9,
+        "pct": 0.0113
+      },
+      {
+        "a": "2bipyridylrutheniumiichloride",
+        "b": "dce",
+        "count": 9,
+        "pct": 0.0113
+      },
+      {
+        "a": "1",
+        "b": "pxylene",
+        "count": 8,
+        "pct": 0.01
+      },
+      {
+        "a": "2diaminocyclohexane",
+        "b": "pxylene",
+        "count": 8,
+        "pct": 0.01
+      },
+      {
+        "a": "2diaminocyclohexane",
+        "b": "water",
+        "count": 8,
+        "pct": 0.01
+      },
+      {
+        "a": "2diaminocyclohexane",
+        "b": "dmf",
+        "count": 8,
+        "pct": 0.01
+      },
+      {
+        "a": "none",
+        "b": "dichloromethane",
+        "count": 8,
+        "pct": 0.01
+      },
+      {
+        "a": "none",
+        "b": "unresolvedcas108383",
+        "count": 7,
+        "pct": 0.0088
+      },
+      {
+        "a": "none",
+        "b": "unresolvedcas920661",
+        "count": 7,
+        "pct": 0.0088
+      },
+      {
+        "a": "2benzenediamine",
+        "b": "toluene",
+        "count": 7,
+        "pct": 0.0088
+      },
+      {
+        "a": "n13",
+        "b": "toluene",
+        "count": 7,
+        "pct": 0.0088
+      },
+      {
+        "a": "5bis1",
+        "b": "toluene",
+        "count": 7,
+        "pct": 0.0088
+      },
+      {
+        "a": "1dimethylethyl1",
+        "b": "toluene",
+        "count": 7,
+        "pct": 0.0088
+      },
+      {
+        "a": "1biphenyl2yln223",
+        "b": "toluene",
+        "count": 7,
+        "pct": 0.0088
+      },
+      {
+        "a": "1dimethylethylphenyl1naphthalenyl",
+        "b": "toluene",
+        "count": 7,
+        "pct": 0.0088
+      },
+      {
+        "a": "iodine",
+        "b": "dce",
+        "count": 6,
+        "pct": 0.0075
+      },
+      {
+        "a": "none",
+        "b": "dmac",
+        "count": 6,
+        "pct": 0.0075
+      },
+      {
+        "a": "2cyclohexanediamine",
+        "b": "toluene",
+        "count": 6,
+        "pct": 0.0075
+      },
+      {
+        "a": "10phenanthroline",
+        "b": "toluene",
+        "count": 5,
+        "pct": 0.0063
+      },
+      {
+        "a": "sodiumbis2ethylhexylsulfosuccinate",
+        "b": "water",
+        "count": 5,
+        "pct": 0.0063
+      },
+      {
+        "a": "1",
+        "b": "thf",
+        "count": 5,
+        "pct": 0.0063
+      },
+      {
+        "a": "tris2",
+        "b": "dmso",
+        "count": 5,
+        "pct": 0.0063
+      },
+      {
+        "a": "2bipyridylrutheniumiichloride",
+        "b": "dmso",
+        "count": 5,
+        "pct": 0.0063
+      },
+      {
+        "a": "transn",
+        "b": "toluene",
+        "count": 5,
+        "pct": 0.0063
+      },
+      {
+        "a": "ndimethyl1",
+        "b": "toluene",
+        "count": 5,
+        "pct": 0.0063
+      },
+      {
+        "a": "4",
+        "b": "dioxane",
+        "count": 4,
+        "pct": 0.005
+      },
+      {
+        "a": "7diphenyl1",
+        "b": "dioxane",
+        "count": 4,
+        "pct": 0.005
+      },
+      {
+        "a": "10phenanthroline",
+        "b": "dioxane",
+        "count": 4,
+        "pct": 0.005
+      },
+      {
+        "a": "2thiophenecarboxylatoo2",
+        "b": "dioxane",
+        "count": 4,
+        "pct": 0.005
+      },
+      {
+        "a": "none",
+        "b": "unresolvedcas111466",
+        "count": 4,
+        "pct": 0.005
+      },
+      {
+        "a": "iodine",
+        "b": "dioxane",
+        "count": 4,
+        "pct": 0.005
+      },
+      {
+        "a": "2",
+        "b": "dce",
+        "count": 4,
+        "pct": 0.005
+      },
+      {
+        "a": "2bipyridine",
+        "b": "dce",
+        "count": 4,
+        "pct": 0.005
+      },
+      {
+        "a": "10phenanthroline",
+        "b": "water",
+        "count": 4,
+        "pct": 0.005
+      },
+      {
+        "a": "none",
+        "b": "meoh",
+        "count": 4,
+        "pct": 0.005
+      },
+      {
+        "a": "trans1",
+        "b": "dioxane",
+        "count": 4,
+        "pct": 0.005
+      },
+      {
+        "a": "2diaminocyclohexane",
+        "b": "dioxane",
+        "count": 4,
+        "pct": 0.005
+      },
+      {
+        "a": "none",
+        "b": "ethylacetate",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "3",
+        "b": "dioxane",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "5diaza1azonia7phosphatricyclo33113",
+        "b": "dioxane",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "7decane",
+        "b": "dioxane",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "14sulfobutyl",
+        "b": "dioxane",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "innersalt",
+        "b": "dioxane",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "imidazo1",
+        "b": "dmf",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "5a1",
+        "b": "dmf",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "10phenanthrolinium",
+        "b": "dmf",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "102",
+        "b": "dmf",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "6bis1methylethylphenyl",
+        "b": "dmf",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "chloride11",
+        "b": "dmf",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "n2bis2furanylmethylethanediamide",
+        "b": "dmso",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "none",
+        "b": "thf",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "nad",
+        "b": "water",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "18crown6",
+        "b": "dmf",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "none",
+        "b": "unresolvedcas7226235",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "1",
+        "b": "xylene",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "10phenanthroline",
+        "b": "xylene",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "10phenanthroline",
+        "b": "thf",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "polyoxyethylenesorbitanmonooleate",
+        "b": "water",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "n",
+        "b": "dioxane",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "ndimethylethylenediamine",
+        "b": "dioxane",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "4",
+        "b": "ethylacetate",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "7diphenyl1",
+        "b": "ethylacetate",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "10phenanthroline",
+        "b": "ethylacetate",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "n",
+        "b": "unresolvedcas95501",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "ntetramethylethylenediamine",
+        "b": "unresolvedcas95501",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "none",
+        "b": "unresolvedcas110861",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "1",
+        "b": "dmac",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "2benzenediamine",
+        "b": "dmac",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "n13",
+        "b": "dmac",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "5bis1",
+        "b": "dmac",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "1dimethylethyl1",
+        "b": "dmac",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "1biphenyl2yln223",
+        "b": "dmac",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "1dimethylethylphenyl1naphthalenyl",
+        "b": "dmac",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "2benzenediamine",
+        "b": "thf",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "n13",
+        "b": "thf",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "5bis1",
+        "b": "thf",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "1dimethylethyl1",
+        "b": "thf",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "1biphenyl2yln223",
+        "b": "thf",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "1dimethylethylphenyl1naphthalenyl",
+        "b": "thf",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "pyridine",
+        "b": "dmf",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "1",
+        "b": "dme",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "10phenanthroline",
+        "b": "dme",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "2",
+        "b": "dmf",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "5diphenylphosphino2thiazolamine",
+        "b": "acn",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "trispentafluorophenylborane",
+        "b": "dioxane",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "pPh3",
+        "b": "dioxane",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "6",
+        "b": "water",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "2",
+        "b": "toluene",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "none",
+        "b": "unresolvedcas95476",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "trans1",
+        "b": "toluene",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "2",
+        "b": "dioxane",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "3butanediamine",
+        "b": "dioxane",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "none",
+        "b": "unresolvedcas96479",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "n",
+        "b": "dmso",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "ndimethylglycine",
+        "b": "dmso",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "none",
+        "b": "dce",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "lhydroxyproline",
+        "b": "dmso",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "n",
+        "b": "water",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "ndimethylethylenediamine",
+        "b": "water",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "4dimethylaminopyridine",
+        "b": "dmso",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "4dimethylaminopyridine",
+        "b": "dichloromethane",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "iron",
+        "b": "toluene",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "nonacarbonyldi3selenoxotri",
+        "b": "toluene",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "2fefe",
+        "b": "toluene",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "n11",
+        "b": "dmso",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "1biphenyl2yln22phenyl1naphthalenyl",
+        "b": "dmso",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "4bis1",
+        "b": "dioxane",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "1dimethylethyl2",
+        "b": "dioxane",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "2bipyridinen1",
+        "b": "dioxane",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "n1bis5fluoro25methyl2pyridinylnphenylc",
+        "b": "dioxane",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "oc633",
+        "b": "dioxane",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "hexafluorophosphate111",
+        "b": "dioxane",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "2999684181",
+        "b": "dmf",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "2999684169",
+        "b": "dmf",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "n2",
+        "b": "dmf",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "n6bis12",
+        "b": "dmf",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "3",
+        "b": "dmf",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "4",
+        "b": "dmf",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "3triazol4ylmethyl2",
+        "b": "dmf",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "6pyridinedicarboxamide",
+        "b": "dmf",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "10phenanthroline",
+        "b": "dmso",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "none",
+        "b": "unresolvedcas626959",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "2",
+        "b": "unresolvedcas109864",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "2",
+        "b": "thf",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "2",
+        "b": "dichloromethane",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "2dimethylhydrazide",
+        "b": "unresolvedcas109864",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "2dimethylhydrazide",
+        "b": "thf",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "2dimethylhydrazide",
+        "b": "dichloromethane",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "transn",
+        "b": "dmf",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "ndimethyl1",
+        "b": "dmf",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "2cyclohexanediamine",
+        "b": "dmf",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "sodiumascorbate",
+        "b": "dmf",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "sodiumascorbate",
+        "b": "water",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "none",
+        "b": "etoh",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "18crown6",
+        "b": "unresolvedcas101848",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "2",
+        "b": "water",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "6",
+        "b": "dmf",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "6tetramethyl3",
+        "b": "dmf",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "6tetramethyl3",
+        "b": "water",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "5heptanedione",
+        "b": "dmf",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "5heptanedione",
+        "b": "water",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "4",
+        "b": "unresolvedcas462066",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "7dimethoxy1",
+        "b": "unresolvedcas462066",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "7dimethoxy1",
+        "b": "acn",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "10phenanthroline",
+        "b": "unresolvedcas462066",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "10phenanthroline",
+        "b": "acn",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "4bis1",
+        "b": "unresolvedcas462066",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "1dimethylethyl2",
+        "b": "unresolvedcas462066",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "2bipyridinen1",
+        "b": "unresolvedcas462066",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "n1bis5fluoro25methyl2pyridinylnphenylc",
+        "b": "unresolvedcas462066",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "n1bis5fluoro25methyl2pyridinylnphenylc",
+        "b": "acn",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "oc633",
+        "b": "unresolvedcas462066",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "hexafluorophosphate111",
+        "b": "unresolvedcas462066",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "6",
+        "b": "toluene",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "6tetramethyl3",
+        "b": "toluene",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "5heptanedione",
+        "b": "toluene",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "monohydrate",
+        "b": "dmf",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "none",
+        "b": "unresolvedcas60297",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "8quinolinesulfonamide",
+        "b": "benzene",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "n1s",
+        "b": "benzene",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "2s2dimethylaminocyclohexyl",
+        "b": "benzene",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "l-proline",
+        "b": "water",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "l-proline",
+        "b": "dichloromethane",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "n1",
+        "b": "toluene",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "n2dimethyl1",
+        "b": "toluene",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "2diaminocyclohexane",
+        "b": "dmso",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "dimethylethylamine",
+        "b": "dmf",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "ntetramethylethylenediamine",
+        "b": "toluene",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "4",
+        "b": "water",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "7dimethoxy1",
+        "b": "water",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "2",
+        "b": "acn",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "21r",
+        "b": "acn",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "21r",
+        "b": "toluene",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "2r1",
+        "b": "acn",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "2r1",
+        "b": "toluene",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "2cyclohexanediylbisnitrilonmethylidynebis4",
+        "b": "acn",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "2cyclohexanediylbisnitrilonmethylidynebis4",
+        "b": "toluene",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "6bis1",
+        "b": "acn",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "6bis1",
+        "b": "toluene",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "1dimethylethylphenolatoo2cobalt",
+        "b": "acn",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "1dimethylethylphenolatoo2cobalt",
+        "b": "toluene",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "picolinicacid",
+        "b": "dmf",
+        "count": 1,
+        "pct": 0.0013
+      }
+    ],
+    "base_solvent": [
+      {
+        "a": "k2co3",
+        "b": "dmso",
+        "count": 90,
+        "pct": 0.1126
+      },
+      {
+        "a": "cs2co3",
+        "b": "dmf",
+        "count": 74,
+        "pct": 0.0926
+      },
+      {
+        "a": "k2co3",
+        "b": "dmf",
+        "count": 55,
+        "pct": 0.0688
+      },
+      {
+        "a": "tripotassiumphosphatek3po4",
+        "b": "toluene",
+        "count": 48,
+        "pct": 0.0601
+      },
+      {
+        "a": "water",
+        "b": "toluene",
+        "count": 46,
+        "pct": 0.0576
+      },
+      {
+        "a": "k2co3",
+        "b": "dioxane",
+        "count": 40,
+        "pct": 0.0501
+      },
+      {
+        "a": "naome",
+        "b": "dmso",
+        "count": 40,
+        "pct": 0.0501
+      },
+      {
+        "a": "potassiumtertbutoxidekotbu",
+        "b": "dmso",
+        "count": 38,
+        "pct": 0.0476
+      },
+      {
+        "a": "unresolvedcas26628228",
+        "b": "unresolvedcas25322683",
+        "count": 32,
+        "pct": 0.0401
+      },
+      {
+        "a": "tripotassiumphosphatek3po4",
+        "b": "water",
+        "count": 28,
+        "pct": 0.035
+      },
+      {
+        "a": "unresolvedcas18027106",
+        "b": "dmso",
+        "count": 27,
+        "pct": 0.0338
+      },
+      {
+        "a": "water",
+        "b": "dmso",
+        "count": 25,
+        "pct": 0.0313
+      },
+      {
+        "a": "k2co3",
+        "b": "toluene",
+        "count": 23,
+        "pct": 0.0288
+      },
+      {
+        "a": "tripotassiumphosphatek3po4",
+        "b": "isopropanol",
+        "count": 19,
+        "pct": 0.0238
+      },
+      {
+        "a": "koh",
+        "b": "dmso",
+        "count": 17,
+        "pct": 0.0213
+      },
+      {
+        "a": "oxygeno2",
+        "b": "dioxane",
+        "count": 17,
+        "pct": 0.0213
+      },
+      {
+        "a": "k2co3",
+        "b": "water",
+        "count": 17,
+        "pct": 0.0213
+      },
+      {
+        "a": "tripotassiumphosphatek3po4",
+        "b": "unresolvedcas107211",
+        "count": 16,
+        "pct": 0.02
+      },
+      {
+        "a": "oxygeno2",
+        "b": "dce",
+        "count": 15,
+        "pct": 0.0188
+      },
+      {
+        "a": "triethylaminenet3",
+        "b": "acn",
+        "count": 15,
+        "pct": 0.0188
+      },
+      {
+        "a": "unresolvedcas7553562",
+        "b": "dioxane",
+        "count": 13,
+        "pct": 0.0163
+      },
+      {
+        "a": "unresolvedcas7758114",
+        "b": "acn",
+        "count": 12,
+        "pct": 0.015
+      },
+      {
+        "a": "triethylaminenet3",
+        "b": "dmf",
+        "count": 12,
+        "pct": 0.015
+      },
+      {
+        "a": "unresolvedcas7782492",
+        "b": "dmf",
+        "count": 11,
+        "pct": 0.0138
+      },
+      {
+        "a": "tripotassiumphosphatek3po4",
+        "b": "dioxane",
+        "count": 11,
+        "pct": 0.0138
+      },
+      {
+        "a": "sodiumhydroxidenaoh",
+        "b": "water",
+        "count": 11,
+        "pct": 0.0138
+      },
+      {
+        "a": "na2co3",
+        "b": "toluene",
+        "count": 10,
+        "pct": 0.0125
+      },
+      {
+        "a": "k2co3",
+        "b": "unresolvedcas95501",
+        "count": 10,
+        "pct": 0.0125
+      },
+      {
+        "a": "oxygeno2",
+        "b": "dmso",
+        "count": 10,
+        "pct": 0.0125
+      },
+      {
+        "a": "tripotassiumphosphatek3po4",
+        "b": "dmf",
+        "count": 10,
+        "pct": 0.0125
+      },
+      {
+        "a": "oxygeno2",
+        "b": "toluene",
+        "count": 9,
+        "pct": 0.0113
+      },
+      {
+        "a": "ammoniumchloridenh4cl",
+        "b": "water",
+        "count": 9,
+        "pct": 0.0113
+      },
+      {
+        "a": "ammoniumchloridenh4cl",
+        "b": "toluene",
+        "count": 9,
+        "pct": 0.0113
+      },
+      {
+        "a": "koac",
+        "b": "acn",
+        "count": 9,
+        "pct": 0.0113
+      },
+      {
+        "a": "water",
+        "b": "unresolvedcas25322683",
+        "count": 9,
+        "pct": 0.0113
+      },
+      {
+        "a": "cs2co3",
+        "b": "toluene",
+        "count": 8,
+        "pct": 0.01
+      },
+      {
+        "a": "unresolvedcas7553562",
+        "b": "toluene",
+        "count": 8,
+        "pct": 0.01
+      },
+      {
+        "a": "tripotassiumphosphatek3po4",
+        "b": "pxylene",
+        "count": 8,
+        "pct": 0.01
+      },
+      {
+        "a": "ammoniumchloridenh4cl",
+        "b": "pxylene",
+        "count": 8,
+        "pct": 0.01
+      },
+      {
+        "a": "ammoniumchloridenh4cl",
+        "b": "dmf",
+        "count": 8,
+        "pct": 0.01
+      },
+      {
+        "a": "unresolvedcas10025873",
+        "b": "pxylene",
+        "count": 8,
+        "pct": 0.01
+      },
+      {
+        "a": "unresolvedcas10025873",
+        "b": "water",
+        "count": 8,
+        "pct": 0.01
+      },
+      {
+        "a": "unresolvedcas10025873",
+        "b": "dmf",
+        "count": 8,
+        "pct": 0.01
+      },
+      {
+        "a": "unresolvedcas10025873",
+        "b": "toluene",
+        "count": 8,
+        "pct": 0.01
+      },
+      {
+        "a": "sodiumhydroxidenaoh",
+        "b": "pxylene",
+        "count": 8,
+        "pct": 0.01
+      },
+      {
+        "a": "sodiumhydroxidenaoh",
+        "b": "dmf",
+        "count": 8,
+        "pct": 0.01
+      },
+      {
+        "a": "sodiumhydroxidenaoh",
+        "b": "toluene",
+        "count": 8,
+        "pct": 0.01
+      },
+      {
+        "a": "potassiumtertbutoxidekotbu",
+        "b": "unresolvedcas25322683",
+        "count": 8,
+        "pct": 0.01
+      },
+      {
+        "a": "cs2co3",
+        "b": "dmso",
+        "count": 7,
+        "pct": 0.0088
+      },
+      {
+        "a": "unresolvedcas480637",
+        "b": "unresolvedcas108383",
+        "count": 7,
+        "pct": 0.0088
+      },
+      {
+        "a": "unresolvedcas480637",
+        "b": "unresolvedcas920661",
+        "count": 7,
+        "pct": 0.0088
+      },
+      {
+        "a": "na2co3",
+        "b": "unresolvedcas108383",
+        "count": 7,
+        "pct": 0.0088
+      },
+      {
+        "a": "na2co3",
+        "b": "unresolvedcas920661",
+        "count": 7,
+        "pct": 0.0088
+      },
+      {
+        "a": "unresolvedcas7775419",
+        "b": "unresolvedcas108383",
+        "count": 7,
+        "pct": 0.0088
+      },
+      {
+        "a": "unresolvedcas7775419",
+        "b": "unresolvedcas920661",
+        "count": 7,
+        "pct": 0.0088
+      },
+      {
+        "a": "oxygeno2",
+        "b": "unresolvedcas108383",
+        "count": 7,
+        "pct": 0.0088
+      },
+      {
+        "a": "oxygeno2",
+        "b": "unresolvedcas920661",
+        "count": 7,
+        "pct": 0.0088
+      },
+      {
+        "a": "naome",
+        "b": "toluene",
+        "count": 7,
+        "pct": 0.0088
+      },
+      {
+        "a": "potassiumtertbutoxidekotbu",
+        "b": "dmf",
+        "count": 6,
+        "pct": 0.0075
+      },
+      {
+        "a": "water",
+        "b": "dmf",
+        "count": 6,
+        "pct": 0.0075
+      },
+      {
+        "a": "unresolvedcas76051",
+        "b": "water",
+        "count": 5,
+        "pct": 0.0063
+      },
+      {
+        "a": "triethylaminenet3",
+        "b": "water",
+        "count": 5,
+        "pct": 0.0063
+      },
+      {
+        "a": "unresolvedcas7553562",
+        "b": "dmso",
+        "count": 5,
+        "pct": 0.0063
+      },
+      {
+        "a": "unresolvedcas1184889",
+        "b": "dmso",
+        "count": 5,
+        "pct": 0.0063
+      },
+      {
+        "a": "dbu",
+        "b": "dichloromethane",
+        "count": 5,
+        "pct": 0.0063
+      },
+      {
+        "a": "sodiumchloridenacl",
+        "b": "water",
+        "count": 4,
+        "pct": 0.005
+      },
+      {
+        "a": "k2co3",
+        "b": "unresolvedcas111466",
+        "count": 4,
+        "pct": 0.005
+      },
+      {
+        "a": "unresolvedcas84582",
+        "b": "dioxane",
+        "count": 4,
+        "pct": 0.005
+      },
+      {
+        "a": "tripotassiumphosphatek3po4",
+        "b": "dmso",
+        "count": 4,
+        "pct": 0.005
+      },
+      {
+        "a": "tripotassiumphosphatek3po4",
+        "b": "dce",
+        "count": 4,
+        "pct": 0.005
+      },
+      {
+        "a": "unresolvedcas10043524",
+        "b": "dmf",
+        "count": 4,
+        "pct": 0.005
+      },
+      {
+        "a": "potassiumtertbutoxidekotbu",
+        "b": "water",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "unresolvedcas7782492",
+        "b": "water",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "sodiumchloridenacl",
+        "b": "dmf",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "unresolvedcas1118689",
+        "b": "dmso",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "unresolvedcas867447",
+        "b": "dioxane",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "unresolvedcas867447",
+        "b": "water",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "sodiumhydroxidenaoh",
+        "b": "dioxane",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "mcpba",
+        "b": "dioxane",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "mcpba",
+        "b": "water",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "koh",
+        "b": "water",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "dbu",
+        "b": "thf",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "k2co3",
+        "b": "acn",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "oxygeno2",
+        "b": "water",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "k2co3",
+        "b": "unresolvedcas7226235",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "unresolvedcas107211",
+        "b": "isopropanol",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "unresolvedcas7647010",
+        "b": "water",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "k2co3",
+        "b": "xylene",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "unresolvedcas429414",
+        "b": "thf",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "unresolvedcas1118714",
+        "b": "dmf",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "unresolvedcas7646697",
+        "b": "dmf",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "1",
+        "b": "dioxane",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "1",
+        "b": "ethylacetate",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "10phenanthroline",
+        "b": "dioxane",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "10phenanthroline",
+        "b": "ethylacetate",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "tripotassiumphosphatek3po4",
+        "b": "ethylacetate",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "unresolvedcas75229",
+        "b": "ethylacetate",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "unresolvedcas39809933",
+        "b": "ethylacetate",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "tripotassiumphosphatek3po4",
+        "b": "unresolvedcas95501",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "water",
+        "b": "isopropanol",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "water",
+        "b": "unresolvedcas107211",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "triethylaminenet3",
+        "b": "dichloromethane",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "naome",
+        "b": "dmac",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "naome",
+        "b": "thf",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "koh",
+        "b": "dme",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "unresolvedcas110861",
+        "b": "dichloromethane",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "unresolvedcas110861",
+        "b": "water",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "cs2co3",
+        "b": "acn",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "triethylaminenet3",
+        "b": "dioxane",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "k2co3",
+        "b": "dmac",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "n",
+        "b": "toluene",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "ndimethylethylenediaminedmeda",
+        "b": "toluene",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "1",
+        "b": "dmf",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "10phenanthroline",
+        "b": "dmf",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "lproline",
+        "b": "dmso",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "k2co3",
+        "b": "unresolvedcas96479",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas1118689",
+        "b": "unresolvedcas96479",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas1118689",
+        "b": "water",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas110189",
+        "b": "dmso",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas110189",
+        "b": "unresolvedcas96479",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas110189",
+        "b": "water",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "sodiumhydroxidenaoh",
+        "b": "dmso",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "triethylaminenet3",
+        "b": "dce",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "naotbu",
+        "b": "dmso",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "koac",
+        "b": "dmso",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "koac",
+        "b": "dichloromethane",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "triethylaminenet3",
+        "b": "dmso",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "n",
+        "b": "dmf",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "ndimethylethylenediaminedmeda",
+        "b": "dmf",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas7447418",
+        "b": "dmso",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas7447418",
+        "b": "water",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "cs2co3",
+        "b": "unresolvedcas626959",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "tripotassiumphosphatek3po4",
+        "b": "unresolvedcas109864",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "tripotassiumphosphatek3po4",
+        "b": "thf",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "tripotassiumphosphatek3po4",
+        "b": "dichloromethane",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas76051",
+        "b": "unresolvedcas109864",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas76051",
+        "b": "thf",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas76051",
+        "b": "dichloromethane",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas7646697",
+        "b": "water",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "k2co3",
+        "b": "etoh",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "k2co3",
+        "b": "unresolvedcas101848",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas2857978",
+        "b": "dioxane",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas694837",
+        "b": "dioxane",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas7647010",
+        "b": "dmso",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas7647010",
+        "b": "dmf",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas29166721",
+        "b": "unresolvedcas462066",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas29166721",
+        "b": "acn",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas1207294914",
+        "b": "unresolvedcas462066",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas1207294914",
+        "b": "acn",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas110861",
+        "b": "unresolvedcas462066",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas110861",
+        "b": "acn",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas75851499",
+        "b": "unresolvedcas462066",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas75851499",
+        "b": "acn",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas2615250",
+        "b": "dioxane",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "k2co3",
+        "b": "ethylacetate",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas7647010",
+        "b": "dmac",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas7647010",
+        "b": "ethylacetate",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas7646697",
+        "b": "dmso",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "sodiumchloridenacl",
+        "b": "dmac",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas109728",
+        "b": "unresolvedcas60297",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas109728",
+        "b": "dmso",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "k2co3",
+        "b": "unresolvedcas60297",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "cs2co3",
+        "b": "benzene",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "k2co3",
+        "b": "dichloromethane",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas77929",
+        "b": "dmso",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas77929",
+        "b": "water",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas77929",
+        "b": "dichloromethane",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas1122583",
+        "b": "dmso",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas1122583",
+        "b": "water",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "unresolvedcas1122583",
+        "b": "dichloromethane",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "dipea",
+        "b": "dmso",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "dipea",
+        "b": "water",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "dipea",
+        "b": "dichloromethane",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "edci",
+        "b": "dmso",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "edci",
+        "b": "water",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "edci",
+        "b": "dichloromethane",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "triethylaminenet3",
+        "b": "toluene",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "oxygeno2",
+        "b": "acn",
+        "count": 1,
+        "pct": 0.0013
+      }
+    ],
+    "catalyst_ligand": [
+      {
+        "a": "cu",
+        "b": "none",
+        "count": 326,
+        "pct": 0.408
+      },
+      {
+        "a": "cu",
+        "b": "1",
+        "count": 125,
+        "pct": 0.1564
+      },
+      {
+        "a": "cu",
+        "b": "2benzenediamine",
+        "count": 68,
+        "pct": 0.0851
+      },
+      {
+        "a": "cu",
+        "b": "2cyclohexanediamine",
+        "count": 66,
+        "pct": 0.0826
+      },
+      {
+        "a": "cu",
+        "b": "l-proline",
+        "count": 53,
+        "pct": 0.0663
+      },
+      {
+        "a": "cu",
+        "b": "10phenanthroline",
+        "count": 45,
+        "pct": 0.0563
+      },
+      {
+        "a": "cu",
+        "b": "ndimethyl1",
+        "count": 44,
+        "pct": 0.0551
+      },
+      {
+        "a": "cu",
+        "b": "n",
+        "count": 42,
+        "pct": 0.0526
+      },
+      {
+        "a": "cu",
+        "b": "n13",
+        "count": 39,
+        "pct": 0.0488
+      },
+      {
+        "a": "cu",
+        "b": "5bis1",
+        "count": 39,
+        "pct": 0.0488
+      },
+      {
+        "a": "cu",
+        "b": "1dimethylethyl1",
+        "count": 39,
+        "pct": 0.0488
+      },
+      {
+        "a": "cu",
+        "b": "1biphenyl2yln223",
+        "count": 39,
+        "pct": 0.0488
+      },
+      {
+        "a": "cu",
+        "b": "1dimethylethylphenyl1naphthalenyl",
+        "count": 39,
+        "pct": 0.0488
+      },
+      {
+        "a": "cu",
+        "b": "ndimethylethylenediamine",
+        "count": 38,
+        "pct": 0.0476
+      },
+      {
+        "a": "cu",
+        "b": "n1",
+        "count": 32,
+        "pct": 0.0401
+      },
+      {
+        "a": "cu",
+        "b": "4",
+        "count": 31,
+        "pct": 0.0388
+      },
+      {
+        "a": "cu",
+        "b": "3",
+        "count": 29,
+        "pct": 0.0363
+      },
+      {
+        "a": "cu",
+        "b": "n2bis2phenyl1naphthalenyl",
+        "count": 28,
+        "pct": 0.035
+      },
+      {
+        "a": "cu",
+        "b": "2999684170",
+        "count": 26,
+        "pct": 0.0325
+      },
+      {
+        "a": "cu",
+        "b": "r",
+        "count": 23,
+        "pct": 0.0288
+      },
+      {
+        "a": "cu",
+        "b": "rn",
+        "count": 23,
+        "pct": 0.0288
+      },
+      {
+        "a": "cu",
+        "b": "n2dimethyl1",
+        "count": 22,
+        "pct": 0.0275
+      },
+      {
+        "a": "cu",
+        "b": "1s",
+        "count": 21,
+        "pct": 0.0263
+      },
+      {
+        "a": "cu",
+        "b": "2sn1",
+        "count": 21,
+        "pct": 0.0263
+      },
+      {
+        "a": "cu",
+        "b": "transn",
+        "count": 21,
+        "pct": 0.0263
+      },
+      {
+        "a": "cu",
+        "b": "5diaza1azonia7phosphatricyclo33113",
+        "count": 18,
+        "pct": 0.0225
+      },
+      {
+        "a": "cu",
+        "b": "7decane",
+        "count": 18,
+        "pct": 0.0225
+      },
+      {
+        "a": "cu",
+        "b": "14sulfobutyl",
+        "count": 18,
+        "pct": 0.0225
+      },
+      {
+        "a": "cu",
+        "b": "innersalt",
+        "count": 18,
+        "pct": 0.0225
+      },
+      {
+        "a": "ir",
+        "b": "4",
+        "count": 17,
+        "pct": 0.0213
+      },
+      {
+        "a": "cu",
+        "b": "2diaminocyclohexane",
+        "count": 16,
+        "pct": 0.02
+      },
+      {
+        "a": "cu",
+        "b": "polyaniline",
+        "count": 14,
+        "pct": 0.0175
+      },
+      {
+        "a": "cu",
+        "b": "18crown6",
+        "count": 14,
+        "pct": 0.0175
+      },
+      {
+        "a": "cu",
+        "b": "4bis1",
+        "count": 14,
+        "pct": 0.0175
+      },
+      {
+        "a": "cu",
+        "b": "1dimethylethyl2",
+        "count": 14,
+        "pct": 0.0175
+      },
+      {
+        "a": "cu",
+        "b": "2bipyridinen1",
+        "count": 14,
+        "pct": 0.0175
+      },
+      {
+        "a": "cu",
+        "b": "oc633",
+        "count": 14,
+        "pct": 0.0175
+      },
+      {
+        "a": "cu",
+        "b": "hexafluorophosphate111",
+        "count": 14,
+        "pct": 0.0175
+      },
+      {
+        "a": "ir",
+        "b": "4bis1",
+        "count": 14,
+        "pct": 0.0175
+      },
+      {
+        "a": "ir",
+        "b": "1dimethylethyl2",
+        "count": 14,
+        "pct": 0.0175
+      },
+      {
+        "a": "ir",
+        "b": "2bipyridinen1",
+        "count": 14,
+        "pct": 0.0175
+      },
+      {
+        "a": "ir",
+        "b": "oc633",
+        "count": 14,
+        "pct": 0.0175
+      },
+      {
+        "a": "ir",
+        "b": "hexafluorophosphate111",
+        "count": 14,
+        "pct": 0.0175
+      },
+      {
+        "a": "cu",
+        "b": "tris2",
+        "count": 14,
+        "pct": 0.0175
+      },
+      {
+        "a": "cu",
+        "b": "2bipyridylrutheniumiichloride",
+        "count": 14,
+        "pct": 0.0175
+      },
+      {
+        "a": "cu",
+        "b": "n1bis22pyridinylnphenylc",
+        "count": 12,
+        "pct": 0.015
+      },
+      {
+        "a": "ir",
+        "b": "n1bis22pyridinylnphenylc",
+        "count": 12,
+        "pct": 0.015
+      },
+      {
+        "a": "cu",
+        "b": "guargum",
+        "count": 12,
+        "pct": 0.015
+      },
+      {
+        "a": "cu",
+        "b": "n2",
+        "count": 11,
+        "pct": 0.0138
+      },
+      {
+        "a": "cu",
+        "b": "kanamycina",
+        "count": 11,
+        "pct": 0.0138
+      },
+      {
+        "a": "cu",
+        "b": "5triazine2",
+        "count": 10,
+        "pct": 0.0125
+      },
+      {
+        "a": "cu",
+        "b": "6triamine",
+        "count": 10,
+        "pct": 0.0125
+      },
+      {
+        "a": "cu",
+        "b": "n4bis2thienylmethylenen63triethoxysilylpropyl",
+        "count": 10,
+        "pct": 0.0125
+      },
+      {
+        "a": "cu",
+        "b": "2",
+        "count": 10,
+        "pct": 0.0125
+      },
+      {
+        "a": "cu",
+        "b": "iodine",
+        "count": 10,
+        "pct": 0.0125
+      },
+      {
+        "a": "cu",
+        "b": "7diphenyl1",
+        "count": 6,
+        "pct": 0.0075
+      },
+      {
+        "a": "cu",
+        "b": "trans1",
+        "count": 6,
+        "pct": 0.0075
+      },
+      {
+        "a": "ir",
+        "b": "10phenanthroline",
+        "count": 5,
+        "pct": 0.0063
+      },
+      {
+        "a": "cu",
+        "b": "sodiumbis2ethylhexylsulfosuccinate",
+        "count": 5,
+        "pct": 0.0063
+      },
+      {
+        "a": "cu",
+        "b": "2thiophenecarboxylatoo2",
+        "count": 4,
+        "pct": 0.005
+      },
+      {
+        "a": "ir",
+        "b": "7diphenyl1",
+        "count": 4,
+        "pct": 0.005
+      },
+      {
+        "a": "ir",
+        "b": "2thiophenecarboxylatoo2",
+        "count": 4,
+        "pct": 0.005
+      },
+      {
+        "a": "cu",
+        "b": "2bipyridine",
+        "count": 4,
+        "pct": 0.005
+      },
+      {
+        "a": "cu",
+        "b": "imidazo1",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "cu",
+        "b": "5a1",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "cu",
+        "b": "10phenanthrolinium",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "cu",
+        "b": "102",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "cu",
+        "b": "6bis1methylethylphenyl",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "cu",
+        "b": "chloride11",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "cu",
+        "b": "ntetramethylethylenediamine",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "cu",
+        "b": "n2bis2furanylmethylethanediamide",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "cu",
+        "b": "nad",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "cu",
+        "b": "6",
+        "count": 3,
+        "pct": 0.0038
+      },
+      {
+        "a": "cu",
+        "b": "polyoxyethylenesorbitanmonooleate",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "ni",
+        "b": "cobaltoxideco3o4",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "cu",
+        "b": "cobaltoxideco3o4",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "cu",
+        "b": "pyridine",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "cu",
+        "b": "n1bis5fluoro25methyl2pyridinylnphenylc",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "ir",
+        "b": "n1bis5fluoro25methyl2pyridinylnphenylc",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "cu",
+        "b": "5diphenylphosphino2thiazolamine",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "cu",
+        "b": "trispentafluorophenylborane",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "cu",
+        "b": "pPh3",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "cu",
+        "b": "6tetramethyl3",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "cu",
+        "b": "5heptanedione",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "cu",
+        "b": "7dimethoxy1",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "rh",
+        "b": "none",
+        "count": 2,
+        "pct": 0.0025
+      },
+      {
+        "a": "cu",
+        "b": "potassiumcarbonate",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "cu",
+        "b": "3butanediamine",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "cu",
+        "b": "ndimethylglycine",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "cu",
+        "b": "lhydroxyproline",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "cu",
+        "b": "4dimethylaminopyridine",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "cu",
+        "b": "iron",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "cu",
+        "b": "nonacarbonyldi3selenoxotri",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "cu",
+        "b": "2fefe",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "cu",
+        "b": "n11",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "cu",
+        "b": "1biphenyl2yln22phenyl1naphthalenyl",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "cu",
+        "b": "2999684181",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "cu",
+        "b": "2999684169",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "cu",
+        "b": "n6bis12",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "cu",
+        "b": "3triazol4ylmethyl2",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "cu",
+        "b": "6pyridinedicarboxamide",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "cu",
+        "b": "2dimethylhydrazide",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "cu",
+        "b": "sodiumascorbate",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "ir",
+        "b": "7dimethoxy1",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "cu",
+        "b": "monohydrate",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "cu",
+        "b": "8quinolinesulfonamide",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "cu",
+        "b": "n1s",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "cu",
+        "b": "2s2dimethylaminocyclohexyl",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "cu",
+        "b": "dimethylethylamine",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "cu",
+        "b": "21r",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "cu",
+        "b": "2r1",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "cu",
+        "b": "2cyclohexanediylbisnitrilonmethylidynebis4",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "cu",
+        "b": "6bis1",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "cu",
+        "b": "1dimethylethylphenolatoo2cobalt",
+        "count": 1,
+        "pct": 0.0013
+      },
+      {
+        "a": "cu",
+        "b": "picolinicacid",
+        "count": 1,
+        "pct": 0.0013
+      }
+    ]
+  },
+  "numeric_stats": {
+    "temperature_c": {
+      "median": 90.0,
+      "p25": 65.0,
+      "p75": 120.0,
+      "n": 789
+    },
+    "time_h": {
+      "median": 14.0,
+      "p25": 5.5,
+      "p75": 24.0,
+      "n": 782
+    },
+    "yield_pct": {
+      "median": 76.0,
+      "p25": 66.0,
+      "p75": 87.0,
+      "n": 799
+    }
+  },
+  "notes": {
+    "normalizations_applied": [
+      "canonicalize tokens",
+      "synonym maps (in-module)",
+      "split CSV list-like fields"
+    ],
+    "missing_columns": []
+  }
+}

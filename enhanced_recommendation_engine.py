@@ -45,6 +45,17 @@ class EnhancedRecommendationEngine:
     
     def __init__(self):
         self.base_engine = None
+        # Analytics priors configuration (Milestone 2)
+        self._analytics_cfg = {
+            'enabled': True,
+            'apply_to': {
+                'solvents': True,
+                'bases': True,
+                'ligands': True,  # Milestone 3: enable ligand priors
+            },
+            'w_freq': 0.15,
+            'min_support_pct': 0.01,  # ignore items <1% support
+        }
         if BASE_ENGINE_AVAILABLE:
             try:
                 self.base_engine = BaseRecommendationEngine()
@@ -224,10 +235,29 @@ class EnhancedRecommendationEngine:
             # Normalize scoring mapping for internal parsing, but pass original type to allow Ullmann boosts
             scoring_type = 'Cross-Coupling' if (reaction_type or '').lower() == 'ullmann' else reaction_type
 
-            # Evidence-aware context: mine dataset for ligands/solvents/bases used in similar reactions (if available)
-            evidence_ligands = self._harvest_evidence_ligands(reaction_type)
-            evidence_solvents = self._harvest_evidence_solvents(reaction_type)
-            evidence_bases = self._harvest_evidence_bases(reaction_type)
+            # Analytics priors (latest.json) take precedence when present; fallback to CSV harvest
+            priors = self._load_analytics_summary(reaction_type)
+            evidence_ligands = None
+            evidence_solvents = None
+            evidence_bases = None
+            if priors:
+                try:
+                    evidence_solvents = self._extract_priors(priors, 'solvents')
+                except Exception:
+                    evidence_solvents = None
+                try:
+                    evidence_bases = self._extract_priors(priors, 'bases')
+                except Exception:
+                    evidence_bases = None
+                try:
+                    evidence_ligands = self._extract_priors(priors, 'ligands')
+                except Exception:
+                    evidence_ligands = None
+            else:
+                # Evidence-aware context: mine dataset for ligands/solvents/bases used in similar reactions (if available)
+                evidence_ligands = self._harvest_evidence_ligands(reaction_type)
+                evidence_solvents = self._harvest_evidence_solvents(reaction_type)
+                evidence_bases = self._harvest_evidence_bases(reaction_type)
 
             # Get top ligands for this reaction type, with evidence-aware boost
             ligands = recommend_ligands_for_reaction(
@@ -236,6 +266,12 @@ class EnhancedRecommendationEngine:
                 min_compatibility=0.4,
                 evidence_ligands=evidence_ligands or None
             )
+            # Apply analytics priors to ligands if configured
+            if priors and self._analytics_cfg['enabled'] and self._analytics_cfg['apply_to']['ligands']:
+                try:
+                    ligands = self._apply_freq_priors_ligands(ligands, priors)
+                except Exception:
+                    pass
             recommendations['ligand_recommendations'] = ligands
             
             # Get top solvents for this reaction type (pass evidence for gentle boost)
@@ -245,6 +281,12 @@ class EnhancedRecommendationEngine:
                 min_compatibility=0.4,
                 evidence_solvents=evidence_solvents or None
             )
+            # Apply analytics priors to solvents if configured
+            if priors and self._analytics_cfg['enabled'] and self._analytics_cfg['apply_to']['solvents']:
+                try:
+                    solvents = self._apply_freq_priors_solvents(solvents, priors)
+                except Exception:
+                    pass
             recommendations['solvent_recommendations'] = solvents
             
             # Try to get base recommendations if available
@@ -255,40 +297,45 @@ class EnhancedRecommendationEngine:
                     top_n=5,
                     min_compatibility=0.4
                 )
-                # Apply evidence-aware gentle boost to bases if we have any
-                try:
-                    if evidence_bases:
-                        # Normalize weights
-                        max_w = max(float(v) for v in evidence_bases.values()) if evidence_bases else 0.0
-                        if max_w > 0:
-                            def _canon_base(nm: str) -> str:
-                                s = (nm or '').strip()
-                                # favor formula inside parentheses if present
-                                if '(' in s and ')' in s:
-                                    inner = s[s.rfind('(')+1:s.rfind(')')].strip()
-                                    if inner:
-                                        s = inner
-                                return s.lower()
+                # Apply analytics priors to bases if configured
+                if priors and self._analytics_cfg['enabled'] and self._analytics_cfg['apply_to']['bases']:
+                    try:
+                        bases = self._apply_freq_priors_bases(bases, priors)
+                    except Exception:
+                        pass
+                else:
+                    # Legacy evidence-aware gentle boost to bases
+                    try:
+                        if evidence_bases:
+                            # Normalize weights
+                            max_w = max(float(v) for v in evidence_bases.values()) if evidence_bases else 0.0
+                            if max_w > 0:
+                                def _canon_base(nm: str) -> str:
+                                    s = (nm or '').strip()
+                                    if '(' in s and ')' in s:
+                                        inner = s[s.rfind('(')+1:s.rfind(')')].strip()
+                                        if inner:
+                                            s = inner
+                                    return s.lower()
 
-                            ev_map = { _canon_base(k): float(v) for k, v in evidence_bases.items() }
-                            boosted = []
-                            for b in bases:
-                                name = b.get('base') or ''
-                                key = _canon_base(str(name))
-                                w = ev_map.get(key, 0.0)
-                                adjusted = b.get('compatibility_score', 0.0)
-                                if w > 0:
-                                    norm = w / max_w
-                                    boost = 0.05 + 0.10 * float(norm)
-                                    adjusted = max(0.0, min(1.0, adjusted + boost))
-                                nb = dict(b)
-                                nb['compatibility_score'] = round(adjusted, 3)
-                                boosted.append(nb)
-                            # Re-rank
-                            boosted.sort(key=lambda x: x.get('compatibility_score', 0.0), reverse=True)
-                            bases = boosted
-                except Exception:
-                    pass
+                                ev_map = { _canon_base(k): float(v) for k, v in evidence_bases.items() }
+                                boosted = []
+                                for b in bases:
+                                    name = b.get('base') or ''
+                                    key = _canon_base(str(name))
+                                    w = ev_map.get(key, 0.0)
+                                    adjusted = b.get('compatibility_score', 0.0)
+                                    if w > 0:
+                                        norm = w / max_w
+                                        boost = 0.05 + 0.10 * float(norm)
+                                        adjusted = max(0.0, min(1.0, adjusted + boost))
+                                    nb = dict(b)
+                                    nb['compatibility_score'] = round(adjusted, 3)
+                                    boosted.append(nb)
+                                boosted.sort(key=lambda x: x.get('compatibility_score', 0.0), reverse=True)
+                                bases = boosted
+                    except Exception:
+                        pass
                 recommendations['base_recommendations'] = bases
             except Exception:
                 bases = []
@@ -316,7 +363,8 @@ class EnhancedRecommendationEngine:
                 recommendations['dataset_info'] = {
                     'ligands_available': len(ligand_df),
                     'solvents_available': len(solvent_df),
-                    'reaction_types_supported': ['Cross-Coupling', 'Hydrogenation', 'Metathesis', 'C-H_Activation', 'Carbonylation']
+                    'reaction_types_supported': ['Cross-Coupling', 'Hydrogenation', 'Metathesis', 'C-H_Activation', 'Carbonylation'],
+                    'analytics_loaded': bool(priors)
                 }
             except:
                 pass
@@ -325,6 +373,155 @@ class EnhancedRecommendationEngine:
             recommendations['error'] = f"Enhanced recommendation error: {str(e)}"
         
         return recommendations
+
+    # ===== Milestone 2: analytics loading and priors application =====
+    def _load_analytics_summary(self, reaction_type: str) -> Optional[dict]:
+        """Load data/analytics/<reaction_type>/latest.json if present.
+
+        For Milestone 2, we support Ullmann only.
+        """
+        try:
+            rt = (reaction_type or '').strip()
+            if rt.lower() != 'ullmann':
+                return None
+            base = os.path.join(_ROOT, 'data', 'analytics', 'Ullmann')
+            latest = os.path.join(base, 'latest.json')
+            if os.path.exists(latest):
+                with open(latest, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                    return data
+        except Exception:
+            return None
+        return None
+
+    def _extract_priors(self, summary: dict, kind: str) -> Optional[dict]:
+        """Extract a mapping name -> pct for a top list kind (e.g., 'solvents', 'bases').
+        Returns dict of canonical_name -> pct (0..1).
+        """
+        try:
+            top = ((summary or {}).get('top') or {}).get(kind) or []
+            if not top:
+                return None
+            pri = {}
+            for item in top:
+                nm = str(item.get('name') or '').strip()
+                pct = float(item.get('pct') or 0.0)
+                if not nm or pct <= 0:
+                    continue
+                pri[nm] = pct
+            return pri or None
+        except Exception:
+            return None
+
+    def _apply_freq_priors_solvents(self, solvents: List[Dict], summary: dict) -> List[Dict]:
+        """Apply frequency-based priors to solvent compatibility scores.
+
+        final = base * (1 + w * sqrt(pct)) with cap to 1.0
+        """
+        try:
+            import math
+            pri = self._extract_priors(summary, 'solvents') or {}
+            if not pri:
+                return solvents
+            # Optional normalization helpers
+            def _canon(name: str) -> str:
+                s = (name or '').strip()
+                # try to harmonize common cases
+                s_low = s.lower().replace(' ', '')
+                # special-case DMSO often appears as 'dms o' canonical in analytics
+                if s_low in ('dmso', 'dms o', 'dimethylsulfoxide'):
+                    return 'dms o'
+                return s_low
+
+            # Build lookup
+            pri_map = { _canon(k): float(v) for k, v in pri.items() }
+            w = float(self._analytics_cfg.get('w_freq', 0.15) or 0.15)
+            min_pct = float(self._analytics_cfg.get('min_support_pct', 0.01) or 0.01)
+            boosted: List[Dict] = []
+            for s in solvents:
+                base_score = float(s.get('compatibility_score', 0.0) or 0.0)
+                key = _canon(str(s.get('solvent') or ''))
+                pct = pri_map.get(key, 0.0)
+                adj = base_score
+                if pct >= min_pct and base_score > 0:
+                    adj = min(1.0, base_score * (1.0 + w * math.sqrt(pct)))
+                ns = dict(s)
+                ns['compatibility_score'] = round(adj, 3)
+                boosted.append(ns)
+            boosted.sort(key=lambda x: x.get('compatibility_score', 0.0), reverse=True)
+            return boosted
+        except Exception:
+            return solvents
+
+    def _apply_freq_priors_bases(self, bases: List[Dict], summary: dict) -> List[Dict]:
+        """Apply frequency-based priors to base compatibility scores using analytics.
+        """
+        try:
+            import math
+            pri = self._extract_priors(summary, 'bases') or {}
+            if not pri:
+                return bases
+
+            def _canon_base(nm: str) -> str:
+                s = (nm or '').strip()
+                # favor formula inside parentheses if present
+                if '(' in s and ')' in s:
+                    inner = s[s.rfind('(')+1:s.rfind(')')].strip()
+                    if inner:
+                        s = inner
+                return s.lower().replace(' ', '')
+
+            pri_map = { _canon_base(k): float(v) for k, v in pri.items() }
+            w = float(self._analytics_cfg.get('w_freq', 0.15) or 0.15)
+            min_pct = float(self._analytics_cfg.get('min_support_pct', 0.01) or 0.01)
+            out: List[Dict] = []
+            for b in bases:
+                base_score = float(b.get('compatibility_score', 0.0) or 0.0)
+                key = _canon_base(str(b.get('base') or ''))
+                pct = pri_map.get(key, 0.0)
+                adj = base_score
+                if pct >= min_pct and base_score > 0:
+                    adj = min(1.0, base_score * (1.0 + w * math.sqrt(pct)))
+                nb = dict(b)
+                nb['compatibility_score'] = round(adj, 3)
+                out.append(nb)
+            out.sort(key=lambda x: x.get('compatibility_score', 0.0), reverse=True)
+            return out
+        except Exception:
+            return bases
+
+    def _apply_freq_priors_ligands(self, ligands: List[Dict], summary: dict) -> List[Dict]:
+        """Apply frequency-based priors to ligand compatibility scores using analytics.
+
+        Similar to solvents/bases. Uses ligand name key directly.
+        """
+        try:
+            import math
+            pri = self._extract_priors(summary, 'ligands') or {}
+            if not pri:
+                return ligands
+
+            def _canon(nm: str) -> str:
+                return (nm or '').strip().casefold()
+
+            pri_map = { _canon(k): float(v) for k, v in pri.items() }
+            w = float(self._analytics_cfg.get('w_freq', 0.15) or 0.15)
+            min_pct = float(self._analytics_cfg.get('min_support_pct', 0.01) or 0.01)
+            out: List[Dict] = []
+            for L in ligands:
+                base_score = float(L.get('compatibility_score', 0.0) or 0.0)
+                key = _canon(str(L.get('ligand') or ''))
+                pct = pri_map.get(key, 0.0)
+                adj = base_score
+                if pct >= min_pct and base_score > 0:
+                    adj = min(1.0, base_score * (1.0 + w * math.sqrt(pct)))
+                nL = dict(L)
+                nL['compatibility_score'] = round(adj, 3)
+                out.append(nL)
+            out.sort(key=lambda x: x.get('compatibility_score', 0.0), reverse=True)
+            return out
+        except Exception:
+            return ligands
 
     def _harvest_evidence_ligands(self, reaction_type: str) -> dict:
         """Collect a small frequency map of ligands from built-in datasets for this reaction type.

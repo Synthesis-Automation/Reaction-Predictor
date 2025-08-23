@@ -134,30 +134,33 @@ $env:PYTHONPATH='.'; python simple_reaction_gui.py
 
 - Primary Amines: 32 reactions with aniline derivatives
 - Secondary Amines: 9 reactions with dialkyl/cyclic amines
-- Chloro Substrates: 8 challenging aryl chloride examples
-- Iodo Substrates: 3 highly reactive aryl iodide cases
-- Benzyl Amines: 6 benzylic amine substrates
 - Heteroaryl: 12 pyridine/thiazole/furan examples
 - Sterically Hindered: 9 ortho-substituted difficult cases
 - Pharmaceutical: 3 drug-like intermediate examples
-
-### Testing the Collection
-
-```powershell
 # Test the collection
 python test_buchwald_collection.py
 
-# Demo the browser features
 python demo_buchwald_browser.py
 ```
 
-### Example Reactions
 
 ```text
 # Simple diphenylamine formation
-Brc1ccccc1.Nc1ccccc1>>c1ccc(Nc2ccccc2)cc1
-
 # Challenging ortho-substituted case
+
+## Dataset analytics (Milestone 1)
+
+This repo includes a first-pass analytics pipeline (Ullmann only for now) to compute frequency summaries and numeric stats from CSV datasets.
+
+- Run analyzer (PowerShell):
+
+```powershell
+$env:PYTHONPATH='.'
+python scripts/analyze_dataset.py --reaction-type "Ullmann"
+```
+
+Artifacts will be written under `data/analytics/Ullmann/<timestamp>/summary.json` and `data/analytics/Ullmann/latest.json`.
+
 Brc1ccccc1C.Nc1ccccc1>>Cc1ccccc1Nc1ccccc1
 
 # Heteroaryl substrate

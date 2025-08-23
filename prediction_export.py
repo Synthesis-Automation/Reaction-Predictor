@@ -199,6 +199,55 @@ def build_export_payload(result: dict, related_reactions: Optional[list] = None)
             }
         })
 
+    # Optional: attach a compact analytics snippet (Milestone 3)
+    def _load_analytics_snippet(rt: str):
+        try:
+            if not isinstance(rt, str) or rt.strip().lower() != 'ullmann':
+                return None
+            base = os.path.join(os.path.dirname(__file__), 'data', 'analytics', 'Ullmann')
+            latest = os.path.join(base, 'latest.json')
+            if not os.path.exists(latest):
+                return None
+            with open(latest, 'r', encoding='utf-8') as f:
+                summ = json.load(f)
+            top = (summ.get('top') or {})
+            co = (summ.get('cooccurrence') or {})
+            def _simple(items, n=3):
+                out = []
+                for it in (items or [])[:n]:
+                    out.append({
+                        'name': it.get('name'),
+                        'pct': it.get('pct'),
+                        'count': it.get('count')
+                    })
+                return out
+            def _best(pair_list):
+                if not pair_list:
+                    return None
+                first = pair_list[0]
+                return {
+                    'a': first.get('a'),
+                    'b': first.get('b'),
+                    'pct': first.get('pct'),
+                    'count': first.get('count')
+                }
+            return {
+                'source': 'Ullmann',
+                'top': {
+                    'ligands': _simple(top.get('ligands')),
+                    'solvents': _simple(top.get('solvents')),
+                    'bases': _simple(top.get('bases')),
+                },
+                'cooccurrence': {
+                    'best_ligand_solvent': _best(co.get('ligand_solvent')),
+                    'best_base_solvent': _best(co.get('base_solvent')),
+                }
+            }
+        except Exception:
+            return None
+
+    analytics_snippet = _load_analytics_snippet(detected_type)
+
     payload = {
         'meta': {
             'generated_at': time.strftime('%Y-%m-%dT%H:%M:%S'),
@@ -222,4 +271,6 @@ def build_export_payload(result: dict, related_reactions: Optional[list] = None)
         'top_conditions': top_conditions,
         'related_reactions': related,
     }
+    if analytics_snippet:
+        payload['analytics'] = analytics_snippet
     return payload

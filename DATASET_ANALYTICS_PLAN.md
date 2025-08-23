@@ -1,4 +1,26 @@
-# Dataset Analytics and Evidence Priors — Implementation Plan
+# Dataset Analytics Milestones
+
+This document tracks the analytics roadmap and current status.
+
+- Milestone 1 (done):
+  - Normalization utilities and dataset adapters for Ullmann
+  - Aggregate top counts and numeric stats
+  - Export latest.json
+
+- Milestone 2 (done):
+  - Engine hook loads analytics latest.json for Ullmann
+  - Apply frequency-based priors to solvents and bases
+
+- Milestone 3 (this change):
+  - Co-occurrence tables for ligand–solvent, base–solvent, catalyst–ligand
+  - CSV exports for tops, co-occurrences, numeric stats
+  - Normalize DMSO token and broaden base/solvent synonyms
+  - Apply ligand priors in engine
+
+- Milestone 4 (next):
+  - Winsorize numeric parsing and add unit tests
+  - Extend adapters to more datasets and reactions
+  - Command options for analytics CLI; VS Code task wiring# Dataset Analytics and Evidence Priors — Implementation Plan
 
 Date: 2025-08-23
 

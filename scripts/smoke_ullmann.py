@@ -7,5 +7,10 @@ if __name__ == "__main__":
     rxn = 'Brc1ccccc1.NH2c1ccccc1>>Nc1ccccc1'
     recs = e.get_recommendations(rxn, 'C-N Coupling - Ullmann')
     ligs = recs.get('ligand_recommendations', [])[:5]
+    solvs = recs.get('solvent_recommendations', [])[:5]
+    bases = recs.get('base_recommendations', [])[:5]
     print('TYPE', recs.get('reaction_type'))
+    print('ANALYTICS', recs.get('dataset_info',{}).get('analytics_loaded'))
     print('TOP_LIGANDS', [(r['ligand'], r.get('compatibility_score')) for r in ligs])
+    print('TOP_SOLVENTS', [(r['solvent'], r.get('compatibility_score')) for r in solvs])
+    print('TOP_BASES', [(r['base'], r.get('compatibility_score')) for r in bases])
