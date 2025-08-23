@@ -9,6 +9,7 @@ import sys
 import json
 from typing import Dict, List, Optional, Tuple
 import re
+from collections import defaultdict
 
 # Ensure project root (containing 'reagents' package) is on sys.path
 _HERE = os.path.dirname(__file__)
@@ -208,6 +209,17 @@ class EnhancedRecommendationEngine:
             # Get enhanced recommendations
             enhanced_recs = self._get_enhanced_recommendations(reaction_smiles, actual_reaction_type)
             result.update(enhanced_recs)
+
+            # If user left type as Auto-detect, also compute a general, cross-dataset
+            # similarity-based recommendation set as supplemental guidance.
+            try:
+                if (reaction_type or '').lower().startswith('auto'):
+                    gen = self._get_general_similarity_recommendations(reaction_smiles)
+                    if gen:
+                        result['general_recommendations'] = gen
+            except Exception as _e:
+                # Keep enhanced path intact even if general similarity fails
+                result.setdefault('debug_warnings', []).append(f"general_similarity_failed: {str(_e)}")
             
             # Try to get base engine recommendations as supplementary info
             # Suppress Buchwald analysis for Ullmann selections/detections
@@ -383,6 +395,257 @@ class EnhancedRecommendationEngine:
             recommendations['error'] = f"Enhanced recommendation error: {str(e)}"
         
         return recommendations
+
+    # ===== General cross-dataset similarity (for undefined/auto type) =====
+    def _get_general_similarity_recommendations(self, reaction_smiles: str) -> Optional[Dict]:
+        """Search all datasets for similar reactions (by SMILES) and aggregate
+        ligands, solvents, and bases from the top hits.
+
+        Returns a dict with:
+        - top_hits: list of {ReactionID, ReactionType, similarity, CondKey, Ligand[], Base[], Solvent[]}
+        - ligand_recommendations/solvent_recommendations/base_recommendations: ranked with scores 0..1
+        """
+        try:
+            # Lazy import RDKit; if not available, gracefully skip
+            try:
+                from rdkit import Chem
+                from rdkit.Chem import AllChem
+                from rdkit import DataStructs
+            except Exception:
+                return None
+
+            def _mols_from_mixture(smistr: str) -> List:
+                mols = []
+                if not smistr:
+                    return mols
+                for part in str(smistr).split('.'):
+                    part = part.strip()
+                    if not part:
+                        continue
+                    try:
+                        m = Chem.MolFromSmiles(part)
+                        if m:
+                            mols.append(m)
+                    except Exception:
+                        continue
+                return mols
+
+            def _fp_from_mixture(smistr: str):
+                mols = _mols_from_mixture(smistr)
+                if not mols:
+                    return None
+                fps = [AllChem.GetMorganFingerprintAsBitVect(m, 2, nBits=2048) for m in mols]
+                # Combine by bitwise OR
+                combo = fps[0]
+                for fv in fps[1:]:
+                    combo |= fv
+                return combo
+
+            # Build query fingerprints for reactants and products
+            react_smi, prod_smi = '', ''
+            if '>>' in reaction_smiles:
+                react_smi, prod_smi = reaction_smiles.split('>>', 1)
+            else:
+                react_smi = reaction_smiles
+                prod_smi = ''
+            qfp_r = _fp_from_mixture(react_smi)
+            qfp_p = _fp_from_mixture(prod_smi) if prod_smi else None
+
+            if not qfp_r and not qfp_p:
+                return None
+
+            data_dir = os.path.join(_ROOT, 'data', 'reaction_dataset')
+            if not os.path.isdir(data_dir):
+                return None
+
+            # Collect similarities across all CSV datasets
+            candidates: List[Dict] = []
+            import csv
+            for fname in os.listdir(data_dir):
+                if not fname.lower().endswith('.csv'):
+                    continue
+                path = os.path.join(data_dir, fname)
+                try:
+                    with open(path, 'r', encoding='utf-8') as f:
+                        reader = csv.DictReader(f)
+                        for row in reader:
+                            rs = row.get('ReactantSMILES') or ''
+                            ps = row.get('ProductSMILES') or ''
+                            rfp = _fp_from_mixture(rs)
+                            pfp = _fp_from_mixture(ps) if ps else None
+                            sim_r = 0.0
+                            sim_p = 0.0
+                            try:
+                                if qfp_r is not None and rfp is not None:
+                                    sim_r = DataStructs.TanimotoSimilarity(qfp_r, rfp)
+                                if qfp_p is not None and pfp is not None:
+                                    sim_p = DataStructs.TanimotoSimilarity(qfp_p, pfp)
+                            except Exception:
+                                pass
+                            # Weighted combination; favor product when available
+                            if qfp_p is not None and pfp is not None:
+                                sim = 0.6 * sim_p + 0.4 * sim_r
+                            else:
+                                sim = sim_r
+                            if sim <= 0:
+                                continue
+                            candidates.append({
+                                'ReactionID': row.get('ReactionID') or '',
+                                'ReactionType': row.get('ReactionType') or '',
+                                'CondKey': row.get('CondKey') or '',
+                                'Ligand': row.get('Ligand') or '',
+                                'ReagentRaw': row.get('ReagentRaw') or '',
+                                'ReagentRole': row.get('ReagentRole') or '',
+                                'RGTName': row.get('RGTName') or '',
+                                'SOLName': row.get('SOLName') or '',
+                                'Solvent': row.get('Solvent') or '',
+                                'CoreDetail': row.get('CoreDetail') or '',
+                                'CoreGeneric': row.get('CoreGeneric') or '',
+                                'similarity': float(sim)
+                            })
+                except Exception:
+                    continue
+
+            if not candidates:
+                return None
+
+            # Keep top K hits
+            candidates.sort(key=lambda x: x['similarity'], reverse=True)
+            top_hits = candidates[:50]
+
+            # Aggregate ligands, solvents, bases weighted by similarity
+            lig_counts: Dict[str, float] = defaultdict(float)
+            solv_counts: Dict[str, float] = defaultdict(float)
+            base_counts: Dict[str, float] = defaultdict(float)
+
+            def _parse_listlike(val: str) -> List[str]:
+                if not val:
+                    return []
+                s = str(val).strip()
+                # Try JSON list first
+                if s.startswith('[') and s.endswith(']'):
+                    try:
+                        arr = json.loads(s)
+                        return [str(x).strip() for x in arr if str(x).strip()]
+                    except Exception:
+                        pass
+                # Fallback: strip quotes/brackets and split by comma
+                s2 = s.strip('[]').replace('"', '').replace("'", '')
+                parts = [p.strip() for p in s2.split(',') if p.strip()]
+                return parts
+
+            # Base alias normalization
+            base_alias = {
+                'potassium carbonate (k2co3)': 'K2CO3',
+                'cesium carbonate (cs2co3)': 'Cs2CO3',
+                'tripotassium phosphate (k3po4)': 'K3PO4',
+                'potassium tert-butoxide (kotbu)': 'KOtBu',
+                'sodium tert-butoxide (naotbu)': 'NaOtBu',
+                'sodium carbonate (na2co3)': 'Na2CO3',
+                'potassium hydroxide (koh)': 'KOH',
+                'triethylamine': 'Et3N',
+            }
+
+            def _canon_base(nm: str) -> str:
+                s = (nm or '').strip()
+                low = s.lower()
+                # Pull formula inside parentheses when present
+                if '(' in s and ')' in s:
+                    inner = s[s.rfind('(')+1:s.rfind(')')].strip()
+                    if inner:
+                        low = inner.lower()
+                low = low.replace(' ', '')
+                return base_alias.get(low, s)
+
+            # Solvent abbreviation lookup via solvent dataframe if available
+            solv_abbrev: Dict[str, str] = {}
+            try:
+                sdf = create_solvent_dataframe()
+                for _, rowx in sdf.iterrows():
+                    nm = str(rowx.get('name') or '').strip()
+                    ab = str(rowx.get('abbreviation') or '').strip()
+                    if nm:
+                        solv_abbrev[nm] = ab
+                    if ab and ab not in solv_abbrev:
+                        solv_abbrev[ab] = ab
+            except Exception:
+                pass
+
+            for hit in top_hits:
+                w = float(hit.get('similarity') or 0.0)
+                if w <= 0:
+                    continue
+                # Ligands
+                for src in ('Ligand',):
+                    for item in _parse_listlike(hit.get(src) or ''):
+                        if item and item.lower() != 'none':
+                            lig_counts[item] += w
+                # Solvents (handle both columns)
+                sol_items = _parse_listlike(hit.get('Solvent') or '')
+                sol_items += _parse_listlike(hit.get('SOLName') or '')
+                for sitem in sol_items:
+                    if sitem and sitem.lower() != 'none':
+                        solv_counts[sitem] += w
+                # Bases (from reagent columns)
+                rraw = _parse_listlike(hit.get('ReagentRaw') or '')
+                rgtn = _parse_listlike(hit.get('RGTName') or '')
+                for bitem in rraw + rgtn:
+                    cb = _canon_base(bitem)
+                    if cb and cb.lower() not in ('none', 'unk'):
+                        base_counts[cb] += w
+
+            # Normalize to 0..1 by max weight
+            def _rank_map(d: Dict[str, float]) -> List[Tuple[str, float]]:
+                if not d:
+                    return []
+                mx = max(d.values()) if d else 1.0
+                return [(k, (v / mx) if mx > 0 else 0.0) for k, v in sorted(d.items(), key=lambda kv: kv[1], reverse=True)]
+
+            lig_rank = _rank_map(lig_counts)
+            solv_rank = _rank_map(solv_counts)
+            base_rank = _rank_map(base_counts)
+
+            # Adapt to engine's output shapes
+            lig_out = [{
+                'ligand': name,
+                'compatibility_score': round(score, 3)
+            } for name, score in lig_rank[:5]]
+
+            solv_out = [{
+                'solvent': name,
+                'abbreviation': (solv_abbrev.get(name) or name),
+                'compatibility_score': round(score, 3)
+            } for name, score in solv_rank[:5]]
+
+            base_out = [{
+                'base': name,
+                'compatibility_score': round(score, 3)
+            } for name, score in base_rank[:5]]
+
+            # Provide a concise view of top hits
+            hits_view = [{
+                'ReactionID': h.get('ReactionID'),
+                'ReactionType': h.get('ReactionType'),
+                'CondKey': h.get('CondKey'),
+                'similarity': round(float(h.get('similarity') or 0.0), 3)
+            } for h in top_hits[:10]]
+
+            # Create combined suggestions for convenience
+            combined_conditions = self._create_combined_conditions(lig_out, solv_out, self.analyze_reaction_type(reaction_smiles, None)) if lig_out and solv_out else []
+            if base_out and combined_conditions:
+                suggested = base_out[0].get('base')
+                for cc in combined_conditions:
+                    cc['suggested_base'] = suggested
+
+            return {
+                'top_hits': hits_view,
+                'ligand_recommendations': lig_out,
+                'solvent_recommendations': solv_out,
+                'base_recommendations': base_out,
+                'combined_conditions': combined_conditions
+            }
+        except Exception as e:
+            return {'error': f'general_similarity_error: {e}'}
 
     # ===== Milestone 2: analytics loading and priors application =====
     def _load_analytics_summary(self, reaction_type: str) -> Optional[dict]:
