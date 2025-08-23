@@ -438,8 +438,8 @@ class SampleReactionsBrowser(QDialog):
         top_row = QHBoxLayout()
         for cat_name, cat_key in [("All", "all"), ("Coupling", "coupling_only"), ("Everything Else", "non_coupling")]:
             cb = QCheckBox(cat_name)
-            if cat_key == "all":
-                cb.setChecked(True)
+            # Default: "All" should be unchecked on start
+            # (no explicit setChecked(True) here)
             cb.stateChanged.connect(self.filter_by_category)
             self.category_checkboxes[cat_key] = cb
             top_row.addWidget(cb)
@@ -456,47 +456,54 @@ class SampleReactionsBrowser(QDialog):
         family_row.addStretch()
         category_layout.addLayout(family_row)
 
-        # Sub-categories per family
+        # Sub-categories per family (wrap across rows to avoid cutoff)
         sub_layout = QHBoxLayout()
+
+        # Helper to populate a group box with a grid of checkboxes
+        def add_checkboxes_grid(group_title, items):
+            box = QGroupBox(group_title)
+            grid = QGridLayout(box)
+            cols = 2  # arrange in two columns to reduce horizontal overflow
+            for idx, (name, key) in enumerate(items):
+                cb = QCheckBox(name)
+                cb.stateChanged.connect(self.filter_by_category)
+                self.category_checkboxes[key] = cb
+                row = idx // cols
+                col = idx % cols
+                grid.addWidget(cb, row, col)
+            return box
+
         # C-C subcats
-        cc_box = QGroupBox("C-C Couplings")
-        cc_l = QHBoxLayout(cc_box)
-        for name, key in [("Suzuki (Pd)", "cc_suzuki"), ("Stille (Pd)", "cc_stille"), ("Sonogashira (Pd)", "cc_sonogashira"), ("Heck (Pd)", "cc_heck"), ("Negishi (Pd)", "cc_negishi"), ("Kumada (Ni)", "cc_kumada")]:
-            cb = QCheckBox(name)
-            cb.stateChanged.connect(self.filter_by_category)
-            self.category_checkboxes[key] = cb
-            cc_l.addWidget(cb)
-        sub_layout.addWidget(cc_box)
+        cc_items = [
+            ("Suzuki (Pd)", "cc_suzuki"),
+            ("Stille (Pd)", "cc_stille"),
+            ("Sonogashira (Pd)", "cc_sonogashira"),
+            ("Heck (Pd)", "cc_heck"),
+            ("Negishi (Pd)", "cc_negishi"),
+            ("Kumada (Ni)", "cc_kumada"),
+        ]
+        sub_layout.addWidget(add_checkboxes_grid("C-C Couplings", cc_items))
 
         # C-N subcats
-        cn_box = QGroupBox("C-N Couplings")
-        cn_l = QHBoxLayout(cn_box)
-        for name, key in [("Buchwald-Hartwig (Pd)", "cn_bh"), ("Ullmann (Cu)", "cn_ullmann"), ("Chan-Lam (Cu)", "cn_chanlam")]:
-            cb = QCheckBox(name)
-            cb.stateChanged.connect(self.filter_by_category)
-            self.category_checkboxes[key] = cb
-            cn_l.addWidget(cb)
-        sub_layout.addWidget(cn_box)
+        cn_items = [
+            ("Buchwald-Hartwig (Pd)", "cn_bh"),
+            ("Ullmann (Cu)", "cn_ullmann"),
+            ("Chan-Lam (Cu)", "cn_chanlam"),
+        ]
+        sub_layout.addWidget(add_checkboxes_grid("C-N Couplings", cn_items))
 
         # C-O subcats
-        co_box = QGroupBox("C-O Couplings")
-        co_l = QHBoxLayout(co_box)
-        for name, key in [("Ullmann Ether (Cu)", "co_ullmann_ether"), ("Mitsunobu", "co_mitsunobu")]:
-            cb = QCheckBox(name)
-            cb.stateChanged.connect(self.filter_by_category)
-            self.category_checkboxes[key] = cb
-            co_l.addWidget(cb)
-        sub_layout.addWidget(co_box)
+        co_items = [
+            ("Ullmann Ether (Cu)", "co_ullmann_ether"),
+            ("Mitsunobu", "co_mitsunobu"),
+        ]
+        sub_layout.addWidget(add_checkboxes_grid("C-O Couplings", co_items))
 
         # C-S subcats
-        cs_box = QGroupBox("C-S Couplings")
-        cs_l = QHBoxLayout(cs_box)
-        for name, key in [("Thioether Coupling (Pd)", "cs_thioether")]:
-            cb = QCheckBox(name)
-            cb.stateChanged.connect(self.filter_by_category)
-            self.category_checkboxes[key] = cb
-            cs_l.addWidget(cb)
-        sub_layout.addWidget(cs_box)
+        cs_items = [
+            ("Thioether Coupling (Pd)", "cs_thioether"),
+        ]
+        sub_layout.addWidget(add_checkboxes_grid("C-S Couplings", cs_items))
 
         category_layout.addLayout(sub_layout)
 
