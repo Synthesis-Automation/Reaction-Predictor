@@ -72,6 +72,7 @@ def build_export_payload(result: dict, related_reactions: Optional[list] = None)
             data_dir = os.path.join(os.path.dirname(__file__), 'data')
             path = os.path.join(data_dir, 'cas_dictionary.csv')
             with open(path, 'r', encoding='utf-8') as f:
+                # CSV expected for cas_dictionary; unchanged
                 reader = csv.DictReader(f)
                 for row in reader:
                     cas = (row.get('CAS') or '').strip()

@@ -2134,7 +2134,11 @@ class SimpleReactionGUI(QMainWindow):
                 pass
             
             # Read the dataset
-            df = pd.read_csv(dataset_path)
+            # Support CSV and TSV datasets uniformly
+            if dataset_path.lower().endswith('.tsv'):
+                df = pd.read_csv(dataset_path, sep='\t')
+            else:
+                df = pd.read_csv(dataset_path)
             
             if df.empty:
                 print("Dataset is empty")
@@ -2197,7 +2201,7 @@ class SimpleReactionGUI(QMainWindow):
                         'reaction_smiles': f"{reactant_smiles}>>{product_smiles}",
                         'similarity': combined_similarity,
                         'yield': row.get('Yield_%', 0.0),
-                        'catalyst': self._parse_json_field(row.get('CoreDetail', '[]')),
+                        'catalyst': self._parse_json_field(row.get('CatalystCoreDetail', row.get('CoreDetail', '[]'))),
                         'ligand': self._parse_json_field(row.get('Ligand', '[]')),
                         'solvent': self._parse_json_field(row.get('Solvent', '[]')),
                         'temperature': row.get('Temperature_C', ''),
@@ -2292,7 +2296,7 @@ class SimpleReactionGUI(QMainWindow):
                         'reaction_smiles': f"{reactant_smiles}>>{product_smiles}",
                         'similarity': 0.5 + (hash_int % 30) / 100.0,  # Fake similarity 0.5-0.8
                         'yield': row.get('Yield_%', 0.0),
-                        'catalyst': self._parse_json_field(row.get('CoreDetail', '[]')),
+                        'catalyst': self._parse_json_field(row.get('CatalystCoreDetail', row.get('CoreDetail', '[]'))),
                         'ligand': self._parse_json_field(row.get('Ligand', '[]')),
                         'solvent': self._parse_json_field(row.get('Solvent', '[]')),
                         'temperature': row.get('Temperature_C', ''),

@@ -114,8 +114,11 @@ class BuchwaldHartwigRecommender(ReactionRecommender):
             if not os.path.exists(dataset_path):
                 return False
             
-            # Load main dataset
-            self.dataset = pd.read_csv(dataset_path)
+            # Load main dataset (CSV or TSV)
+            if dataset_path.lower().endswith('.tsv'):
+                self.dataset = pd.read_csv(dataset_path, sep='\t')
+            else:
+                self.dataset = pd.read_csv(dataset_path)
             
             # Load ligand families configuration
             self._load_ligand_families_config()
@@ -135,6 +138,14 @@ class BuchwaldHartwigRecommender(ReactionRecommender):
         """Clean and standardize the dataset"""
         if self.dataset is None:
             return
+        # Harmonize new column names from TSV to legacy names used downstream
+        try:
+            if 'CoreGeneric' not in self.dataset.columns and 'CatalystCoreGeneric' in self.dataset.columns:
+                self.dataset['CoreGeneric'] = self.dataset['CatalystCoreGeneric']
+            if 'CoreDetail' not in self.dataset.columns and 'CatalystCoreDetail' in self.dataset.columns:
+                self.dataset['CoreDetail'] = self.dataset['CatalystCoreDetail']
+        except Exception:
+            pass
         
         # Clean string columns, handling JSON arrays
         string_cols = ['CoreGeneric', 'Ligand', 'Solvent']

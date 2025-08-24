@@ -458,16 +458,20 @@ class EnhancedRecommendationEngine:
             if not os.path.isdir(data_dir):
                 return None
 
-            # Collect similarities across all CSV datasets
+            # Collect similarities across all dataset files (CSV/TSV)
             candidates: List[Dict] = []
             import csv
             for fname in os.listdir(data_dir):
-                if not fname.lower().endswith('.csv'):
+                if not (fname.lower().endswith('.csv') or fname.lower().endswith('.tsv')):
                     continue
                 path = os.path.join(data_dir, fname)
                 try:
                     with open(path, 'r', encoding='utf-8') as f:
-                        reader = csv.DictReader(f)
+                        # Auto-select delimiter by extension
+                        if fname.lower().endswith('.tsv'):
+                            reader = csv.DictReader(f, delimiter='\t')
+                        else:
+                            reader = csv.DictReader(f)
                         for row in reader:
                             rs = row.get('ReactantSMILES') or ''
                             ps = row.get('ProductSMILES') or ''
@@ -496,7 +500,8 @@ class EnhancedRecommendationEngine:
                                 'ReactantSMILES': rs,
                                 'ProductSMILES': ps,
                                 'Ligand': row.get('Ligand') or '',
-                                'ReagentRaw': row.get('ReagentRaw') or '',
+                                # Support both legacy and new columns
+                                'Reagent': row.get('Reagent') or row.get('ReagentRaw') or '',
                                 'ReagentRole': row.get('ReagentRole') or '',
                                 'RGTName': row.get('RGTName') or '',
                                 'SOLName': row.get('SOLName') or '',
@@ -589,7 +594,8 @@ class EnhancedRecommendationEngine:
                     if sitem and sitem.lower() != 'none':
                         solv_counts[sitem] += w
                 # Bases (from reagent columns)
-                rraw = _parse_listlike(hit.get('ReagentRaw') or '')
+                # New unified reagent columns
+                rraw = _parse_listlike(hit.get('Reagent') or '')
                 rgtn = _parse_listlike(hit.get('RGTName') or '')
                 for bitem in rraw + rgtn:
                     cb = _canon_base(bitem)
@@ -826,13 +832,13 @@ class EnhancedRecommendationEngine:
                 return evidence
             # Consider a few known files; ignore huge processing
             for fname in os.listdir(data_dir):
-                if not fname.lower().endswith('.csv'):
+                if not (fname.lower().endswith('.csv') or fname.lower().endswith('.tsv')):
                     continue
                 path = os.path.join(data_dir, fname)
                 try:
                     import csv
                     with open(path, 'r', encoding='utf-8') as f:
-                        reader = csv.DictReader(f)
+                        reader = csv.DictReader(f, delimiter='\t') if fname.lower().endswith('.tsv') else csv.DictReader(f)
                         for row in reader:
                             rtype = (row.get('ReactionType') or '').strip()
                             if not rtype:
@@ -877,13 +883,13 @@ class EnhancedRecommendationEngine:
             if not os.path.isdir(data_dir):
                 return evidence
             for fname in os.listdir(data_dir):
-                if not fname.lower().endswith('.csv'):
+                if not (fname.lower().endswith('.csv') or fname.lower().endswith('.tsv')):
                     continue
                 path = os.path.join(data_dir, fname)
                 try:
                     import csv
                     with open(path, 'r', encoding='utf-8') as f:
-                        reader = csv.DictReader(f)
+                        reader = csv.DictReader(f, delimiter='\t') if fname.lower().endswith('.tsv') else csv.DictReader(f)
                         for row in reader:
                             rtype = (row.get('ReactionType') or '').strip()
                             if not rtype or rtype.lower() != (reaction_type or '').lower():
@@ -934,19 +940,20 @@ class EnhancedRecommendationEngine:
                             break
 
             for fname in os.listdir(data_dir):
-                if not fname.lower().endswith('.csv'):
+                if not (fname.lower().endswith('.csv') or fname.lower().endswith('.tsv')):
                     continue
                 path = os.path.join(data_dir, fname)
                 try:
                     import csv
                     with open(path, 'r', encoding='utf-8') as f:
-                        reader = csv.DictReader(f)
+                        reader = csv.DictReader(f, delimiter='\t') if fname.lower().endswith('.tsv') else csv.DictReader(f)
                         for row in reader:
                             rtype = (row.get('ReactionType') or '').strip()
                             if not rtype or rtype.lower() != (reaction_type or '').lower():
                                 continue
                             # check common columns
-                            _maybe_add(row.get('ReagentRaw') or '')
+                            # New column name Reagent (with roles in ReagentRole)
+                            _maybe_add(row.get('Reagent') or row.get('ReagentRaw') or '')
                             _maybe_add(row.get('RGTName') or '')
                             _maybe_add(row.get('Base') or '')
                 except Exception:

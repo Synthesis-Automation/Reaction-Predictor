@@ -20,27 +20,32 @@ from typing import Optional, Dict, List
 # Add new entries as you create more datasets.
 DATASET_MAP: Dict[str, str] = {
     # Buchwald (aliases)
-    "C-N Coupling - Buchwald-Hartwig": "buchwald_reactions.csv",
-    "Buchwald-Hartwig Amination": "buchwald_reactions.csv",
+    "C-N Coupling - Buchwald-Hartwig": "Buchwald-2021-2014.tsv",
+    "Buchwald-Hartwig Amination": "Buchwald-2021-2014.tsv",
 
     # Ullmann (C-N and C-O variants share the same dataset file for now)
-    "C-N Coupling - Ullmann": "Ullman_2024_full.csv",
+    "C-N Coupling - Ullmann": "Ullman-2020-2024.tsv",
     # Old label kept for back-compat in samples/docs
-    "C-O Coupling - Ullmann Ether": "Ullman_2024_full.csv",
+    "C-O Coupling - Ullmann Ether": "Ullman-2020-2024.tsv",
     # New reorganized label (metal in parentheses removed via normalization below)
-    "C-O Coupling - Ullmann": "Ullman_2024_full.csv",
-    "Ullmann Reaction": "Ullman_2024_full.csv",
-    "Ullmann Ether Synthesis": "Ullman_2024_full.csv",
+    "C-O Coupling - Ullmann": "Ullman-2020-2024.tsv",
+    "Ullmann Reaction": "Ullman-2020-2024.tsv",
+    "Ullmann Ether Synthesis": "Ullman-2020-2024.tsv",
+
+    # Amide formation / amidation
+    "Amidation": "Amide-formation.tsv",
+    "Amide formation": "Amide-formation.tsv",
 }
 
 # Fallback keyword routing for unexpected labels
 KEYWORD_FALLBACKS: List[tuple[str, str]] = [
-    ("ullmann", "Ullman_2024_full.csv"),
-    ("buchwald", "buchwald_reactions.csv"),
+    ("ullmann", "Ullman-2020-2024.tsv"),
+    ("buchwald", "Buchwald-2021-2014.tsv"),
+    ("amid", "Amide-formation.tsv"),
     # Treat generic cross-coupling and Chan-Lam as falling back to the
     # Buchwald dataset for similarity browsing when nothing else is available
-    ("cross-coupling", "buchwald_reactions.csv"),
-    ("chan-lam", "buchwald_reactions.csv"),
+    ("cross-coupling", "Buchwald-2021-2014.tsv"),
+    ("chan-lam", "Buchwald-2021-2014.tsv"),
 ]
 
 
