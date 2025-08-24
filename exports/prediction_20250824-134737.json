@@ -1,0 +1,316 @@
+{
+  "meta": {
+    "generated_at": "2025-08-24T13:47:37",
+    "analysis_type": "enhanced",
+    "status": "Enhanced recommendations generated successfully"
+  },
+  "input": {
+    "reaction_smiles": "Clc1ccncc1.Nc1ccccc1>>c1ccc(Nc2ccncc2)cc1",
+    "selected_reaction_type": "Auto detect reaction type"
+  },
+  "detection": {
+    "reaction_type": "Cross-Coupling"
+  },
+  "dataset": {
+    "ligands_available": 123,
+    "solvents_available": 72,
+    "reaction_types_supported": [
+      "Cross-Coupling",
+      "Hydrogenation",
+      "Metathesis",
+      "C-H_Activation",
+      "Carbonylation"
+    ],
+    "analytics_loaded": false
+  },
+  "top_conditions": [
+    {
+      "reaction": {
+        "smiles": "Clc1ccncc1.Nc1ccccc1>>c1ccc(Nc2ccncc2)cc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Clc1ccncc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Nc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "Pd(OAc)2",
+          "cas": "3375-31-3",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "XPhos",
+          "cas": "98327-87-8",
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "Cs2CO3",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "THF",
+          "abbreviation": "THF",
+          "cas": "109-99-9",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-120°C",
+        "time": "4-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    },
+    {
+      "reaction": {
+        "smiles": "Clc1ccncc1.Nc1ccccc1>>c1ccc(Nc2ccncc2)cc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Clc1ccncc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Nc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "Pd(OAc)2",
+          "cas": "3375-31-3",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "SPhos",
+          "cas": "161265-03-8",
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "Cs2CO3",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "Dimethylformamide",
+          "abbreviation": "DMF",
+          "cas": "68-12-2",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-120°C",
+        "time": "4-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    },
+    {
+      "reaction": {
+        "smiles": "Clc1ccncc1.Nc1ccccc1>>c1ccc(Nc2ccncc2)cc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Clc1ccncc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Nc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "Pd(OAc)2",
+          "cas": "3375-31-3",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "SPhos",
+          "cas": "161265-03-8",
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "Cs2CO3",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "THF",
+          "abbreviation": "THF",
+          "cas": "109-99-9",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-120°C",
+        "time": "4-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    }
+  ],
+  "related_reactions": [
+    {
+      "reaction_smiles": "NC1=CC=CC=C1.BrC1=CC=CC=C1>>C1=CC=C(NC2=CC=CC=C2)C=C1",
+      "similarity": 0.5448717948717948,
+      "yield": 98,
+      "catalyst": "Pd2(dba)3·CHCl3",
+      "ligand": "tBuXPhos",
+      "solvent": "Tol",
+      "temperature": NaN,
+      "time": NaN,
+      "reference": "Journal of Organic Chemistry (2002), 67(16), 5553-5566",
+      "reaction_id": "RXN000218"
+    },
+    {
+      "reaction_smiles": "CC1=CC=C(N)C=C1.ClC1=CC=CC=C1>>CC1=CC=C(NC2=CC=CC=C2)C=C1",
+      "similarity": 0.5,
+      "yield": 99,
+      "catalyst": "Pd(OAc)2",
+      "ligand": "BrettPhos",
+      "solvent": "DME",
+      "temperature": NaN,
+      "time": NaN,
+      "reference": "Journal of the American Chemical Society (2008), 130(20), 6586-6596",
+      "reaction_id": "RXN000083"
+    }
+  ],
+  "general": {
+    "ligands": [],
+    "solvents": [],
+    "bases": [],
+    "top_hits": [
+      {
+        "ReactionID": "RXN000218",
+        "ReactionType": "Buchwald",
+        "CondKey": "Pd/tBuXPhos/none/Tol",
+        "similarity": 0.569,
+        "reactant_smiles": "NC1=CC=CC=C1.BrC1=CC=CC=C1",
+        "product_smiles": "C1=CC=C(NC2=CC=CC=C2)C=C1",
+        "reaction_smiles": "NC1=CC=CC=C1.BrC1=CC=CC=C1>>C1=CC=C(NC2=CC=CC=C2)C=C1"
+      },
+      {
+        "ReactionID": "RXN000083",
+        "ReactionType": "Buchwald",
+        "CondKey": "Pd/BrettPhos/none/DME",
+        "similarity": 0.5,
+        "reactant_smiles": "CC1=CC=C(N)C=C1.ClC1=CC=CC=C1",
+        "product_smiles": "CC1=CC=C(NC2=CC=CC=C2)C=C1",
+        "reaction_smiles": "CC1=CC=C(N)C=C1.ClC1=CC=CC=C1>>CC1=CC=C(NC2=CC=CC=C2)C=C1"
+      },
+      {
+        "ReactionID": "RXN000363",
+        "ReactionType": "Buchwald",
+        "CondKey": "Pd/tBuXPhos/none/Tol",
+        "similarity": 0.467,
+        "reactant_smiles": "NC1=CC=CC=C1.N#CC1=CC=C(Cl)C=C1",
+        "product_smiles": "N#CC1=CC=C(NC2=CC=CC=C2)C=C1",
+        "reaction_smiles": "NC1=CC=CC=C1.N#CC1=CC=C(Cl)C=C1>>N#CC1=CC=C(NC2=CC=CC=C2)C=C1"
+      },
+      {
+        "ReactionID": "RXN000446",
+        "ReactionType": "Buchwald",
+        "CondKey": "Pd/none/60633-21-8/Tol",
+        "similarity": 0.445,
+        "reactant_smiles": "NC1=CC=CC=C1.FC(F)(F)C1=CC=C(Br)C=C1",
+        "product_smiles": "FC(F)(F)C1=CC=C(NC2=CC=CC=C2)C=C1",
+        "reaction_smiles": "NC1=CC=CC=C1.FC(F)(F)C1=CC=C(Br)C=C1>>FC(F)(F)C1=CC=C(NC2=CC=CC=C2)C=C1"
+      },
+      {
+        "ReactionID": "RXN000371",
+        "ReactionType": "Buchwald",
+        "CondKey": "Pd/tBuXPhos/none/DME",
+        "similarity": 0.436,
+        "reactant_smiles": "NC1=CC=CC=C1.O=N(=O)C1=CC=C(Cl)C=C1",
+        "product_smiles": "O=N(=O)C1=CC=C(NC2=CC=CC=C2)C=C1",
+        "reaction_smiles": "NC1=CC=CC=C1.O=N(=O)C1=CC=C(Cl)C=C1>>O=N(=O)C1=CC=C(NC2=CC=CC=C2)C=C1"
+      },
+      {
+        "ReactionID": "RXN000014",
+        "ReactionType": "Buchwald",
+        "CondKey": "Pd/XPhos/none/Tol",
+        "similarity": 0.429,
+        "reactant_smiles": "NC1=CC=CC(Cl)=C1.BrC1=CC=CC=C1",
+        "product_smiles": "ClC1=CC=CC(NC2=CC=CC=C2)=C1",
+        "reaction_smiles": "NC1=CC=CC(Cl)=C1.BrC1=CC=CC=C1>>ClC1=CC=CC(NC2=CC=CC=C2)=C1"
+      },
+      {
+        "ReactionID": "RXN000479",
+        "ReactionType": "Buchwald",
+        "CondKey": "Pd/BrettPhos/none/DME",
+        "similarity": 0.425,
+        "reactant_smiles": "CC1=CC=C(N)C=C1.BrC1=CC=CC=C1",
+        "product_smiles": "CC1=CC=C(NC2=CC=CC=C2)C=C1",
+        "reaction_smiles": "CC1=CC=C(N)C=C1.BrC1=CC=CC=C1>>CC1=CC=C(NC2=CC=CC=C2)C=C1"
+      },
+      {
+        "ReactionID": "RXN000282",
+        "ReactionType": "Buchwald",
+        "CondKey": "Pd/tBuXPhos/none/Tol",
+        "similarity": 0.424,
+        "reactant_smiles": "NC1=CC=CC=C1.CC1=C(Cl)C=CC=C1",
+        "product_smiles": "CC1=C(NC2=CC=CC=C2)C=CC=C1",
+        "reaction_smiles": "NC1=CC=CC=C1.CC1=C(Cl)C=CC=C1>>CC1=C(NC2=CC=CC=C2)C=CC=C1"
+      },
+      {
+        "ReactionID": "RXN000258",
+        "ReactionType": "Buchwald",
+        "CondKey": "Pd/none/331465-71-5/Tol",
+        "similarity": 0.405,
+        "reactant_smiles": "NC1=CC=CC=C1.COC1=CC(Cl)=CC=C1",
+        "product_smiles": "COC1=CC=CC(NC2=CC=CC=C2)=C1",
+        "reaction_smiles": "NC1=CC=CC=C1.COC1=CC(Cl)=CC=C1>>COC1=CC=CC(NC2=CC=CC=C2)=C1"
+      },
+      {
+        "ReactionID": "RXN000412",
+        "ReactionType": "Buchwald",
+        "CondKey": "Pd/tBuXPhos/none/DME",
+        "similarity": 0.404,
+        "reactant_smiles": "NC1=CC=CC=C1.COC(=O)C1=CC=C(Cl)C=C1",
+        "product_smiles": "COC(=O)C1=CC=C(NC2=CC=CC=C2)C=C1",
+        "reaction_smiles": "NC1=CC=CC=C1.COC(=O)C1=CC=C(Cl)C=C1>>COC(=O)C1=CC=C(NC2=CC=CC=C2)C=C1"
+      }
+    ]
+  }
+}
