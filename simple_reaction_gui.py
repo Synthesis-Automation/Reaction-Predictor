@@ -1906,7 +1906,7 @@ class SimpleReactionGUI(QMainWindow):
             child = self.related_reactions_layout.itemAt(i).widget()
             if child:
                 child.setParent(None)
-        
+
         if not related_reactions:
             # Show placeholder if no related reactions
             placeholder_label = QLabel("No related reactions found in dataset")
@@ -1925,9 +1925,10 @@ class SimpleReactionGUI(QMainWindow):
             placeholder_label.setMinimumHeight(100)
             self.related_reactions_layout.addWidget(placeholder_label)
             return
-        
-        # Display top 2 related reactions
-        for i, reaction_data in enumerate(related_reactions[:2], 1):
+
+        # Display up to 15 related reactions (scrollable area already present)
+        MAX_RELATED = 15
+        for i, reaction_data in enumerate(related_reactions[:MAX_RELATED], 1):
             # Create container for each reaction
             reaction_container = QWidget()
             reaction_container.setStyleSheet("""
@@ -1940,18 +1941,18 @@ class SimpleReactionGUI(QMainWindow):
             """)
             container_layout = QVBoxLayout(reaction_container)
             container_layout.setContentsMargins(8, 8, 8, 8)
-            
+
             # Reaction title
             title_label = QLabel(f"Related Reaction #{i}")
             title_label.setStyleSheet("font-weight: bold; color: #4CAF50; margin-bottom: 5px;")
             container_layout.addWidget(title_label)
-            
+
             # Extract SMILES and create image
             reaction_smiles = reaction_data.get('reaction_smiles', '')
             if not reaction_smiles:
                 # Try alternative keys that might contain the SMILES
                 reaction_smiles = reaction_data.get('smiles', reaction_data.get('reaction', ''))
-            
+
             if reaction_smiles:
                 try:
                     # Create reaction image with wider width to prevent overlap
@@ -1992,7 +1993,7 @@ class SimpleReactionGUI(QMainWindow):
                     error_label.setStyleSheet("color: #FF6B6B; font-style: italic; text-align: center;")
                     error_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
                     container_layout.addWidget(error_label)
-            
+
             # Additional info
             info_text = ""
             if 'yield' in reaction_data and reaction_data['yield']:
@@ -2001,16 +2002,16 @@ class SimpleReactionGUI(QMainWindow):
                     info_text += f"Yield: {yield_val:.1f}%\n"
                 except (ValueError, TypeError):
                     pass
-            
+
             if 'catalyst' in reaction_data and reaction_data['catalyst'] != 'N/A':
                 info_text += f"Catalyst: {reaction_data['catalyst']}\n"
-            
+
             if 'ligand' in reaction_data and reaction_data['ligand'] != 'N/A':
                 info_text += f"Ligand: {reaction_data['ligand']}\n"
-            
+
             if 'solvent' in reaction_data and reaction_data['solvent'] != 'N/A':
                 info_text += f"Solvent: {reaction_data['solvent']}\n"
-            
+
             if 'temperature' in reaction_data and reaction_data['temperature']:
                 try:
                     temp_val = reaction_data['temperature']
@@ -2028,7 +2029,7 @@ class SimpleReactionGUI(QMainWindow):
                                 info_text += f"Temperature: {temp_str} °C\n"
                 except:
                     pass
-            
+
             if 'time' in reaction_data and reaction_data['time']:
                 try:
                     time_val = reaction_data['time']
@@ -2045,13 +2046,13 @@ class SimpleReactionGUI(QMainWindow):
                                 info_text += f"Time: {time_str} h\n"
                 except:
                     pass
-            
+
             if 'similarity' in reaction_data:
                 info_text += f"Similarity: {reaction_data['similarity']:.1%}\n"
-            
+
             if 'reaction_id' in reaction_data:
                 info_text += f"ID: {reaction_data['reaction_id']}"
-            
+
             if info_text:
                 info_label = QLabel(info_text.strip())
                 info_label.setStyleSheet("""
@@ -2067,9 +2068,9 @@ class SimpleReactionGUI(QMainWindow):
                 """)
                 info_label.setWordWrap(True)
                 container_layout.addWidget(info_label)
-            
+
             self.related_reactions_layout.addWidget(reaction_container)
-        
+
         # Add stretch to push content to top
         self.related_reactions_layout.addStretch()
     
@@ -2098,7 +2099,7 @@ class SimpleReactionGUI(QMainWindow):
         placeholder_label.setMinimumHeight(450)  # Further increased from 300 to 450
         self.related_reactions_layout.addWidget(placeholder_label)
     
-    def get_related_reactions_from_dataset(self, input_smiles, top_k=2, reaction_type=None):
+    def get_related_reactions_from_dataset(self, input_smiles, top_k=15, reaction_type=None):
         """Find related reactions from actual dataset using chemical similarity.
 
         If reaction_type hints at Ullmann, prefer the Ullmann dataset; otherwise use Buchwald.
@@ -2443,14 +2444,14 @@ class SimpleReactionGUI(QMainWindow):
                     or result.get('reaction_type')
                     or self.reaction_type_combo.currentText()
                 )
-                related_reactions = self.get_related_reactions_from_dataset(reaction_smiles, reaction_type=rt_hint)
+                related_reactions = self.get_related_reactions_from_dataset(reaction_smiles, top_k=15, reaction_type=rt_hint)
                 if not related_reactions:
-                    # Fallback: build simple cards from general similarity hits if available
+                    # Fallback: build cards from general similarity hits if available
                     try:
                         gen = result.get('recommendations', {}).get('general_recommendations')
                         hits = (gen or {}).get('top_hits') or []
                         built = []
-                        for h in hits[:4]:
+                        for h in hits[:15]:
                             rxn = h.get('reaction_smiles')
                             if not rxn:
                                 rs = h.get('reactant_smiles') or ''
@@ -2489,10 +2490,11 @@ class SimpleReactionGUI(QMainWindow):
                     except Exception:
                         pass
                     detected_type = result.get('recommendations', {}).get('reaction_type', '')
-                    if (analysis_type == 'buchwald_hartwig' or 
+                    if (not related_reactions and (
+                        analysis_type == 'buchwald_hartwig' or 
                         'buchwald' in detected_type.lower() or 
                         'cross' in detected_type.lower() or
-                        'coupling' in detected_type.lower()):
+                        'coupling' in detected_type.lower())):
                         related_reactions = self.get_mock_related_reactions(reaction_smiles)
 
         # Export a well-structured JSON (no separate HTML export)

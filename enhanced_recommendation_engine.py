@@ -405,7 +405,11 @@ class EnhancedRecommendationEngine:
         ligands, solvents, and bases from the top hits.
 
         Returns a dict with:
-        - top_hits: list of {ReactionID, ReactionType, similarity, CondKey, Ligand[], Base[], Solvent[]}
+        - top_hits: up to 15 items with rich details per hit
+            { reaction_id, reaction_type, dataset_file, cond_key, similarity,
+              reactant_smiles, product_smiles, reaction_smiles,
+              ligands[], solvents[], bases[], temperature, time, yield_pct,
+              catalyst, reference, core_detail, core_generic }
         - ligand_recommendations/solvent_recommendations/base_recommendations: ranked with scores 0..1
         """
         try:
