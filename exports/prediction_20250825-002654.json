@@ -1,0 +1,285 @@
+{
+  "meta": {
+    "generated_at": "2025-08-25T00:26:54",
+    "analysis_type": "enhanced",
+    "status": "Enhanced recommendations generated successfully"
+  },
+  "input": {
+    "reaction_smiles": "Clc1ccncc1.Nc1ccccc1>>c1ccc(Nc2ccncc2)cc1",
+    "selected_reaction_type": "C-N Coupling - Ullmann (Cu)"
+  },
+  "detection": {
+    "reaction_type": "Ullmann"
+  },
+  "dataset": {
+    "ligands_available": 123,
+    "solvents_available": 72,
+    "reaction_types_supported": [
+      "Cross-Coupling",
+      "Hydrogenation",
+      "Metathesis",
+      "C-H_Activation",
+      "Carbonylation"
+    ],
+    "analytics_loaded": true,
+    "analytics": {
+      "source": "Ullmann",
+      "top": {
+        "ligands": [
+          {
+            "name": "none",
+            "pct": 0.408,
+            "count": 326
+          },
+          {
+            "name": "1",
+            "pct": 0.1564,
+            "count": 125
+          },
+          {
+            "name": "2-Benzenediamine",
+            "pct": 0.0851,
+            "count": 68
+          }
+        ],
+        "solvents": [
+          {
+            "name": "DMSO",
+            "pct": 0.2979,
+            "count": 238
+          },
+          {
+            "name": "DMF",
+            "pct": 0.199,
+            "count": 159
+          },
+          {
+            "name": "Toluene",
+            "pct": 0.1327,
+            "count": 106
+          }
+        ],
+        "bases": [
+          {
+            "name": "K2CO3",
+            "pct": 0.6233,
+            "count": 498
+          },
+          {
+            "name": "K3PO4",
+            "pct": 0.2678,
+            "count": 214
+          },
+          {
+            "name": "Cs2CO3",
+            "pct": 0.2453,
+            "count": 196
+          }
+        ]
+      },
+      "cooccurrence": {
+        "best_ligand_solvent": null,
+        "best_base_solvent": null
+      },
+      "numeric_stats": {
+        "temperature_c": null,
+        "time_h": null,
+        "yield_pct": null
+      },
+      "typical_catalyst_loading": "5-20 mol% Cu"
+    }
+  },
+  "top_conditions": [
+    {
+      "reaction": {
+        "smiles": "Clc1ccncc1.Nc1ccccc1>>c1ccc(Nc2ccncc2)cc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Clc1ccncc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Nc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "CuI",
+          "cas": "7681-65-4",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "L-Proline",
+          "cas": null,
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "Cs2CO3",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "Dimethylformamide",
+          "abbreviation": "DMF",
+          "cas": "68-12-2",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-140°C",
+        "time": "6-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    },
+    {
+      "reaction": {
+        "smiles": "Clc1ccncc1.Nc1ccccc1>>c1ccc(Nc2ccncc2)cc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Clc1ccncc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Nc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "CuI",
+          "cas": "7681-65-4",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "L-Proline",
+          "cas": null,
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "Cs2CO3",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "THF",
+          "abbreviation": "THF",
+          "cas": "109-99-9",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-140°C",
+        "time": "6-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    },
+    {
+      "reaction": {
+        "smiles": "Clc1ccncc1.Nc1ccccc1>>c1ccc(Nc2ccncc2)cc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Clc1ccncc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Nc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "CuI",
+          "cas": "7681-65-4",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "L-Proline",
+          "cas": null,
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "Cs2CO3",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "N-Methyl-2-pyrrolidone",
+          "abbreviation": "NMP",
+          "cas": "872-50-4",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-140°C",
+        "time": "6-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    }
+  ],
+  "related_reactions": [
+    {
+      "reaction_smiles": "Nc1ccccc1 . N#CC(Cl)(Cl)Cl . ClC(=NNc1ccccc1)c1ccc(Br)cc1>>Brc1ccc(-c2nc(Nc3ccccc3)n(-c3ccccc3)n2)cc1",
+      "similarity": 0.40824622531939603,
+      "yield": 61,
+      "catalyst": "Cuprous iodide",
+      "ligand": "N/A",
+      "solvent": "Dimethylformamide",
+      "temperature": 25.0,
+      "time": 2.333,
+      "reference": "New Journal of Chemistry (2022), 46(40), 19100-19103. | Song, Dake; et al | New Journal of Chemistry (2022), 46(40), 19100-19103.",
+      "reaction_id": "31-287-CAS-22733257"
+    },
+    {
+      "reaction_smiles": "Clc1ccccc1 . c1c[nH]cn1>>c1ccc(-n2ccnc2)cc1",
+      "similarity": 0.37727272727272726,
+      "yield": 60,
+      "catalyst": "Copper oxide (CuO)",
+      "ligand": "Guar gum",
+      "solvent": "Dimethylformamide",
+      "temperature": 80.0,
+      "time": 15.0,
+      "reference": "ACS Applied Polymer Materials (2024), 6(9), 5256-5267. | Chern, Yaw-Terng; et al | ACS Applied Polymer Materials (2024), 6(9), 5256-5267.",
+      "reaction_id": "31-614-CAS-41844052"
+    }
+  ]
+}

@@ -1,0 +1,316 @@
+{
+  "meta": {
+    "generated_at": "2025-08-25T00:28:30",
+    "analysis_type": "enhanced",
+    "status": "Enhanced recommendations generated successfully"
+  },
+  "input": {
+    "reaction_smiles": "Brc1ccccc1.CCN>>c1ccc(NCC)cc1",
+    "selected_reaction_type": "Auto detect reaction type"
+  },
+  "detection": {
+    "reaction_type": "Cross-Coupling"
+  },
+  "dataset": {
+    "ligands_available": 123,
+    "solvents_available": 72,
+    "reaction_types_supported": [
+      "Cross-Coupling",
+      "Hydrogenation",
+      "Metathesis",
+      "C-H_Activation",
+      "Carbonylation"
+    ],
+    "analytics_loaded": false
+  },
+  "top_conditions": [
+    {
+      "reaction": {
+        "smiles": "Brc1ccccc1.CCN>>c1ccc(NCC)cc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Brc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "CCN",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "Pd(OAc)2",
+          "cas": "3375-31-3",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "XPhos",
+          "cas": "98327-87-8",
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "Cs2CO3",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "THF",
+          "abbreviation": "THF",
+          "cas": "109-99-9",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-120°C",
+        "time": "4-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    },
+    {
+      "reaction": {
+        "smiles": "Brc1ccccc1.CCN>>c1ccc(NCC)cc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Brc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "CCN",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "Pd(OAc)2",
+          "cas": "3375-31-3",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "SPhos",
+          "cas": "161265-03-8",
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "Cs2CO3",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "Dimethylformamide",
+          "abbreviation": "DMF",
+          "cas": "68-12-2",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-120°C",
+        "time": "4-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    },
+    {
+      "reaction": {
+        "smiles": "Brc1ccccc1.CCN>>c1ccc(NCC)cc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Brc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "CCN",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "Pd(OAc)2",
+          "cas": "3375-31-3",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "SPhos",
+          "cas": "161265-03-8",
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "Cs2CO3",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "THF",
+          "abbreviation": "THF",
+          "cas": "109-99-9",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-120°C",
+        "time": "4-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    }
+  ],
+  "related_reactions": [
+    {
+      "reaction_smiles": "Brc1ccccc1 . c1ccc(Nc2ccccc2)cc1>>c1ccc(N(c2ccccc2)c2ccccc2)cc1",
+      "similarity": 0.482620320855615,
+      "yield": 78,
+      "catalyst": "Tris(dibenzylideneacetone)dipalladium",
+      "ligand": "Tri-tert-butylphosphine",
+      "solvent": "Toluene",
+      "temperature": NaN,
+      "time": 16.0,
+      "reference": "Organic Letters (2022), 24(20), 3736-3740. | Scattolin, Thomas; et al | Organic Letters (2022), 24(20), 3736-3740.",
+      "reaction_id": "31-614-CAS-38638303"
+    },
+    {
+      "reaction_smiles": "Brc1ccccc1 . CC(C)(C)c1ccc(Nc2ccc(N(c3ccc(Nc4ccc(C(C)(C)C)cc4)cc3)c3ccc(C(C)(C)C)cc3)cc2)cc1>>CC(C)(C)c1ccc(Nc2ccc(N(c3ccc(N(c4ccccc4)c4ccc(C(C)(C)C)cc4)cc3)c3ccc(C(C)(C)C)cc3)cc2)cc1",
+      "similarity": 0.47058823529411764,
+      "yield": 57,
+      "catalyst": "1, [1, 1′-Bis(diphenylphosphino)ferrocene]dichloropalladium",
+      "ligand": "1, 1-Bis(diphenylphosphino)ferrocene",
+      "solvent": "Toluene",
+      "temperature": 120.0,
+      "time": 16.0,
+      "reference": "Journal of the American Chemical Society (2024), 146(48), 33035-33047. | Raguram, Elaine Reichert; et al | Journal of the American Chemical Society (2024), 146(48), 33035-33047.",
+      "reaction_id": "31-614-CAS-32084955"
+    }
+  ],
+  "general": {
+    "ligands": [],
+    "solvents": [],
+    "bases": [],
+    "top_hits": [
+      {
+        "ReactionID": "31-614-CAS-31851260",
+        "ReactionType": "Ullmann",
+        "CondKey": "Cu(II)/(2Fe-Fe)|+Iron|+nonacarbonyldi-μ3-selenoxotri-|/none/none",
+        "similarity": 0.427,
+        "reactant_smiles": "CCCN . Clc1ccccc1 . CCNCC",
+        "product_smiles": "CCN(CC)c1ccccc1 . CCCNc1ccccc1",
+        "reaction_smiles": "CCCN . Clc1ccccc1 . CCNCC>>CCN(CC)c1ccccc1 . CCCNc1ccccc1"
+      },
+      {
+        "ReactionID": "31-614-CAS-35261995",
+        "ReactionType": "Ullmann",
+        "CondKey": "Cu(I)/none/N,N-Dimethylglycine|1118-68-9+Potassium carbonate|584-08-7/Dimethylformamide|68-12-2",
+        "similarity": 0.394,
+        "reactant_smiles": "Brc1ccccc1 . CCNC=O",
+        "product_smiles": "CCN(C=O)c1ccccc1",
+        "reaction_smiles": "Brc1ccccc1 . CCNC=O>>CCN(C=O)c1ccccc1"
+      },
+      {
+        "ReactionID": "31-614-CAS-31851264",
+        "ReactionType": "Ullmann",
+        "CondKey": "Cu(II)/(2Fe-Fe)|+Iron|+nonacarbonyldi-μ3-selenoxotri-|/none/none",
+        "similarity": 0.388,
+        "reactant_smiles": "CCCN . Clc1ccccc1 . C1CCNC1",
+        "product_smiles": "CCCNc1ccccc1 . c1ccc(N2CCCC2)cc1",
+        "reaction_smiles": "CCCN . Clc1ccccc1 . C1CCNC1>>CCCNc1ccccc1 . c1ccc(N2CCCC2)cc1"
+      },
+      {
+        "ReactionID": "31-614-CAS-38638303",
+        "ReactionType": "Buchwald",
+        "CondKey": "Pd/Tri-tert-butylphosphine|13716-12-6/Sodium tert-butoxide|865-48-5/Toluene|108-88-3",
+        "similarity": 0.382,
+        "reactant_smiles": "Brc1ccccc1 . c1ccc(Nc2ccccc2)cc1",
+        "product_smiles": "c1ccc(N(c2ccccc2)c2ccccc2)cc1",
+        "reaction_smiles": "Brc1ccccc1 . c1ccc(Nc2ccccc2)cc1>>c1ccc(N(c2ccccc2)c2ccccc2)cc1"
+      },
+      {
+        "ReactionID": "31-614-CAS-34896365",
+        "ReactionType": "Ullmann",
+        "CondKey": "Cu(II)/1-[2-(2-methoxyphenyl)-2-oxoethyl]-3-(2-pyridinyl)-|+bromide (1:1)|/none/none",
+        "similarity": 0.375,
+        "reactant_smiles": "NCCc1ccccc1 . Brc1ccccc1 . C1CCNC1",
+        "product_smiles": "c1ccc(CCNc2ccccc2)cc1 . c1ccc(N2CCCC2)cc1",
+        "reaction_smiles": "NCCc1ccccc1 . Brc1ccccc1 . C1CCNC1>>c1ccc(CCNc2ccccc2)cc1 . c1ccc(N2CCCC2)cc1"
+      },
+      {
+        "ReactionID": "31-172-CAS-21959637",
+        "ReactionType": "Ullmann",
+        "CondKey": "Cu/none/Potassium carbonate|584-08-7/Dimethylformamide|68-12-2",
+        "similarity": 0.357,
+        "reactant_smiles": "Brc1ccccc1 . c1cc[nH]c1",
+        "product_smiles": "c1ccc(-n2cccc2)cc1",
+        "reaction_smiles": "Brc1ccccc1 . c1cc[nH]c1>>c1ccc(-n2cccc2)cc1"
+      },
+      {
+        "ReactionID": "31-172-CAS-23294750",
+        "ReactionType": "Ullmann",
+        "CondKey": "Cu(I)/none/Cesium carbonate|534-17-8/Ethanol|64-17-5",
+        "similarity": 0.357,
+        "reactant_smiles": "Brc1ccccc1 . c1cc[nH]c1",
+        "product_smiles": "c1ccc(-n2cccc2)cc1",
+        "reaction_smiles": "Brc1ccccc1 . c1cc[nH]c1>>c1ccc(-n2cccc2)cc1"
+      },
+      {
+        "ReactionID": "31-614-CAS-31334891",
+        "ReactionType": "Ullmann",
+        "CondKey": "Cu/Iron zinc oxide (Fe2ZnO4)|/Cesium carbonate|534-17-8/Ethanol|64-17-5",
+        "similarity": 0.357,
+        "reactant_smiles": "Brc1ccccc1 . c1cc[nH]c1",
+        "product_smiles": "c1ccc(-n2cccc2)cc1",
+        "reaction_smiles": "Brc1ccccc1 . c1cc[nH]c1>>c1ccc(-n2cccc2)cc1"
+      },
+      {
+        "ReactionID": "31-614-CAS-33810017",
+        "ReactionType": "Ullmann",
+        "CondKey": "Cu/Iron oxide (Fe3O4)|+L-Arginine|/Potassium carbonate|584-08-7/Choline chloride|67-48-1+Glycerol|56-81-5",
+        "similarity": 0.357,
+        "reactant_smiles": "Brc1ccccc1 . c1cc[nH]c1",
+        "product_smiles": "c1ccc(-n2cccc2)cc1",
+        "reaction_smiles": "Brc1ccccc1 . c1cc[nH]c1>>c1ccc(-n2cccc2)cc1"
+      },
+      {
+        "ReactionID": "31-614-CAS-33994232",
+        "ReactionType": "Ullmann",
+        "CondKey": "Cu/1,10-Phenanthroline|66-71-7/Cesium carbonate|534-17-8/Ethanol|64-17-5",
+        "similarity": 0.357,
+        "reactant_smiles": "Brc1ccccc1 . c1cc[nH]c1",
+        "product_smiles": "c1ccc(-n2cccc2)cc1",
+        "reaction_smiles": "Brc1ccccc1 . c1cc[nH]c1>>c1ccc(-n2cccc2)cc1"
+      }
+    ]
+  }
+}

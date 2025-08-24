@@ -1,0 +1,219 @@
+{
+  "meta": {
+    "generated_at": "2025-08-25T00:30:54",
+    "analysis_type": "enhanced",
+    "status": "Enhanced recommendations generated successfully"
+  },
+  "input": {
+    "reaction_smiles": "Brc1ccccc1.CCN>>c1ccc(NCC)cc1",
+    "selected_reaction_type": "C-N Coupling - Buchwald-Hartwig (Pd)"
+  },
+  "detection": {
+    "reaction_type": "Cross-Coupling"
+  },
+  "dataset": {
+    "ligands_available": 123,
+    "solvents_available": 72,
+    "reaction_types_supported": [
+      "Cross-Coupling",
+      "Hydrogenation",
+      "Metathesis",
+      "C-H_Activation",
+      "Carbonylation"
+    ],
+    "analytics_loaded": false
+  },
+  "top_conditions": [
+    {
+      "reaction": {
+        "smiles": "Brc1ccccc1.CCN>>c1ccc(NCC)cc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Brc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "CCN",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "Pd(OAc)2",
+          "cas": "3375-31-3",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "XPhos",
+          "cas": "98327-87-8",
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "Cs2CO3",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "THF",
+          "abbreviation": "THF",
+          "cas": "109-99-9",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-120°C",
+        "time": "4-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    },
+    {
+      "reaction": {
+        "smiles": "Brc1ccccc1.CCN>>c1ccc(NCC)cc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Brc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "CCN",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "Pd(OAc)2",
+          "cas": "3375-31-3",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "SPhos",
+          "cas": "161265-03-8",
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "Cs2CO3",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "Dimethylformamide",
+          "abbreviation": "DMF",
+          "cas": "68-12-2",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-120°C",
+        "time": "4-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    },
+    {
+      "reaction": {
+        "smiles": "Brc1ccccc1.CCN>>c1ccc(NCC)cc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Brc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "CCN",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "Pd(OAc)2",
+          "cas": "3375-31-3",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "SPhos",
+          "cas": "161265-03-8",
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "Cs2CO3",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "THF",
+          "abbreviation": "THF",
+          "cas": "109-99-9",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-120°C",
+        "time": "4-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    }
+  ],
+  "related_reactions": [
+    {
+      "reaction_smiles": "Brc1ccccc1 . c1ccc(Nc2ccccc2)cc1>>c1ccc(N(c2ccccc2)c2ccccc2)cc1",
+      "similarity": 0.482620320855615,
+      "yield": 78,
+      "catalyst": "Tris(dibenzylideneacetone)dipalladium",
+      "ligand": "Tri-tert-butylphosphine",
+      "solvent": "Toluene",
+      "temperature": NaN,
+      "time": 16.0,
+      "reference": "Organic Letters (2022), 24(20), 3736-3740. | Scattolin, Thomas; et al | Organic Letters (2022), 24(20), 3736-3740.",
+      "reaction_id": "31-614-CAS-38638303"
+    },
+    {
+      "reaction_smiles": "Brc1ccccc1 . CC(C)(C)c1ccc(Nc2ccc(N(c3ccc(Nc4ccc(C(C)(C)C)cc4)cc3)c3ccc(C(C)(C)C)cc3)cc2)cc1>>CC(C)(C)c1ccc(Nc2ccc(N(c3ccc(N(c4ccccc4)c4ccc(C(C)(C)C)cc4)cc3)c3ccc(C(C)(C)C)cc3)cc2)cc1",
+      "similarity": 0.47058823529411764,
+      "yield": 57,
+      "catalyst": "1, [1, 1′-Bis(diphenylphosphino)ferrocene]dichloropalladium",
+      "ligand": "1, 1-Bis(diphenylphosphino)ferrocene",
+      "solvent": "Toluene",
+      "temperature": 120.0,
+      "time": 16.0,
+      "reference": "Journal of the American Chemical Society (2024), 146(48), 33035-33047. | Raguram, Elaine Reichert; et al | Journal of the American Chemical Society (2024), 146(48), 33035-33047.",
+      "reaction_id": "31-614-CAS-32084955"
+    }
+  ]
+}

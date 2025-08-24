@@ -288,6 +288,9 @@ class EnhancedRecommendationEngine:
                 min_compatibility=0.4,
                 evidence_ligands=evidence_ligands or None
             )
+            # Drop placeholder/dummy items
+            if ligands:
+                ligands = [L for L in ligands if str(L.get('ligand') or '').strip().lower() not in ('none', 'n/a', '-')]
             # Apply analytics priors to ligands if configured
             if priors and self._analytics_cfg['enabled'] and self._analytics_cfg['apply_to']['ligands']:
                 try:
@@ -493,6 +496,26 @@ class EnhancedRecommendationEngine:
                                 sim = sim_r
                             if sim <= 0:
                                 continue
+                            # Flexible field harvesting for richer hit details
+                            yield_val = (
+                                row.get('Yield') or row.get('Yield_%') or row.get('Yield(%)') or
+                                row.get('Yield%') or row.get('Yield %') or row.get('Yield_pct') or ''
+                            )
+                            temp_val = (
+                                row.get('Temperature') or row.get('Temp') or row.get('Temperature_C') or
+                                row.get('TempC') or row.get('Temp_C') or ''
+                            )
+                            time_val = (
+                                row.get('Time') or row.get('Hours') or row.get('Time_h') or row.get('Duration') or ''
+                            )
+                            catalyst_val = (
+                                row.get('Catalyst') or row.get('Cat') or row.get('CopperSource') or
+                                row.get('PdSource') or row.get('Metal') or ''
+                            )
+                            reference_val = (
+                                row.get('Reference') or row.get('DOI') or row.get('URL') or
+                                row.get('Source') or row.get('JournalRef') or ''
+                            )
                             candidates.append({
                                 'ReactionID': row.get('ReactionID') or '',
                                 'ReactionType': row.get('ReactionType') or '',
@@ -508,6 +531,12 @@ class EnhancedRecommendationEngine:
                                 'Solvent': row.get('Solvent') or '',
                                 'CoreDetail': row.get('CoreDetail') or '',
                                 'CoreGeneric': row.get('CoreGeneric') or '',
+                                'YieldPct': yield_val,
+                                'Temperature': temp_val,
+                                'Time': time_val,
+                                'CatalystLike': catalyst_val,
+                                'Reference': reference_val,
+                                'DatasetFile': fname,
                                 'similarity': float(sim)
                             })
                 except Exception:
@@ -540,6 +569,21 @@ class EnhancedRecommendationEngine:
                 s2 = s.strip('[]').replace('"', '').replace("'", '')
                 parts = [p.strip() for p in s2.split(',') if p.strip()]
                 return parts
+
+            # New datasets may encode tokens as "name|CAS"; prefer name, fallback to CAS if name missing
+            def _name_only(tok: str) -> str:
+                try:
+                    if tok is None:
+                        return ''
+                    txt = str(tok)
+                    if '|' in txt:
+                        left, right = txt.split('|', 1)
+                        left = left.strip()
+                        right = right.strip()
+                        return left or right or ''
+                    return txt.strip()
+                except Exception:
+                    return str(tok).strip() if tok is not None else ''
 
             # Base alias normalization
             base_alias = {
@@ -585,20 +629,22 @@ class EnhancedRecommendationEngine:
                 # Ligands
                 for src in ('Ligand',):
                     for item in _parse_listlike(hit.get(src) or ''):
-                        if item and item.lower() != 'none':
-                            lig_counts[item] += w
+                        name = _name_only(item)
+                        if name and name.lower() != 'none':
+                            lig_counts[name] += w
                 # Solvents (handle both columns)
                 sol_items = _parse_listlike(hit.get('Solvent') or '')
                 sol_items += _parse_listlike(hit.get('SOLName') or '')
                 for sitem in sol_items:
-                    if sitem and sitem.lower() != 'none':
-                        solv_counts[sitem] += w
+                    name = _name_only(sitem)
+                    if name and name.lower() != 'none':
+                        solv_counts[name] += w
                 # Bases (from reagent columns)
                 # New unified reagent columns
                 rraw = _parse_listlike(hit.get('Reagent') or '')
                 rgtn = _parse_listlike(hit.get('RGTName') or '')
                 for bitem in rraw + rgtn:
-                    cb = _canon_base(bitem)
+                    cb = _canon_base(_name_only(bitem))
                     if cb and cb.lower() not in ('none', 'unk'):
                         base_counts[cb] += w
 
@@ -614,6 +660,16 @@ class EnhancedRecommendationEngine:
             base_rank = _rank_map(base_counts)
 
             # Adapt to engine's output shapes
+            # Utility: detect CAS-only tokens (e.g., 108-88-3)
+            cas_re = re.compile(r"^\d{2,7}-\d{2}-\d$")
+            def _filter_cas(rank_list: List[Tuple[str, float]]) -> List[Tuple[str, float]]:
+                non_cas = [(n, s) for n, s in rank_list if not cas_re.match(str(n or '').strip())]
+                return non_cas if non_cas else rank_list
+
+            lig_rank = _filter_cas(lig_rank)
+            solv_rank = _filter_cas(solv_rank)
+            base_rank = _filter_cas(base_rank)
+
             lig_out = [{
                 'ligand': name,
                 'compatibility_score': round(score, 3)
@@ -630,17 +686,85 @@ class EnhancedRecommendationEngine:
                 'compatibility_score': round(score, 3)
             } for name, score in base_rank[:5]]
 
-            # Provide a concise view of top hits
-            hits_view = [{
-                'ReactionID': h.get('ReactionID'),
-                'ReactionType': h.get('ReactionType'),
-                'CondKey': h.get('CondKey'),
-                'similarity': round(float(h.get('similarity') or 0.0), 3),
-                'reactant_smiles': h.get('ReactantSMILES') or '',
-                'product_smiles': h.get('ProductSMILES') or '',
-                'reaction_smiles': (f"{h.get('ReactantSMILES')}>>{h.get('ProductSMILES')}"
-                                    if (h.get('ReactantSMILES') and h.get('ProductSMILES')) else None)
-            } for h in top_hits[:10]]
+            # Provide a richer view of top hits (top 15)
+            base_tokens = ['k2co3', 'cs2co3', 'k3po4', 'kotbu', 'naotbu', 'na2co3', 'koh', 'tbuok', 'ko-tbu', 'triethylamine', 'et3n']
+            cas_only_re = re.compile(r'^\d{2,7}-\d{2}-\d$')
+            def _dedup(seq: List[str]) -> List[str]:
+                seen = set()
+                out: List[str] = []
+                for x in seq:
+                    k = (x or '').strip().lower()
+                    if not k or k in seen:
+                        continue
+                    seen.add(k)
+                    out.append(x)
+                return out
+
+            def _extract_ligands_from_hit(h: Dict) -> List[str]:
+                ligs = []
+                for item in _parse_listlike(h.get('Ligand') or ''):
+                    nm = _name_only(item)
+                    if nm and nm.lower() not in ('none',) and not cas_only_re.match(nm):
+                        ligs.append(nm)
+                return _dedup(ligs)
+
+            def _extract_solvents_from_hit(h: Dict) -> List[str]:
+                sol_items = _parse_listlike(h.get('Solvent') or '') + _parse_listlike(h.get('SOLName') or '')
+                sols = []
+                for sitem in sol_items:
+                    nm = _name_only(sitem)
+                    if nm and nm.lower() not in ('none',) and not cas_only_re.match(nm):
+                        sols.append(nm)
+                return _dedup(sols)
+
+            def _extract_bases_from_hit(h: Dict) -> List[str]:
+                bases = []
+                for bitem in _parse_listlike(h.get('Reagent') or '') + _parse_listlike(h.get('RGTName') or ''):
+                    nm = _name_only(bitem)
+                    low = nm.lower().replace(' ', '')
+                    if cas_only_re.match(nm):
+                        continue
+                    if any(tok in low for tok in base_tokens):
+                        bases.append(_canon_base(nm))
+                return _dedup(bases)
+
+            def _as_float(val: str) -> Optional[float]:
+                try:
+                    s = str(val).strip()
+                    if not s:
+                        return None
+                    # strip percent sign or other non-numeric
+                    s = s.replace('%', '').replace('\u200b', '').strip()
+                    return float(s)
+                except Exception:
+                    return None
+
+            hits_view = []
+            for h in top_hits[:15]:
+                y = _as_float(h.get('YieldPct') or '')
+                if y is not None and y > 100:
+                    y = min(y, 100.0)
+                hits_view.append({
+                    'reaction_id': h.get('ReactionID') or None,
+                    'reaction_type': h.get('ReactionType') or None,
+                    'dataset_file': h.get('DatasetFile') or None,
+                    'cond_key': h.get('CondKey') or None,
+                    'similarity': round(float(h.get('similarity') or 0.0), 3),
+                    'reactant_smiles': h.get('ReactantSMILES') or '',
+                    'product_smiles': h.get('ProductSMILES') or '',
+                    'reaction_smiles': (f"{h.get('ReactantSMILES')}>>{h.get('ProductSMILES')}"
+                                        if (h.get('ReactantSMILES') and h.get('ProductSMILES')) else None),
+                    'ligands': _extract_ligands_from_hit(h),
+                    'solvents': _extract_solvents_from_hit(h),
+                    'bases': _extract_bases_from_hit(h),
+                    'temperature': (h.get('Temperature') or None),
+                    'time': (h.get('Time') or None),
+                    'yield_pct': y,
+                    'catalyst': (h.get('CatalystLike') or None),
+                    'reference': (h.get('Reference') or None),
+                    'core_detail': h.get('CoreDetail') or None,
+                    'core_generic': h.get('CoreGeneric') or None,
+                })
 
             # Create combined suggestions for convenience
             combined_conditions = self._create_combined_conditions(lig_out, solv_out, self.analyze_reaction_type(reaction_smiles, None)) if lig_out and solv_out else []
@@ -831,6 +955,21 @@ class EnhancedRecommendationEngine:
             if not os.path.isdir(data_dir):
                 return evidence
             # Consider a few known files; ignore huge processing
+            # Helper for name|CAS collapsing
+            def _name_only(tok: str) -> str:
+                try:
+                    if tok is None:
+                        return ''
+                    txt = str(tok)
+                    if '|' in txt:
+                        left, right = txt.split('|', 1)
+                        left = left.strip()
+                        right = right.strip()
+                        return left or right or ''
+                    return txt.strip()
+                except Exception:
+                    return str(tok).strip() if tok is not None else ''
+
             for fname in os.listdir(data_dir):
                 if not (fname.lower().endswith('.csv') or fname.lower().endswith('.tsv')):
                     continue
@@ -862,7 +1001,7 @@ class EnhancedRecommendationEngine:
                             for it in items:
                                 if not it:
                                     continue
-                                name = it
+                                name = _name_only(it)
                                 evidence[name] = evidence.get(name, 0) + 1
                 except Exception:
                     # ignore a bad file
@@ -882,6 +1021,19 @@ class EnhancedRecommendationEngine:
             data_dir = os.path.join(_ROOT, 'data', 'reaction_dataset')
             if not os.path.isdir(data_dir):
                 return evidence
+            def _name_only(tok: str) -> str:
+                try:
+                    if tok is None:
+                        return ''
+                    txt = str(tok)
+                    if '|' in txt:
+                        left, right = txt.split('|', 1)
+                        left = left.strip()
+                        right = right.strip()
+                        return left or right or ''
+                    return txt.strip()
+                except Exception:
+                    return str(tok).strip() if tok is not None else ''
             for fname in os.listdir(data_dir):
                 if not (fname.lower().endswith('.csv') or fname.lower().endswith('.tsv')):
                     continue
@@ -903,7 +1055,7 @@ class EnhancedRecommendationEngine:
                             for it in items:
                                 if not it:
                                     continue
-                                name = it
+                                name = _name_only(it)
                                 evidence[name] = evidence.get(name, 0) + 1
                 except Exception:
                     continue
@@ -926,6 +1078,20 @@ class EnhancedRecommendationEngine:
             if not os.path.isdir(data_dir):
                 return evidence
             base_tokens = ['k2co3', 'cs2co3', 'k3po4', 'kotbu', 'naotbu', 'na2co3', 'koh', 'tbuok', 'ko-tbu', 'triethylamine', 'et3n']
+            # Helper for name|CAS collapsing
+            def _name_only(tok: str) -> str:
+                try:
+                    if tok is None:
+                        return ''
+                    txt = str(tok)
+                    if '|' in txt:
+                        left, right = txt.split('|', 1)
+                        left = left.strip()
+                        right = right.strip()
+                        return left or right or ''
+                    return txt.strip()
+                except Exception:
+                    return str(tok).strip() if tok is not None else ''
             def _maybe_add(text: str):
                 if not text:
                     return
@@ -936,7 +1102,8 @@ class EnhancedRecommendationEngine:
                     low = it.lower()
                     for tok in base_tokens:
                         if tok in low:
-                            evidence[it] = evidence.get(it, 0) + 1
+                            name = _name_only(it)
+                            evidence[name] = evidence.get(name, 0) + 1
                             break
 
             for fname in os.listdir(data_dir):

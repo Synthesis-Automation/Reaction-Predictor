@@ -2241,6 +2241,21 @@ class SimpleReactionGUI(QMainWindow):
             if pd.isna(json_str) or json_str == '':
                 return 'N/A'
             
+            # Helper to collapse "name|CAS" to a single display token (prefer name)
+            def _name_only(tok: str) -> str:
+                try:
+                    if tok is None:
+                        return 'N/A'
+                    txt = str(tok)
+                    if '|' in txt:
+                        left, right = txt.split('|', 1)
+                        left = left.strip()
+                        right = right.strip()
+                        return left or right or 'N/A'
+                    return txt.strip() or 'N/A'
+                except Exception:
+                    return str(tok) if tok else 'N/A'
+
             # Handle JSON array format
             if json_str.startswith('[') and json_str.endswith(']'):
                 parsed = json.loads(json_str)
@@ -2248,7 +2263,7 @@ class SimpleReactionGUI(QMainWindow):
                     # Heuristic: Ullmann dataset sometimes tokenizes a single long name
                     # into many short fragments. If many short tokens, join with spaces.
                     try:
-                        items = [str(x).strip() for x in parsed if str(x).strip()]
+                        items = [_name_only(x) for x in parsed if str(x).strip()]
                         if not items:
                             return 'N/A'
                         avg_len = sum(len(it) for it in items) / max(1, len(items))
@@ -2258,11 +2273,11 @@ class SimpleReactionGUI(QMainWindow):
                         return ", ".join(items)
                     except Exception:
                         # Fallback to first item
-                        return str(parsed[0])
+                        return _name_only(parsed[0])
                 return 'N/A'
             
             # Handle plain string
-            return str(json_str)
+            return _name_only(json_str)
             
         except (json.JSONDecodeError, ValueError):
             return str(json_str) if json_str else 'N/A'
@@ -2443,17 +2458,31 @@ class SimpleReactionGUI(QMainWindow):
                                 rxn = f"{rs}>>{ps}" if (rs and ps) else None
                             if not rxn:
                                 continue
+                            # Back-compat: support both old and new keys
+                            rid = h.get('reaction_id') or h.get('ReactionID') or ''
+                            rtype = h.get('reaction_type') or h.get('ReactionType') or ''
+                            ligs = h.get('ligands') or []
+                            if not ligs:
+                                ligs = [self._parse_json_field(h.get('Ligand'))] if h.get('Ligand') else []
+                            sols = h.get('solvents') or []
+                            if not sols:
+                                sols = [self._parse_json_field(h.get('Solvent'))] if h.get('Solvent') else []
+                            yld = h.get('yield_pct')
+                            cat = h.get('catalyst') or h.get('Catalyst') or 'N/A'
+                            temp = h.get('temperature') or h.get('Temperature')
+                            tim = h.get('time') or h.get('Time')
+                            ref = h.get('reference') or h.get('Reference') or rtype or ''
                             built.append({
                                 'reaction_smiles': rxn,
                                 'similarity': h.get('similarity'),
-                                'yield': None,
-                                'catalyst': 'N/A',
-                                'ligand': 'N/A',
-                                'solvent': 'N/A',
-                                'temperature': None,
-                                'time': None,
-                                'reference': h.get('ReactionType') or '',
-                                'reaction_id': h.get('ReactionID') or ''
+                                'yield': yld,
+                                'catalyst': cat or 'N/A',
+                                'ligand': ", ".join([x for x in ligs if x][:2]) or 'N/A',
+                                'solvent': ", ".join([x for x in sols if x][:2]) or 'N/A',
+                                'temperature': temp,
+                                'time': tim,
+                                'reference': ref,
+                                'reaction_id': rid
                             })
                         if built:
                             related_reactions = built
@@ -3153,7 +3182,7 @@ Status: {result['status']}
                     ) + "\n"
                 hits = gen.get('top_hits') or []
                 if hits:
-                    text += f"  • Similarity hits referenced: {len(hits)} (showing up to 10 in export)\n"
+                    text += f"  • Similarity hits referenced: {len(hits)} (showing up to 15 in export)\n"
                 text += "\n"
             except Exception:
                 pass

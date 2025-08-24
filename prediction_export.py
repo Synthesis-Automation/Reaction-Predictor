@@ -31,6 +31,59 @@ def build_export_payload(result: dict, related_reactions: Optional[list] = None)
     # We no longer include the detailed 'recommendations' block in the export.
 
     related = related_reactions or recs.get('related_reactions', []) or []
+    # Normalize any name|CAS tokens in related reactions (catalyst/ligand/solvent)
+    def _name_only(tok: Optional[str]) -> Optional[str]:
+        try:
+            if tok is None:
+                return None
+            txt = str(tok)
+            if '|' in txt:
+                left, right = txt.split('|', 1)
+                left = left.strip()
+                right = right.strip()
+                return left or right or None
+            return txt.strip() or None
+        except Exception:
+            return str(tok).strip() if tok else None
+
+    def _sanitize_field(val: Optional[str]) -> Optional[str]:
+        if val is None:
+            return None
+        s = str(val).strip()
+        if not s:
+            return None
+        # Try JSON array first
+        if s.startswith('[') and s.endswith(']'):
+            try:
+                arr = json.loads(s)
+                items = [_name_only(x) for x in arr if str(x).strip()]
+                items = [x for x in items if x]
+                return ", ".join(items) if items else None
+            except Exception:
+                pass
+        # Fallback: split by commas
+        parts = [p.strip() for p in s.split(',') if p.strip()]
+        if len(parts) > 1:
+            cleaned = [_name_only(p) for p in parts]
+            cleaned = [x for x in cleaned if x]
+            return ", ".join(cleaned) if cleaned else _name_only(s)
+        return _name_only(s)
+
+    if isinstance(related, list) and related:
+        cleaned_related = []
+        for r in related:
+            try:
+                if not isinstance(r, dict):
+                    cleaned_related.append(r)
+                    continue
+                rr = dict(r)
+                for key in ('catalyst', 'ligand', 'solvent'):
+                    if key in rr:
+                        rr[key] = _sanitize_field(rr.get(key))
+                cleaned_related.append(rr)
+            except Exception:
+                cleaned_related.append(r)
+        related = cleaned_related
 
     # Helpers for top_conditions construction
     def _split_smiles(sm: str):
