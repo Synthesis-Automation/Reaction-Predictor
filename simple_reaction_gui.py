@@ -287,6 +287,7 @@ def create_placeholder_image(reaction_smiles: str, width: int = 600, height: int
         painter.drawText(20, arrow_y + 40, reactants)
         painter.drawText(arrow_end + 20, arrow_y + 40, products)
     
+    
     # Add note about RDKit
     painter.setFont(QFont("Arial", 8))
     painter.setPen(QPen(Qt.GlobalColor.gray))
