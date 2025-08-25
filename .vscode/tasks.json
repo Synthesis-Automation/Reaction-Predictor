@@ -1,7 +1,28 @@
 {
-	// VS Code Tasks for running smokes reliably on Windows PowerShell
 	"version": "2.0.0",
 	"tasks": [
+		{
+			"label": "Evaluate Recommendations (agents Top-3)",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"scripts/evaluate_recommendations.py",
+				"--gold-csv",
+				"data/reaction_dataset/your_gold.csv",
+				"--k",
+				"3"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "Generate 20-Reaction Grading Panel",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"scripts/grading/make_panel.py"
+			],
+			"problemMatcher": []
+		},
 		{
 			"label": "Smoke: Ullmann (PYTHONPATH)",
 			"type": "shell",
@@ -35,11 +56,36 @@
 			"command": "python",
 			"args": [
 				"scripts/analyze_dataset.py",
-				"--reaction-type","Ullmann",
-				"--top-limit","5",
-				"--co-limit","20"
+				"--reaction-type",
+				"Ullmann",
+				"--top-limit",
+				"5",
+				"--co-limit",
+				"20"
 			],
 			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Test: Compact CLI Smoke (default Python)",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"scripts/smoke_cli_compact.py"
+			],
+			"group": "test",
+			"problemMatcher": []
+		},
+		{
+			"label": "Test: Phase-2 Batch (eval + panel)",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"$gold = python scripts/autogen_eval_gold.py; python scripts/evaluate_recommendations.py --gold-csv $gold --k 3; python scripts/grading/make_panel.py"
+			],
+			"group": "test",
 			"problemMatcher": []
 		}
 	]

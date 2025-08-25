@@ -1,0 +1,24 @@
+{
+  "k": 3,
+  "total": 200,
+  "topk_accuracy": {
+    "ligand": 0.0,
+    "base": 0.0,
+    "solvent": 0.0
+  },
+  "topk_accuracy_ci95": {
+    "ligand": {
+      "lo": 0.0,
+      "hi": 0.0
+    },
+    "base": {
+      "lo": 0.0,
+      "hi": 0.0
+    },
+    "solvent": {
+      "lo": 0.0,
+      "hi": 0.0
+    }
+  },
+  "generated_at": "2025-08-25T17:52:15"
+}
