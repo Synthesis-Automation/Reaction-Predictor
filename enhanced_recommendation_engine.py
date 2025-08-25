@@ -46,6 +46,12 @@ class EnhancedRecommendationEngine:
     
     def __init__(self):
         self.base_engine = None
+        # QUARC integration options (Phase 0 defaults)
+        self._quarc_opts = {
+            'use_quarc': os.environ.get('USE_QUARC', 'auto'),  # auto|always|off
+            'quarc_config': os.environ.get('QUARC_OSS_CONFIG', None),
+            'quarc_topk': 5,
+        }
         # Analytics priors configuration (Milestone 2)
         self._analytics_cfg = {
             'enabled': True,
@@ -72,6 +78,13 @@ class EnhancedRecommendationEngine:
                 self.base_engine = BaseRecommendationEngine()
             except:
                 pass
+        # Accept CLI-provided overrides for QUARC options if present (set by predict_cli)
+        try:
+            cli_opts = getattr(self, '_cli_quarc_options', None)
+            if isinstance(cli_opts, dict):
+                self._quarc_opts.update({k: v for k, v in cli_opts.items() if v is not None})
+        except Exception:
+            pass
     
     def analyze_reaction_type(self, reaction_smiles: str, suggested_type: str = None) -> str:
         """Analyze and determine the reaction type from SMILES"""
@@ -184,6 +197,29 @@ class EnhancedRecommendationEngine:
         
         # Simple heuristic: more aromatic complexity in products
         return aromatic_products > aromatic_reactants * 1.2
+
+    def _matches_reaction_type(self, row_type: str, target: str) -> bool:
+        """Flexible match between dataset row ReactionType and engine target label.
+
+        Handles renamed files/labels and common synonyms across families.
+        """
+        rt = (row_type or '').strip().lower()
+        tgt = (target or '').strip().lower()
+        if not rt or not tgt:
+            return False
+        if rt == tgt:
+            return True
+        # Cross-Coupling umbrella should include common subfamilies
+        if tgt == 'cross-coupling':
+            sub = ['buchwald', 'buchwald-hartwig', 'suzuki', 'heck', 'sonogashira', 'stille', 'negishi', 'chan-lam']
+            return any(s in rt for s in sub)
+        # Amide formation synonyms
+        if 'amide' in tgt:
+            return any(s in rt for s in ['amide', 'amidation', 'amide coupling', 'carboxyl activation'])
+        # Ullmann: accept minor variations
+        if 'ullmann' in tgt:
+            return 'ullmann' in rt
+        return False
     
     def get_recommendations(self, reaction_smiles: str, reaction_type: str = "Auto-detect") -> Dict:
         """Get comprehensive recommendations including ligands and solvents"""
@@ -208,6 +244,18 @@ class EnhancedRecommendationEngine:
             
             # Get enhanced recommendations
             enhanced_recs = self._get_enhanced_recommendations(reaction_smiles, actual_reaction_type)
+
+            # Phase 1: QUARC agents integration (catalyst/ligand/base only)
+            used_quarc = False
+            try:
+                quarc_mode = (self._quarc_opts.get('use_quarc') or 'auto').lower()
+                if quarc_mode != 'off':
+                    agents = self._get_quarc_agents(reaction_smiles, top_k=int(self._quarc_opts.get('quarc_topk') or 5))
+                    if agents:
+                        used_quarc = True
+                        self._merge_quarc_agents(agents, enhanced_recs, actual_reaction_type)
+            except Exception as _qe:
+                enhanced_recs.setdefault('debug_warnings', []).append(f"quarc_integration_failed: {_qe}")
             result.update(enhanced_recs)
 
             # If user left type as Auto-detect, also compute a general, cross-dataset
@@ -232,6 +280,14 @@ class EnhancedRecommendationEngine:
                 except Exception as e:
                     print(f"Base engine error: {e}")
             
+            # Providers metadata for export/meta
+            providers = []
+            if used_quarc:
+                providers.append('quarc_oss')
+            if enhanced_recs.get('dataset_info', {}).get('analytics_loaded'):
+                providers.append('analytics')
+            if providers:
+                result['providers'] = providers
             return result
             
         except Exception as e:
@@ -398,6 +454,88 @@ class EnhancedRecommendationEngine:
             recommendations['error'] = f"Enhanced recommendation error: {str(e)}"
         
         return recommendations
+
+    # ===== Phase 1: QUARC adapter hook and merge =====
+    def _get_quarc_agents(self, reaction_smiles: str, top_k: int = 5) -> List[Dict]:
+        """Call the quarc_oss adapter if configured. Returns list of {name, role?, score?}."""
+        try:
+            mode = (self._quarc_opts.get('use_quarc') or 'auto').lower()
+            if mode == 'off':
+                return []
+            # Require env home/config unless mode is 'always' (still needs config to actually run)
+            from integration.quarc_oss_adapter import get_agents_for_engine  # type: ignore
+        except Exception:
+            return []
+
+        cfg = self._quarc_opts.get('quarc_config')
+        agents, err = get_agents_for_engine(reaction_smiles, top_k=top_k, config_path=cfg)
+        if err and (self._quarc_opts.get('use_quarc') or 'auto').lower() == 'always':
+            # In 'always' mode, surface a warning; still return [] to fallback
+            raise RuntimeError(err.get('message') or 'QUARC error')
+        return agents or []
+
+    def _merge_quarc_agents(self, agents: List[Dict], recs: Dict, reaction_type: str) -> None:
+        """Merge QUARC agents into existing recommendations with dedup and light re-ranking.
+
+        - Promote agents with roles ligand/base/catalyst into corresponding lists.
+        - De-duplicate by casefolded name.
+        - Apply light score boost to top QUARC items.
+        """
+        if not agents:
+            return
+        # Prepare maps
+        def _canon(n: str) -> str:
+            return (n or '').strip().casefold()
+        # Existing lists
+        ligs = recs.get('ligand_recommendations') or []
+        bases = recs.get('base_recommendations') or []
+        # Build sets for dedup
+        lig_set = {_canon(x.get('ligand') or '') for x in ligs}
+        base_set = {_canon(x.get('base') or '') for x in bases}
+        # Merge
+        quarc_ligs: List[Dict] = []
+        quarc_bases: List[Dict] = []
+        for a in agents:
+            name = a.get('name')
+            role = (a.get('role') or '').lower()
+            score = float(a.get('score') or 0.75)
+            if not name:
+                continue
+            if role == 'ligand':
+                if _canon(name) not in lig_set:
+                    quarc_ligs.append({'ligand': name, 'compatibility_score': round(min(1.0, max(0.0, score)), 3)})
+                    lig_set.add(_canon(name))
+            elif role == 'base':
+                if _canon(name) not in base_set:
+                    quarc_bases.append({'base': name, 'compatibility_score': round(min(1.0, max(0.0, score)), 3)})
+                    base_set.add(_canon(name))
+            else:
+                # catalyst or additive: ignore for now in lists, but could be attached later
+                continue
+        # Prepend QUARC items then existing, then re-apply analytics priors and truncate
+        if quarc_ligs:
+            ligs = quarc_ligs + ligs
+            # Re-apply ligand priors
+            try:
+                pri = self._load_analytics_summary(reaction_type)
+                if pri and self._analytics_cfg['enabled'] and self._analytics_cfg['apply_to']['ligands']:
+                    ligs = self._apply_freq_priors_ligands(ligs, pri)
+            except Exception:
+                pass
+            recs['ligand_recommendations'] = ligs[:5]
+        if quarc_bases:
+            bases = quarc_bases + bases
+            try:
+                pri = self._load_analytics_summary(reaction_type)
+                if pri and self._analytics_cfg['enabled'] and self._analytics_cfg['apply_to']['bases']:
+                    bases = self._apply_freq_priors_bases(bases, pri)
+            except Exception:
+                pass
+            recs['base_recommendations'] = bases[:5]
+        # Rebuild combined conditions prioritizing QUARC-backed options
+        ligs_eff = recs.get('ligand_recommendations') or []
+        solv_eff = recs.get('solvent_recommendations') or []
+        recs['combined_conditions'] = self._create_combined_conditions(ligs_eff, solv_eff, reaction_type)
 
     # ===== General cross-dataset similarity (for undefined/auto type) =====
     def _get_general_similarity_recommendations(self, reaction_smiles: str) -> Optional[Dict]:
@@ -986,8 +1124,8 @@ class EnhancedRecommendationEngine:
                             rtype = (row.get('ReactionType') or '').strip()
                             if not rtype:
                                 continue
-                            # Simple match: same type token (case-insensitive)
-                            if rtype.lower() != (reaction_type or '').lower():
+                            # Flexible match to accommodate renamed datasets
+                            if not self._matches_reaction_type(rtype, reaction_type):
                                 continue
                             lig_raw = row.get('Ligand') or ''
                             if not lig_raw:
@@ -1048,7 +1186,7 @@ class EnhancedRecommendationEngine:
                         reader = csv.DictReader(f, delimiter='\t') if fname.lower().endswith('.tsv') else csv.DictReader(f)
                         for row in reader:
                             rtype = (row.get('ReactionType') or '').strip()
-                            if not rtype or rtype.lower() != (reaction_type or '').lower():
+                            if not rtype or not self._matches_reaction_type(rtype, reaction_type):
                                 continue
                             raw = row.get('Solvent') or row.get('SOLName') or ''
                             if not raw:
@@ -1120,7 +1258,7 @@ class EnhancedRecommendationEngine:
                         reader = csv.DictReader(f, delimiter='\t') if fname.lower().endswith('.tsv') else csv.DictReader(f)
                         for row in reader:
                             rtype = (row.get('ReactionType') or '').strip()
-                            if not rtype or rtype.lower() != (reaction_type or '').lower():
+                            if not rtype or not self._matches_reaction_type(rtype, reaction_type):
                                 continue
                             # check common columns
                             # New column name Reagent (with roles in ReagentRole)

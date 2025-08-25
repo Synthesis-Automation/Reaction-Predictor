@@ -400,6 +400,34 @@ sample_reactions.py
     └── SAMPLE_REACTIONS list + filtering functions
 ```
 
+## Using QUARC-OSS (agents only)
+
+Phase 0-1 adds optional QUARC-OSS integration for agent (catalyst/ligand/base) suggestions. If QUARC is not configured, behavior is unchanged.
+
+Environment variables:
+- QUARC_OSS_HOME: path to cloned quarc-oss
+- QUARC_OSS_PYTHON: python executable in its conda env (optional)
+- QUARC_OSS_CONFIG: path to pipeline YAML (e.g., ffn_pipeline.yaml)
+
+CLI flags:
+- --use-quarc [auto|always|off] (default auto)
+- --quarc-config <path>
+- --quarc-topk <N>
+
+PowerShell example:
+
+```powershell
+$env:QUARC_OSS_HOME='C:\\path\\to\\quarc-oss'
+$env:QUARC_OSS_PYTHON='C:\\Miniconda3\\envs\\quarc\\python.exe'
+$env:QUARC_OSS_CONFIG='C:\\path\\to\\quarc-oss\\configs\\ffn_pipeline.yaml'
+
+$payload = '{"reaction_smiles":"Brc1ccccc1.Nc1ccccc1>>c1ccc(Nc2ccccc2)cc1","selected_reaction_type":"C-N Coupling - Ullmann"}'
+python predict_cli.py --use-quarc auto --quarc-topk 5 $payload -o .\\out.json
+```
+
+When QUARC is used, `meta.providers` in the export includes `quarc_oss` alongside `analytics` when analytics are applied.
+
+
 ### Adding new features
 
 1. New Reaction Types: Edit `REACTION_TYPES` in `reaction_types.py`

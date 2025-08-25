@@ -54,7 +54,7 @@ def _load_input() -> dict:
     """
     args = sys.argv[1:]
 
-    # Parse known flags (-f/--input-file, -o/--output-file) and filter others for JSON
+    # Parse known flags (-f/--input-file, -o/--output-file, QUARC flags) and filter others for JSON
     file_path: str | None = None
     filtered: list[str] = []
     i = 0
@@ -67,6 +67,10 @@ def _load_input() -> dict:
         if a in ("-o", "--output-file") and i + 1 < len(args):
             # skip output flag from JSON join
             i += 2
+            continue
+        if a in ("--use-quarc", "--quarc-config", "--quarc-topk"):
+            # skip quarc flags and their values
+            i += 2 if (i + 1) < len(args) else 1
             continue
         filtered.append(a)
         i += 1
@@ -152,6 +156,38 @@ def _extract_output_path() -> str | None:
     return None
 
 
+def _extract_quarc_flags() -> dict:
+    """Extract QUARC-related flags from argv to forward into engine options.
+
+    Supported:
+      --use-quarc [auto|always|off]
+      --quarc-config <path>
+      --quarc-topk <N>
+    """
+    args = sys.argv[1:]
+    opts: dict = {}
+    i = 0
+    while i < len(args):
+        a = args[i]
+        if a == "--use-quarc" and i + 1 < len(args):
+            opts['use_quarc'] = args[i + 1]
+            i += 2
+            continue
+        if a == "--quarc-config" and i + 1 < len(args):
+            opts['quarc_config'] = args[i + 1]
+            i += 2
+            continue
+        if a == "--quarc-topk" and i + 1 < len(args):
+            try:
+                opts['quarc_topk'] = int(args[i + 1])
+            except Exception:
+                opts['quarc_topk'] = 5
+            i += 2
+            continue
+        i += 1
+    return opts
+
+
 def main() -> int:
     payload = _load_input()
     reaction_smiles = payload.get('reaction_smiles') or ''
@@ -168,6 +204,13 @@ def main() -> int:
         return 2
 
     engine = create_recommendation_engine()
+    # If engine supports options, set them via attribute to avoid breaking signature
+    try:
+        quarc_opts = _extract_quarc_flags()
+        if quarc_opts:
+            setattr(engine, '_cli_quarc_options', quarc_opts)
+    except Exception:
+        pass
     recs = engine.get_recommendations(reaction_smiles, selected_type)
 
     # Normalize to GUI-like result to reuse export builder
@@ -192,8 +235,12 @@ def main() -> int:
     # Also attach general_recommendations at the top level for exporters that look there
     if recs.get('general_recommendations'):
         result['general_recommendations'] = recs['general_recommendations']
+    # Propagate providers (e.g., ['quarc_oss','analytics']) if engine set them
+    if recs.get('providers'):
+        result['providers'] = recs.get('providers')
 
     export = build_export_payload(result)
+    # Attach providers metadata if QUARC used (engine should set this flag in result later in Phase 1)
 
     # If --output-file is provided, write UTF-8 to that file as well
     out_path = _extract_output_path()

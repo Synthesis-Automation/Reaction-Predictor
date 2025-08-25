@@ -288,6 +288,7 @@ def build_export_payload(result: dict, related_reactions: Optional[list] = None)
             'generated_at': time.strftime('%Y-%m-%dT%H:%M:%S'),
             'analysis_type': result.get('analysis_type', 'unknown'),
             'status': result.get('status'),
+            'providers': result.get('providers') or None,
         },
         'input': {
             'reaction_smiles': result.get('reaction_smiles'),

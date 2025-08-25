@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "updated": "2025-08-25",
+  "roles": ["catalyst", "ligand", "base", "solvent", "additive"],
+  "items": [
+    {"name": "CuI", "role": "catalyst", "synonyms": ["cuprous iodide"], "cas": "7681-65-4"},
+    {"name": "CuBr", "role": "catalyst", "synonyms": ["cuprous bromide"], "cas": "7787-70-4"},
+    {"name": "Cu(OAc)2", "role": "catalyst", "synonyms": ["copper(II) acetate"], "cas": "142-71-2"},
+
+    {"name": "1,10-Phenanthroline", "role": "ligand", "synonyms": ["phen"], "cas": "66-71-7"},
+    {"name": "2,2'-Bipyridine", "role": "ligand", "synonyms": ["bipy", "bpy"], "cas": "366-18-7"},
+    {"name": "L-Proline", "role": "ligand", "synonyms": ["proline"], "cas": "147-85-3"},
+    {"name": "Ethylenediamine", "role": "ligand", "synonyms": ["en"], "cas": "107-15-3"},
+    {"name": "N,N'-Dimethylethylenediamine", "role": "ligand", "synonyms": ["DMEDA"], "cas": "110-70-3"},
+
+    {"name": "K2CO3", "role": "base", "synonyms": ["potassium carbonate"], "cas": "584-08-7"},
+    {"name": "Cs2CO3", "role": "base", "synonyms": ["cesium carbonate"], "cas": "534-17-8"},
+    {"name": "K3PO4", "role": "base", "synonyms": ["tripotassium phosphate"], "cas": "7778-53-2"},
+    {"name": "KOtBu", "role": "base", "synonyms": ["potassium tert-butoxide", "tBuOK"], "cas": "865-48-5"},
+
+    {"name": "DMSO", "role": "solvent", "synonyms": ["dimethyl sulfoxide"], "cas": "67-68-5"},
+    {"name": "DMF", "role": "solvent", "synonyms": ["dimethylformamide"], "cas": "68-12-2"},
+    {"name": "Toluene", "role": "solvent", "synonyms": ["methylbenzene"], "cas": "108-88-3"}
+  ]
+}
