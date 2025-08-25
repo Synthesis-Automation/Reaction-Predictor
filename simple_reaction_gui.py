@@ -1480,12 +1480,37 @@ class SimpleReactionGUI(QMainWindow):
         main_layout.setSpacing(8)
         main_layout.setContentsMargins(20, 12, 20, 12)
         
+        # Reaction setup section (group input + scheme/actions together)
+        setup_group = QGroupBox("Reaction Setup")
+        setup_group.setStyleSheet(
+            """
+            QGroupBox {
+                font-weight: bold;
+                border: 2px solid #555555;
+                border-radius: 5px;
+                margin-top: 10px;
+                padding-top: 10px;
+            }
+            QGroupBox::title {
+                subcontrol-origin: margin;
+                left: 10px;
+                padding: 0 5px 0 5px;
+            }
+            """
+        )
+        setup_layout = QVBoxLayout(setup_group)
+        setup_layout.setContentsMargins(10, 10, 10, 10)
+        setup_layout.setSpacing(8)
+
         # Input section
-        self.create_input_section(main_layout)
-        
+        self.create_input_section(setup_layout)
+
         # Reaction scheme section with control buttons
-        self.create_reaction_scheme_section(main_layout)
-        
+        self.create_reaction_scheme_section(setup_layout)
+
+        # Add setup group to main layout
+        main_layout.addWidget(setup_group)
+
         # Results section
         self.create_results_section(main_layout)
         
@@ -1582,11 +1607,12 @@ class SimpleReactionGUI(QMainWindow):
         """Create the reaction scheme visualization section with control buttons"""
         # Create horizontal layout for scheme and buttons
         scheme_buttons_layout = QHBoxLayout()
-        
-        # Create reaction image label directly without groupbox
+
+        # Reaction image area
         self.reaction_image_label = QLabel()
         self.reaction_image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.reaction_image_label.setStyleSheet("""
+        self.reaction_image_label.setStyleSheet(
+            """
             QLabel {
                 background-color: #404040;
                 border: 1px solid #555555;
@@ -1595,26 +1621,30 @@ class SimpleReactionGUI(QMainWindow):
                 font-style: italic;
                 padding: 5px;
             }
-        """)
+            """
+        )
         self.reaction_image_label.setText("Enter a reaction SMILES to see the reaction scheme")
-        # Set size policy to make the label adaptive but with height constraints
         self.reaction_image_label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         self.reaction_image_label.setWordWrap(True)
-        self.reaction_image_label.setScaledContents(False)  # Don't scale content
-        self.reaction_image_label.setFixedHeight(30)  # Fixed height when showing text only
-        
-        # Add image label directly to horizontal layout
-        scheme_buttons_layout.addWidget(self.reaction_image_label, 3)  # Give scheme more space
-        
-        # Create control buttons section (vertical layout)
-        buttons_widget = QWidget()
-        buttons_layout = QVBoxLayout(buttons_widget)
-        buttons_layout.setContentsMargins(10, 0, 0, 0)
-        
-        # Predict button (make it prominent)
+        self.reaction_image_label.setScaledContents(False)
+        self.reaction_image_label.setFixedHeight(30)
+        scheme_buttons_layout.addWidget(self.reaction_image_label, 3)
+
+        # Actions group on the right
+        actions_group = QGroupBox("Actions")
+        actions_group.setStyleSheet(
+            """
+            QGroupBox { border: 1px solid #555555; border-radius: 5px; margin-top: 0.4em; }
+            QGroupBox::title { subcontrol-origin: margin; left: 8px; padding: 0 4px; }
+            """
+        )
+        buttons_layout = QVBoxLayout(actions_group)
+        buttons_layout.setContentsMargins(8, 6, 8, 8)
+        buttons_layout.setSpacing(8)
+
+        # Predict button (primary)
         self.predict_button = QPushButton("Predict Conditions ▶")
         self.predict_button.setCursor(Qt.CursorShape.PointingHandCursor)
-        # Size and font emphasis
         self.predict_button.setMinimumHeight(48)
         self.predict_button.setMaximumWidth(220)
         pf = self.predict_button.font()
@@ -1624,31 +1654,21 @@ class SimpleReactionGUI(QMainWindow):
             pass
         pf.setBold(True)
         self.predict_button.setFont(pf)
-        # Visual style
         self.predict_button.setStyleSheet(
             """
             QPushButton {
-                background-color: #2E7D32; /* green */
+                background-color: #2E7D32;
                 color: #FFFFFF;
                 font-weight: 600;
                 border-radius: 8px;
                 padding: 10px 16px;
                 border: 1px solid #1B5E20;
             }
-            QPushButton:hover {
-                background-color: #388E3C;
-            }
-            QPushButton:pressed {
-                background-color: #1B5E20;
-            }
-            QPushButton:disabled {
-                background-color: #4D4D4D;
-                border-color: #3A3A3A;
-                color: #BBBBBB;
-            }
+            QPushButton:hover { background-color: #388E3C; }
+            QPushButton:pressed { background-color: #1B5E20; }
+            QPushButton:disabled { background-color: #4D4D4D; border-color: #3A3A3A; color: #BBBBBB; }
             """
         )
-        # Subtle shadow to lift the button
         try:
             shadow = QGraphicsDropShadowEffect(self)
             shadow.setBlurRadius(16)
@@ -1657,31 +1677,44 @@ class SimpleReactionGUI(QMainWindow):
             self.predict_button.setGraphicsEffect(shadow)
         except Exception:
             pass
-        # Usability helpers
         self.predict_button.setToolTip("Run condition prediction (Ctrl+Enter)")
         self.predict_button.setShortcut("Ctrl+Return")
         self.predict_button.clicked.connect(self.run_prediction)
-        
-        # Clear button
+
+        # Clear button (secondary)
         self.clear_button = QPushButton("Clear")
         self.clear_button.setMinimumHeight(40)
         self.clear_button.setMaximumWidth(180)
         self.clear_button.clicked.connect(self.clear_inputs)
-        
-        # Browse samples button
+        self.clear_button.setStyleSheet(
+            """
+            QPushButton { background-color: #616161; color: #FFFFFF; border-radius: 6px; padding: 8px 12px; border: 1px solid #555; }
+            QPushButton:hover { background-color: #757575; }
+            QPushButton:pressed { background-color: #424242; }
+            """
+        )
+
+        # Browse samples button (secondary)
         self.browse_samples_button = QPushButton("Browse Samples")
         self.browse_samples_button.setMinimumHeight(40)
         self.browse_samples_button.setMaximumWidth(180)
         self.browse_samples_button.clicked.connect(self.browse_sample_reactions)
-        
+        self.browse_samples_button.setStyleSheet(
+            """
+            QPushButton { background-color: #616161; color: #FFFFFF; border-radius: 6px; padding: 8px 12px; border: 1px solid #555; }
+            QPushButton:hover { background-color: #757575; }
+            QPushButton:pressed { background-color: #424242; }
+            """
+        )
+
+        # Assemble actions
         buttons_layout.addWidget(self.predict_button)
         buttons_layout.addWidget(self.clear_button)
         buttons_layout.addWidget(self.browse_samples_button)
-        buttons_layout.addStretch()  # Push buttons to top
-        
-        # Add buttons widget to horizontal layout
-        scheme_buttons_layout.addWidget(buttons_widget, 1)  # Give buttons less space
-        
+        buttons_layout.addStretch()
+        scheme_buttons_layout.addWidget(actions_group, 1)
+
+        # Finalize
         parent_layout.addLayout(scheme_buttons_layout)
     
     def create_results_section(self, parent_layout):
