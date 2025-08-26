@@ -16,7 +16,7 @@ from PyQt6.QtWidgets import (
     QGridLayout, QLabel, QLineEdit, QPushButton, QTextEdit, QComboBox,
     QGroupBox, QMessageBox, QFrame, QDialog, QListWidget, QListWidgetItem,
     QSplitter, QCheckBox, QScrollArea, QProgressBar, QSizePolicy,
-    QGraphicsDropShadowEffect
+    QGraphicsDropShadowEffect, QFileDialog, QSpinBox
 )
 from PyQt6.QtCore import Qt, QThread, pyqtSignal, QUrl, QTimer, QMutex
 from PyQt6.QtGui import QFont, QPalette, QColor, QPixmap, QImage
@@ -303,10 +303,11 @@ class SimplePredictionWorker(QThread):
     error = pyqtSignal(str)
     progress = pyqtSignal(int)
     
-    def __init__(self, reaction_smiles: str, reaction_type: str):
+    def __init__(self, reaction_smiles: str, reaction_type: str, quarc_options: dict | None = None):
         super().__init__()
         self.reaction_smiles = reaction_smiles
         self.reaction_type = reaction_type
+        self.quarc_options = quarc_options or {}
     
     def run(self):
         """Run prediction with enhanced recommendation engine"""
@@ -323,6 +324,12 @@ class SimplePredictionWorker(QThread):
             try:
                 from enhanced_recommendation_engine import EnhancedRecommendationEngine
                 engine = EnhancedRecommendationEngine()
+                # Forward QUARC options if provided (Phase 1 integration)
+                try:
+                    if self.quarc_options:
+                        setattr(engine, '_cli_quarc_options', self.quarc_options)
+                except Exception:
+                    pass
                 self.progress.emit(60)
                 
                 # Get enhanced recommendations
@@ -341,6 +348,13 @@ class SimplePredictionWorker(QThread):
                     'available_recommenders': engine.get_available_recommenders(),
                     'analysis_type': recommendations.get('analysis_type', 'enhanced')
                 }
+                # Hoist providers to top-level for exporters/UI if present
+                try:
+                    prov = recommendations.get('providers')
+                    if prov:
+                        result['providers'] = prov
+                except Exception:
+                    pass
                 
             except ImportError as e:
                 # Fallback to original recommendation engine
@@ -403,24 +417,23 @@ class SampleReactionsBrowser(QDialog):
     def init_ui(self):
         """Initialize the sample reactions browser UI"""
         self.setWindowTitle("Sample Reactions Browser")
-        # Removed fixed geometry - will be set dynamically by parent
         self.setModal(True)
-        
-        # Ensure the dialog has a proper title bar and is moveable
-        self.setWindowFlags(Qt.WindowType.Dialog | Qt.WindowType.WindowTitleHint | Qt.WindowType.WindowCloseButtonHint | Qt.WindowType.WindowMinMaxButtonsHint)
-        
-        # Set minimum size to ensure usability
+        self.setWindowFlags(
+            Qt.WindowType.Dialog
+            | Qt.WindowType.WindowTitleHint
+            | Qt.WindowType.WindowCloseButtonHint
+            | Qt.WindowType.WindowMinMaxButtonsHint
+        )
         self.setMinimumSize(1200, 700)
-        
-        # Main layout
+
         layout = QVBoxLayout(self)
         layout.setSpacing(10)
         layout.setContentsMargins(15, 15, 15, 15)
-        
+
         # Filter section
         filter_group = QGroupBox("Filter Reactions")
         filter_layout = QVBoxLayout(filter_group)
-        
+
         # Search box
         search_layout = QHBoxLayout()
         search_label = QLabel("Search:")
@@ -431,24 +444,20 @@ class SampleReactionsBrowser(QDialog):
         search_layout.addWidget(search_label)
         search_layout.addWidget(self.search_input)
         filter_layout.addLayout(search_layout)
-        
-        # Category filters (Coupling-focused with subcategories)
+
+        # Category filters
         category_layout = QVBoxLayout()
         self.category_checkboxes = {}
 
-        # Top-level quick toggles
         top_row = QHBoxLayout()
         for cat_name, cat_key in [("All", "all"), ("Coupling", "coupling_only"), ("Everything Else", "non_coupling")]:
             cb = QCheckBox(cat_name)
-            # Default: "All" should be unchecked on start
-            # (no explicit setChecked(True) here)
             cb.stateChanged.connect(self.filter_by_category)
             self.category_checkboxes[cat_key] = cb
             top_row.addWidget(cb)
         top_row.addStretch()
         category_layout.addLayout(top_row)
 
-        # Coupling families
         family_row = QHBoxLayout()
         for cat_name, cat_key in [("C-C", "cc"), ("C-N", "cn"), ("C-O", "co"), ("C-S", "cs")]:
             cb = QCheckBox(cat_name)
@@ -458,14 +467,12 @@ class SampleReactionsBrowser(QDialog):
         family_row.addStretch()
         category_layout.addLayout(family_row)
 
-        # Sub-categories per family (wrap across rows to avoid cutoff)
         sub_layout = QHBoxLayout()
 
-        # Helper to populate a group box with a grid of checkboxes
         def add_checkboxes_grid(group_title, items):
             box = QGroupBox(group_title)
             grid = QGridLayout(box)
-            cols = 2  # arrange in two columns to reduce horizontal overflow
+            cols = 2
             for idx, (name, key) in enumerate(items):
                 cb = QCheckBox(name)
                 cb.stateChanged.connect(self.filter_by_category)
@@ -475,7 +482,6 @@ class SampleReactionsBrowser(QDialog):
                 grid.addWidget(cb, row, col)
             return box
 
-        # C-C subcats
         cc_items = [
             ("Suzuki (Pd)", "cc_suzuki"),
             ("Stille (Pd)", "cc_stille"),
@@ -486,7 +492,6 @@ class SampleReactionsBrowser(QDialog):
         ]
         sub_layout.addWidget(add_checkboxes_grid("C-C Couplings", cc_items))
 
-        # C-N subcats
         cn_items = [
             ("Buchwald-Hartwig (Pd)", "cn_bh"),
             ("Ullmann (Cu)", "cn_ullmann"),
@@ -494,55 +499,49 @@ class SampleReactionsBrowser(QDialog):
         ]
         sub_layout.addWidget(add_checkboxes_grid("C-N Couplings", cn_items))
 
-        # C-O subcats
         co_items = [
             ("Ullmann Ether (Cu)", "co_ullmann_ether"),
             ("Mitsunobu", "co_mitsunobu"),
         ]
         sub_layout.addWidget(add_checkboxes_grid("C-O Couplings", co_items))
 
-        # C-S subcats
         cs_items = [
             ("Thioether Coupling (Pd)", "cs_thioether"),
         ]
         sub_layout.addWidget(add_checkboxes_grid("C-S Couplings", cs_items))
 
         category_layout.addLayout(sub_layout)
-
         filter_layout.addLayout(category_layout)
         layout.addWidget(filter_group)
-        
+
         # Reactions list and details splitter
         content_splitter = QSplitter(Qt.Orientation.Horizontal)
 
-        # Reactions list
         list_group = QGroupBox("Reactions List")
         list_layout = QVBoxLayout(list_group)
 
         self.reactions_list = QListWidget()
-        self.reactions_list.setMinimumWidth(500)  # Increased from 400 to 500
+        self.reactions_list.setMinimumWidth(500)
         self.reactions_list.itemClicked.connect(self.on_reaction_selected)
         self.reactions_list.itemDoubleClicked.connect(self.on_reaction_double_clicked)
         list_layout.addWidget(self.reactions_list)
 
-        # Stats label
         self.stats_label = QLabel("Total reactions: 0")
         self.stats_label.setStyleSheet("color: #CCCCCC; font-style: italic;")
         list_layout.addWidget(self.stats_label)
 
         content_splitter.addWidget(list_group)
 
-        # Reaction details
         details_group = QGroupBox("Reaction Details")
         details_layout = QVBoxLayout(details_group)
 
-        # Reaction image display
         self.details_image_label = QLabel()
         self.details_image_label.setMinimumHeight(200)
         self.details_image_label.setMaximumHeight(280)
         self.details_image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.details_image_label.setScaledContents(True)
-        self.details_image_label.setStyleSheet("""
+        self.details_image_label.setStyleSheet(
+            """
             QLabel {
                 background-color: #404040;
                 border: 1px solid #555555;
@@ -550,11 +549,11 @@ class SampleReactionsBrowser(QDialog):
                 color: #CCCCCC;
                 font-style: italic;
             }
-        """)
+            """
+        )
         self.details_image_label.setText("Select a reaction to view the structure")
         details_layout.addWidget(self.details_image_label)
 
-        # Text details
         self.details_text = QTextEdit()
         self.details_text.setMinimumWidth(450)
         self.details_text.setMinimumHeight(200)
@@ -567,9 +566,7 @@ class SampleReactionsBrowser(QDialog):
 
         layout.addWidget(content_splitter)
 
-        # Buttons
         button_layout = QHBoxLayout()
-
         self.select_button = QPushButton("Select Reaction")
         self.select_button.setMinimumHeight(35)
         self.select_button.clicked.connect(self.select_reaction)
@@ -584,9 +581,26 @@ class SampleReactionsBrowser(QDialog):
         button_layout.addWidget(cancel_button)
 
         layout.addLayout(button_layout)
-        
-        # Apply dark theme
+
         self.apply_dark_theme()
+
+    def filter_by_category(self):
+        """Handle category checkbox changes and reapply filtering."""
+        try:
+            if self.category_checkboxes.get("all") and self.category_checkboxes["all"].isChecked():
+                for k in ("coupling_only", "non_coupling"):
+                    if k in self.category_checkboxes:
+                        self.category_checkboxes[k].setChecked(False)
+            if (
+                self.category_checkboxes.get("coupling_only") and self.category_checkboxes["coupling_only"].isChecked()
+            ) or (
+                self.category_checkboxes.get("non_coupling") and self.category_checkboxes["non_coupling"].isChecked()
+            ):
+                if self.category_checkboxes.get("all"):
+                    self.category_checkboxes["all"].setChecked(False)
+        except Exception:
+            pass
+        self.filter_reactions()
     
     def apply_dark_theme(self):
         """Apply dark theme to the dialog"""
@@ -683,106 +697,64 @@ class SampleReactionsBrowser(QDialog):
         """)
     
     def load_reactions(self):
-        """Load all sample reactions"""
+        """Load all sample reactions into the browser list."""
         try:
+            # Base set
             self.all_reactions = get_sample_reactions()
+            # Optionally extend with the comprehensive Buchwald-Hartwig set (skip header)
+            try:
+                extra = get_buchwald_hartwig_reactions()
+                if extra and len(extra) > 1:
+                    self.all_reactions = self.all_reactions + extra[1:]
+            except Exception:
+                pass
+
+            # De-duplicate while preserving order
+            seen = set()
+            unique = []
+            for r in self.all_reactions:
+                if r not in seen:
+                    seen.add(r)
+                    unique.append(r)
+            self.all_reactions = unique
+
+            # Initial filtered list
             self.filtered_reactions = self.all_reactions.copy()
+            self.stats_label.setText(f"Total reactions: {len(self.filtered_reactions)}")
             self.populate_list()
         except Exception as e:
-            QMessageBox.warning(self, "Error", f"Could not load sample reactions: {e}")
-            self.all_reactions = []
-            self.filtered_reactions = []
-    
-    def populate_list(self):
-        """Populate the reactions list widget"""
-        self.reactions_list.clear()
-        
-        for reaction in self.filtered_reactions:
-            if reaction.strip() and not reaction.startswith("Select a sample"):
-                item = QListWidgetItem(reaction)
-                # Make the display more readable
-                display_text = self.format_reaction_display(reaction)
-                item.setText(display_text)
-                item.setData(Qt.ItemDataRole.UserRole, reaction)  # Store original data
-                self.reactions_list.addItem(item)
-        
-        # Update stats
-        count = self.reactions_list.count()
-        self.stats_label.setText(f"Total reactions: {count}")
-    
-    def format_reaction_display(self, reaction):
-        """Format reaction for better display in list"""
-        if ">>" in reaction:
-            parts = reaction.split(">>")
-            if len(parts) == 2:
-                reactants = parts[0].strip()
-                if "(" in parts[1]:
-                    products_and_desc = parts[1].split("(", 1)
-                    products = products_and_desc[0].strip()
-                    description = "(" + products_and_desc[1] if len(products_and_desc) > 1 else ""
-                    
-                    # For display purposes, show truncated SMILES but keep full SMILES for processing
-                    display_reactants = reactants[:30] + "..." if len(reactants) > 30 else reactants
-                    display_products = products[:30] + "..." if len(products) > 30 else products
-                    
-                    return f"{display_reactants} → {display_products} {description}"
-        
-        return reaction
-    
-    def filter_reactions(self):
-        """Filter reactions based on search text"""
-        search_text = self.search_input.text().lower()
-        
-        if not search_text:
-            self.apply_category_filter()
-            return
-        
-        # Get base reactions from category filter
-        base_reactions = self.get_category_filtered_reactions()
-        
-        # Apply text search
-        self.filtered_reactions = [
-            reaction for reaction in base_reactions
-            if search_text in reaction.lower()
-        ]
-        
-        self.populate_list()
-    
-    def filter_by_category(self):
-        """Filter reactions by selected categories"""
-        # Handle "All" checkbox
-        if self.category_checkboxes["all"].isChecked():
-            # Uncheck other categories when "All" is checked
-            for key, checkbox in self.category_checkboxes.items():
-                if key != "all":
-                    checkbox.setChecked(False)
-        else:
-            # If any specific category is checked, uncheck "All"
-            any_specific_checked = any(
-                checkbox.isChecked() for key, checkbox in self.category_checkboxes.items() 
-                if key != "all"
-            )
-            if any_specific_checked:
-                self.category_checkboxes["all"].setChecked(False)
-        
-        self.apply_category_filter()
-    
-    def apply_category_filter(self):
-        """Apply category filtering"""
-        if self.category_checkboxes["all"].isChecked():
+            QMessageBox.warning(self, "Load Error", f"Could not load sample reactions:\n{e}")
+            self.all_reactions = ["Select a sample reaction..."]
             self.filtered_reactions = self.all_reactions.copy()
-        else:
-            self.filtered_reactions = self.get_category_filtered_reactions()
-        
-        # Reapply text search if any
-        search_text = self.search_input.text().lower()
-        if search_text:
-            self.filtered_reactions = [
-                reaction for reaction in self.filtered_reactions
-                if search_text in reaction.lower()
-            ]
-        
-        self.populate_list()
+            self.populate_list()
+
+    def filter_reactions(self):
+        """Filter reactions by text and category checkboxes."""
+        try:
+            search_text = (self.search_input.text() or "").lower().strip()
+            base_list = self.all_reactions if self.category_checkboxes["all"].isChecked() else self.get_category_filtered_reactions()
+            if search_text:
+                self.filtered_reactions = [r for r in base_list if search_text in r.lower()]
+            else:
+                self.filtered_reactions = base_list
+            self.populate_list()
+        except Exception as e:
+            print(f"Error filtering reactions: {e}")
+
+    def populate_list(self):
+        """Populate the list widget with the current filtered reactions."""
+        try:
+            self.reactions_list.clear()
+            for r in getattr(self, 'filtered_reactions', []) or []:
+                item = QListWidgetItem()
+                display = r
+                item.setText(display if len(display) <= 200 else display[:200] + "…")
+                item.setData(Qt.ItemDataRole.UserRole, r)
+                self.reactions_list.addItem(item)
+            self.stats_label.setText(f"Total reactions: {len(getattr(self, 'filtered_reactions', []) or [])}")
+        except Exception as e:
+            print(f"Error populating list: {e}")
+    # Note: filtering is handled by filter_reactions(); avoid recursion here.
     
     def get_category_filtered_reactions(self):
         """Get reactions filtered by selected categories"""
@@ -1574,6 +1546,50 @@ class SimpleReactionGUI(QMainWindow):
         
         # Add the layout directly to parent
         parent_layout.addLayout(smiles_layout)
+
+        # Advanced options group (compact) — add QUARC integration controls
+        adv_group = QGroupBox("Advanced (QUARC agents integration)")
+        adv_group.setStyleSheet("QGroupBox{border:1px solid #555555; border-radius:5px; margin-top:6px; padding-top:6px;}")
+        adv_layout = QHBoxLayout(adv_group)
+        adv_layout.setContentsMargins(8, 6, 8, 6)
+
+        self.enable_quarc_checkbox = QCheckBox("Use QUARC agents")
+        self.enable_quarc_checkbox.setToolTip("Merge catalyst/ligand/base agents from QUARC‑OSS when available.")
+        self.enable_quarc_checkbox.setChecked(False)
+
+        self.quarc_config_input = QLineEdit()
+        self.quarc_config_input.setPlaceholderText("Path to quarc-oss config (optional)")
+        self.quarc_config_input.setMinimumHeight(22)
+        self.quarc_config_browse = QPushButton("...")
+        self.quarc_config_browse.setMinimumHeight(22)
+        self.quarc_config_browse.setMaximumWidth(32)
+        self.quarc_config_browse.setToolTip("Browse for a QUARC config file")
+        def _browse_quarc():
+            try:
+                path, _ = QFileDialog.getOpenFileName(self, "Select QUARC config", os.getcwd(), "JSON or YAML (*.json *.yaml *.yml);;All Files (*.*)")
+                if path:
+                    self.quarc_config_input.setText(path)
+            except Exception:
+                pass
+        self.quarc_config_browse.clicked.connect(_browse_quarc)
+
+        quarc_topk_label = QLabel("Top‑K:")
+        self.quarc_topk_spin = QSpinBox()
+        self.quarc_topk_spin.setRange(1, 20)
+        self.quarc_topk_spin.setValue(5)
+        self.quarc_topk_spin.setMinimumHeight(22)
+        self.quarc_topk_spin.setMaximumWidth(60)
+
+        adv_layout.addWidget(self.enable_quarc_checkbox)
+        adv_layout.addSpacing(8)
+        adv_layout.addWidget(QLabel("Config:"))
+        adv_layout.addWidget(self.quarc_config_input)
+        adv_layout.addWidget(self.quarc_config_browse)
+        adv_layout.addSpacing(8)
+        adv_layout.addWidget(quarc_topk_label)
+        adv_layout.addWidget(self.quarc_topk_spin)
+        adv_layout.addStretch()
+        parent_layout.addWidget(adv_group)
         
         # Connect SMILES input to update reaction scheme
         self.smiles_input.textChanged.connect(self.update_reaction_scheme)
@@ -1893,8 +1909,26 @@ class SimpleReactionGUI(QMainWindow):
         # Clear previous results
         self.results_text.clear()
         
+        # Collect QUARC options from UI
+        quarc_opts = {}
+        try:
+            if getattr(self, 'enable_quarc_checkbox', None) and self.enable_quarc_checkbox.isChecked():
+                quarc_opts['use_quarc'] = 'always'
+                cfg = (self.quarc_config_input.text().strip() if self.quarc_config_input else '')
+                if cfg:
+                    quarc_opts['quarc_config'] = cfg
+                try:
+                    quarc_opts['quarc_topk'] = int(self.quarc_topk_spin.value()) if self.quarc_topk_spin else 5
+                except Exception:
+                    quarc_opts['quarc_topk'] = 5
+            else:
+                # Explicitly disable when unchecked so engine avoids subprocess calls
+                quarc_opts['use_quarc'] = 'off'
+        except Exception:
+            pass
+
         # Start prediction worker
-        self.prediction_worker = SimplePredictionWorker(reaction_smiles, reaction_type)
+        self.prediction_worker = SimplePredictionWorker(reaction_smiles, reaction_type, quarc_options=quarc_opts)
         self.prediction_worker.finished.connect(self.on_prediction_finished)
         self.prediction_worker.error.connect(self.on_prediction_error)
         self.prediction_worker.progress.connect(self.on_prediction_progress)
@@ -2826,32 +2860,30 @@ class SimpleReactionGUI(QMainWindow):
         except Exception:
             pass
         return payload
-    
     def _format_buchwald_recommendations(self, result):
         """Format Buchwald-Hartwig specific recommendations"""
-        
         text = f"""Buchwald-Hartwig Amination Condition Recommendations
 
 Reaction: {result['reaction_smiles']}
 Status: {result['status']}
 
 """
-        
+        # Tiny providers line (if available)
+        text += self._providers_line(result)
+
         if 'error' in result:
             text += f"Error: {result['error']}\n"
             return text
-        
-        recommendations_data = result.get('recommendations', {})
-        
+
+        recommendations_data = result.get('recommendations', {}) or {}
         if 'error' in recommendations_data:
             text += f"Recommendation Error: {recommendations_data['error']}\n"
             return text
-        
+
         dataset_size = recommendations_data.get('dataset_size', 'Unknown')
         text += f"Dataset Size: {dataset_size} reactions analyzed\n\n"
-        
-        recs = recommendations_data.get('recommendations', [])
-        
+
+        recs = recommendations_data.get('recommendations', []) or []
         if not recs:
             text += """No specific recommendations found.
 
@@ -2866,57 +2898,57 @@ Suggestions:
 • Consider substrate electronic properties when choosing ligands
 """
             return text
-        
+
         text += f"Found {len(recs)} catalyst family recommendations:\n"
         text += "=" * 70 + "\n\n"
-        
+
         for i, rec in enumerate(recs, 1):
             text += f"""RANK #{i}: {rec['family_name']}
 
 Recommended Catalyst System:
-  • Metal Precursor: {rec['recommended_catalyst']}
-  • Ligand: {rec['recommended_ligand']}
+    • Metal Precursor: {rec['recommended_catalyst']}
+    • Ligand: {rec['recommended_ligand']}
 
 Performance Statistics:
-  • Average Yield: {rec['performance']['avg_yield']:.1f}%
-  • Best Yield: {rec['performance']['max_yield']:.1f}%
-  • Success Rate (≥80%): {rec['performance']['success_rate']:.1%}
-  • Literature Examples: {rec['performance']['total_reactions']} reactions
-  • Confidence Score: {rec['confidence_score']:.1%}
+    • Average Yield: {rec['performance']['avg_yield']:.1f}%
+    • Best Yield: {rec['performance']['max_yield']:.1f}%
+    • Success Rate (≥80%): {rec['performance']['success_rate']:.1%}
+    • Literature Examples: {rec['performance']['total_reactions']} reactions
+    • Confidence Score: {rec['confidence_score']:.1%}
 
 Alternative Catalysts in this Family:"""
-            
-            if rec['alternatives']:
+
+            if rec.get('alternatives'):
                 for alt in rec['alternatives']:
                     text += f"""
-  → {alt['catalyst']} / {alt['ligand']} (Avg: {alt['avg_yield']:.1f}%, Success: {alt['success_rate']:.1%})"""
+    → {alt.get('catalyst')} / {alt.get('ligand')} (Avg: {alt.get('avg_yield'):.1f}%, Success: {alt.get('success_rate'):.1%})"""
             else:
                 text += "\n  → No alternatives found in dataset"
-            
+
             text += "\n\n" + "-" * 70 + "\n\n"
-        
+
         text += """INTERPRETATION GUIDE:
 
 • Higher ranked families show better overall performance
 • Confidence scores reflect the amount of supporting literature data
 • Alternative catalysts within each family are likely to give similar results
 • Consider substrate sterics when choosing between families:
-  - Bulky substrates: Use bulky phosphine ligands (XPhos, SPhos)
-  - Electron-poor substrates: Use electron-rich ligands
-  - Standard substrates: Moderate phosphines often work well
+    - Bulky substrates: Use bulky phosphine ligands (XPhos, SPhos)
+    - Electron-poor substrates: Use electron-rich ligands
+    - Standard substrates: Moderate phosphines often work well
 
 • Metal precursor selection tips:
-  - Pd2(dba)3: Pre-reduced, good for sensitive substrates
-  - Pd(OAc)2: Most common, requires in-situ reduction
-  - PdCl2: Alternative Pd(II) source, similar to Pd(OAc)2
+    - Pd2(dba)3: Pre-reduced, good for sensitive substrates
+    - Pd(OAc)2: Most common, requires in-situ reduction
+    - PdCl2: Alternative Pd(II) source, similar to Pd(OAc)2
 """
-        
+
         return text
     
     def _format_general_recommendations(self, result):
         """Format general recommendations"""
-        recommendations = result.get('recommendations', {})
-        
+        recommendations = result.get('recommendations', {}) or {}
+
         # Build a minimal display type with metal if we can infer from selected type
         def _display_general_type():
             selected = result.get('selected_reaction_type') or ''
@@ -2937,13 +2969,15 @@ Status: {result['status']}
 {recommendations.get('message', 'No specific recommendations available.')}
 
 """
-        
-        suggestions = recommendations.get('suggestions', [])
+        # Tiny providers line (if available)
+        text += self._providers_line(result)
+
+        suggestions = recommendations.get('suggestions', []) or []
         if suggestions:
             text += "Suggestions:\n"
             for i, suggestion in enumerate(suggestions, 1):
                 text += f"  {i}. {suggestion}\n"
-        
+
         text += f"""
 
 Available Recommenders: {', '.join(result.get('available_recommenders', []))}
@@ -2952,13 +2986,13 @@ Note: For specific reaction types like Buchwald-Hartwig amination,
 the system can provide detailed catalyst recommendations when the 
 appropriate dataset is available.
 """
-        
+
         return text
     
     def _format_enhanced_recommendations(self, result):
         """Format enhanced ligand and solvent recommendations"""
-        recommendations = result.get('recommendations', {})
-        
+        recommendations = result.get('recommendations', {}) or {}
+
         # Build a clearer detected reaction type with metal annotation when possible
         def _display_reaction_type():
             rt = recommendations.get('reaction_type', 'Unknown') or 'Unknown'
@@ -2995,11 +3029,13 @@ Detected Type: {_display_reaction_type()}
 Status: {result['status']}
 
 """
-        
+        # Tiny providers line (if available)
+        text += self._providers_line(result)
+
         if 'error' in recommendations:
             text += f"❌ Error: {recommendations['error']}\n\n"
             return text
-        
+
         # Dataset information
         dataset_info = recommendations.get('dataset_info', {})
         if dataset_info:
@@ -3077,20 +3113,20 @@ Status: {result['status']}
         if combined_conditions:
             text += "🎯 TOP RECOMMENDED REACTION CONDITIONS:\n"
             text += "=" * 75 + "\n\n"
-            
+
             for i, combo in enumerate(combined_conditions[:3], 1):
                 confidence_emoji = "🟢" if combo['recommendation_confidence'] == 'High' else "🟡" if combo['recommendation_confidence'] == 'Medium' else "🔴"
-                
+
                 text += f"""RECOMMENDATION #{i} {confidence_emoji} {combo['recommendation_confidence']} Confidence
 
 🧬 Catalyst System:
   • Ligand: {combo['ligand']} (Score: {combo['ligand_compatibility']})
   • Solvent: {combo['solvent']} ({combo['solvent_abbreviation']}) (Score: {combo['solvent_compatibility']})
   • Combined Score: {combo['combined_score']}"""
-                
+
                 if combo['synergy_bonus'] > 0:
                     text += f" (includes +{combo['synergy_bonus']} synergy bonus)"
-                
+
                 # Add typical conditions
                 conditions = combo.get('typical_conditions', {})
                 if conditions:
@@ -3100,66 +3136,66 @@ Status: {result['status']}
   • Temperature: {conditions.get('temperature', 'N/A')}
   • Time: {conditions.get('time', 'N/A')}
   • Atmosphere: {conditions.get('atmosphere', 'N/A')}"""
-                    
+
                     if 'catalyst_loading' in conditions:
                         text += f"\n  • Catalyst Loading: {conditions['catalyst_loading']}"
                     if 'base' in conditions:
                         text += f"\n  • Base: {conditions['base']}"
                     if 'additives' in conditions:
                         text += f"\n  • Notes: {conditions['additives']}"
-                
+
                 text += "\n\n" + "-" * 75 + "\n\n"
-        
+
         # Individual ligand recommendations
         ligand_recs = recommendations.get('ligand_recommendations', [])
         if ligand_recs:
             text += "🧬 TOP LIGAND OPTIONS:\n"
             text += "-" * 40 + "\n"
-            
+
             for i, lig in enumerate(ligand_recs[:5], 1):
                 text += f"""  {i}. {lig['ligand']} (Score: {lig['compatibility_score']})
      • Applications: {lig['applications']}
      • Suitability: {lig['reaction_suitability']}
 """
-        
-        # Individual solvent recommendations  
+
+        # Individual solvent recommendations
         solvent_recs = recommendations.get('solvent_recommendations', [])
         if solvent_recs:
             text += "\n🧪 TOP SOLVENT OPTIONS:\n"
             text += "-" * 40 + "\n"
-            
+
             for i, sol in enumerate(solvent_recs[:5], 1):
                 text += f"""  {i}. {sol['solvent']} ({sol['abbreviation']}) (Score: {sol['compatibility_score']})
      • Applications: {sol['applications']}
      • Suitability: {sol['reaction_suitability']}
 """
-        
+
         # Property-based alternatives
         alternatives = recommendations.get('property_based_alternatives', {})
         if alternatives and len(alternatives) > 1:  # More than just error key
             text += "\n🎛️ SPECIALIZED OPTIONS:\n"
             text += "-" * 40 + "\n"
-            
+
             if 'budget_friendly_ligands' in alternatives:
                 text += "\n💰 Budget-Friendly Ligands:\n"
                 for lig in alternatives['budget_friendly_ligands']:
                     text += f"  • {lig['ligand']} (Score: {lig['compatibility_score']})\n"
-            
+
             if 'low_boiling_solvents' in alternatives:
                 text += "\n🌡️ Low-Boiling Solvents (Easy Removal):\n"
                 for sol in alternatives['low_boiling_solvents']:
                     text += f"  • {sol['solvent']} ({sol['abbreviation']}) (Score: {sol['compatibility_score']})\n"
-            
+
             if 'green_solvents' in alternatives:
                 text += "\n🌱 Green/Sustainable Solvents:\n"
                 for sol in alternatives['green_solvents']:
                     text += f"  • {sol['solvent']} ({sol['abbreviation']}) (Score: {sol['compatibility_score']})\n"
-        
+
         # Reaction-specific guidance
         guidance = recommendations.get('reaction_specific_notes', '')
         if guidance:
             text += f"\n{guidance}\n"
-        
+
         # If available, append a compact section with cross-dataset similarity suggestions
         gen = (recommendations.get('general_recommendations') if isinstance(recommendations, dict) else None)
         if gen:
@@ -3200,7 +3236,7 @@ Status: {result['status']}
 
 🔬 For best results: Use inert atmosphere, dry solvents, and degassed conditions.
 """
-        
+
         return text
     
     def _format_basic_results(self, result):
@@ -3213,16 +3249,40 @@ Input Information:
 
 Status: {result['status']}
 """
-        
+        # Tiny providers line (if available)
+        text += self._providers_line(result)
+
         if 'message' in result:
             text += f"Message: {result['message']}\n"
-        
+
         text += """
 Note: The recommendation engine is being enhanced to provide 
 specific condition recommendations for different reaction types.
 """
-        
+
         return text
+
+    def _providers_line(self, result: dict) -> str:
+        """Compose a tiny providers line if providers metadata is present.
+
+        Looks at top-level result['providers'] first, then
+        result['recommendations']['providers'] as a fallback.
+        """
+        try:
+            prov = result.get('providers')
+            if not prov:
+                prov = (result.get('recommendations') or {}).get('providers')
+            if not prov:
+                return ""
+            if isinstance(prov, (list, tuple)):
+                val = ", ".join([str(p) for p in prov if str(p).strip()])
+            else:
+                val = str(prov)
+            if not val:
+                return ""
+            return f"Providers: {val}\n\n"
+        except Exception:
+            return ""
     
     def on_prediction_error(self, error_message):
         """Handle prediction error"""

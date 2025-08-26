@@ -1,0 +1,737 @@
+{
+  "meta": {
+    "generated_at": "2025-08-25T19:09:42",
+    "analysis_type": "enhanced",
+    "status": "Enhanced recommendations generated successfully",
+    "providers": null
+  },
+  "input": {
+    "reaction_smiles": "Clc1ccncc1.Nc1ccccc1>>c1ccc(Nc2ccncc2)cc1",
+    "selected_reaction_type": "Auto detect reaction type"
+  },
+  "detection": {
+    "reaction_type": "Cross-Coupling"
+  },
+  "dataset": {
+    "ligands_available": 123,
+    "solvents_available": 72,
+    "reaction_types_supported": [
+      "Cross-Coupling",
+      "Hydrogenation",
+      "Metathesis",
+      "C-H_Activation",
+      "Carbonylation"
+    ],
+    "analytics_loaded": false
+  },
+  "top_conditions": [
+    {
+      "reaction": {
+        "smiles": "Clc1ccncc1.Nc1ccccc1>>c1ccc(Nc2ccncc2)cc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Clc1ccncc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Nc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "Pd(OAc)2",
+          "cas": "3375-31-3",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "XPhos",
+          "cas": "98327-87-8",
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "Cs2CO3",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "THF",
+          "abbreviation": "THF",
+          "cas": "109-99-9",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-120°C",
+        "time": "4-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    },
+    {
+      "reaction": {
+        "smiles": "Clc1ccncc1.Nc1ccccc1>>c1ccc(Nc2ccncc2)cc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Clc1ccncc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Nc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "Pd(OAc)2",
+          "cas": "3375-31-3",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "BINAP",
+          "cas": "76806-21-0",
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "Cs2CO3",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "Tetrahydrofuran",
+          "abbreviation": "THF",
+          "cas": "109-99-9",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-120°C",
+        "time": "4-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    },
+    {
+      "reaction": {
+        "smiles": "Clc1ccncc1.Nc1ccccc1>>c1ccc(Nc2ccncc2)cc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Clc1ccncc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Nc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "Pd(OAc)2",
+          "cas": "3375-31-3",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "SPhos",
+          "cas": "161265-03-8",
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "Cs2CO3",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "Tetrahydrofuran",
+          "abbreviation": "THF",
+          "cas": "109-99-9",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-120°C",
+        "time": "4-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    }
+  ],
+  "related_reactions": [
+    {
+      "reaction_smiles": "c1ccc(Nc2ccccc2)cc1 . Brc1cccc(I)c1 . Nc1ccccc1>>c1ccc(Nc2cccc(N(c3ccccc3)c3ccccc3)c2)cc1",
+      "similarity": 0.31800766283524906,
+      "yield": 90,
+      "catalyst": "Palladium diacetate",
+      "ligand": "1",
+      "solvent": "Toluene",
+      "temperature": 110.0,
+      "time": 26.0,
+      "reference": "Angewandte Chemie, International Edition (2021), 60(5), 2455-2463. | Liu, Xinrui; et al | Angewandte Chemie, International Edition (2021), 60(5), 2455-2463.",
+      "reaction_id": "31-614-CAS-34115259"
+    },
+    {
+      "reaction_smiles": "Brc1ccccc1 . Nc1nc2ccccc2[nH]1>>c1ccc(Nc2nc3ccccc3[nH]2)cc1 . c1ccc(Nc2nc3ccccc3n2-c2ccccc2)cc1 . Nc1nc2ccccc2n1-c1ccccc1",
+      "similarity": 0.3028846153846154,
+      "yield": 89,
+      "catalyst": "Tris(dibenzylideneacetone)dipalladium",
+      "ligand": "[3, 6-Dimethoxy-2′, 4′, 6′-tris(1-methylethyl)[1, 1′-biphenyl]-2-yl]bis(1, 1-dimethylethyl)phosphine",
+      "solvent": "tert-Butanol",
+      "temperature": 120.0,
+      "time": 20.05,
+      "reference": "Journal of the American Chemical Society (2024), 146(48), 33035-33047. | Raguram, Elaine Reichert; et al | Journal of the American Chemical Society (2024), 146(48), 33035-33047.",
+      "reaction_id": "31-614-CAS-32698104"
+    },
+    {
+      "reaction_smiles": "Clc1ccccc1 . C[C@@H]1CCCN[C@@H]1c1ccccc1>>C[C@@H]1CCCN(c2ccccc2)[C@@H]1c1ccccc1",
+      "similarity": 0.3004434589800443,
+      "yield": 70,
+      "catalyst": "[2′-(Amino-κN)[1, 1′-biphenyl]-2-yl-κC][[2′, 6′-bis(1-methylethoxy)[1, 1′-biphenyl]-2-yl]dicyclohexylphosphine-κP](methanesulfonato-κO)palladium",
+      "ligand": "[2′, 6′-Bis(1-methylethoxy)[1, 1′-biphenyl]-2-yl]dicyclohexylphosphine",
+      "solvent": "Tetrahydrofuran",
+      "temperature": 80.0,
+      "time": 41.0,
+      "reference": "Organic Letters (2022), 24(20), 3736-3740. | Scattolin, Thomas; et al | Organic Letters (2022), 24(20), 3736-3740.",
+      "reaction_id": "31-172-CAS-23178984"
+    },
+    {
+      "reaction_smiles": "Brc1ccccc1 . CC(C)(C)c1ccc(Nc2ccc(N(c3ccc(Nc4ccc(C(C)(C)C)cc4)cc3)c3ccc(C(C)(C)C)cc3)cc2)cc1>>CC(C)(C)c1ccc(Nc2ccc(N(c3ccc(N(c4ccccc4)c4ccc(C(C)(C)C)cc4)cc3)c3ccc(C(C)(C)C)cc3)cc2)cc1",
+      "similarity": 0.27714932126696834,
+      "yield": 57,
+      "catalyst": "1",
+      "ligand": "1, 1-Bis(diphenylphosphino)ferrocene",
+      "solvent": "Toluene",
+      "temperature": 120.0,
+      "time": 16.0,
+      "reference": "Journal of the American Chemical Society (2024), 146(48), 33035-33047. | Raguram, Elaine Reichert; et al | Journal of the American Chemical Society (2024), 146(48), 33035-33047.",
+      "reaction_id": "31-614-CAS-32084955"
+    },
+    {
+      "reaction_smiles": "c1ccc2c(c1)[nH]c1ccccc12 . Brc1ccncc1>>c1ccc2c(c1)c1ccccc1n2-c1ccncc1",
+      "similarity": 0.25,
+      "yield": 81,
+      "catalyst": "Bis(dibenzylideneacetone)palladium",
+      "ligand": "Tri-tert-butylphosphonium tetrafluoroborate",
+      "solvent": "Xylene, Water",
+      "temperature": 160.0,
+      "time": 48.0,
+      "reference": "Organic Letters (2022), 24(20), 3736-3740. | Scattolin, Thomas; et al | Organic Letters (2022), 24(20), 3736-3740.",
+      "reaction_id": "31-614-CAS-25091086"
+    },
+    {
+      "reaction_smiles": "Brc1ccccn1 . c1ccc(Nc2ccccc2)cc1>>c1ccc(N(c2ccccc2)c2ccccn2)cc1",
+      "similarity": 0.2456989247311828,
+      "yield": 88,
+      "catalyst": "Palladium diacetate",
+      "ligand": "2-Dicyclohexylphosphino-2′, 6′-dimethoxybiphenyl",
+      "solvent": "Toluene",
+      "temperature": 90.0,
+      "time": 1.0,
+      "reference": "Angewandte Chemie, International Edition (2021), 60(5), 2455-2463. | Liu, Xinrui; et al | Angewandte Chemie, International Edition (2021), 60(5), 2455-2463.",
+      "reaction_id": "31-614-CAS-36208219"
+    },
+    {
+      "reaction_smiles": "FC(F)(F)c1ccc(Cl)cc1 . CNc1ccccc1>>CN(c1ccccc1)c1ccc(C(F)(F)F)cc1",
+      "similarity": 0.24087221095334685,
+      "yield": 98,
+      "catalyst": "Bis(dibenzylideneacetone)palladium",
+      "ligand": "2-(Dicyclohexylphosphino)biphenyl",
+      "solvent": "Dichloromethane, tert-Butanol",
+      "temperature": 110.0,
+      "time": 18.083,
+      "reference": "Angewandte Chemie, International Edition (2021), 60(5), 2455-2463. | Liu, Xinrui; et al | Angewandte Chemie, International Edition (2021), 60(5), 2455-2463.",
+      "reaction_id": "31-172-CAS-23771164"
+    },
+    {
+      "reaction_smiles": "Brc1ccccc1 . c1ccc(Nc2ccccc2)cc1>>c1ccc(N(c2ccccc2)c2ccccc2)cc1",
+      "similarity": 0.2403846153846154,
+      "yield": 78,
+      "catalyst": "Tris(dibenzylideneacetone)dipalladium",
+      "ligand": "Tri-tert-butylphosphine",
+      "solvent": "Toluene",
+      "temperature": NaN,
+      "time": 16.0,
+      "reference": "Organic Letters (2022), 24(20), 3736-3740. | Scattolin, Thomas; et al | Organic Letters (2022), 24(20), 3736-3740.",
+      "reaction_id": "31-614-CAS-38638303"
+    },
+    {
+      "reaction_smiles": "Clc1cc2cccccc-2c1 . CC(C)(C)c1ccc2[nH]c3ccc(C(C)(C)C)cc3c2c1>>CC(C)(C)c1ccc2c(c1)c1cc(C(C)(C)C)ccc1n2-c1cc2cccccc-2c1",
+      "similarity": 0.2398373983739837,
+      "yield": 83,
+      "catalyst": "Tris(dibenzylideneacetone)dipalladium",
+      "ligand": "2-Dicyclohexylphosphino-2′, 6′-dimethoxybiphenyl",
+      "solvent": "Toluene",
+      "temperature": 110.0,
+      "time": 24.0,
+      "reference": "Angewandte Chemie, International Edition (2021), 60(5), 2455-2463. | Liu, Xinrui; et al | Angewandte Chemie, International Edition (2021), 60(5), 2455-2463.",
+      "reaction_id": "31-614-CAS-37287949"
+    },
+    {
+      "reaction_smiles": "Clc1nc(-c2ccccc2)nc(-c2ccccc2)n1 . Cc1ccc(-c2cccc3c2[nH]c2ccccc23)cc1>>Cc1ccc(-c2cccc3c4ccccc4n(-c4nc(-c5ccccc5)nc(-c5ccccc5)n4)c23)cc1",
+      "similarity": 0.23809523809523808,
+      "yield": 86,
+      "catalyst": "Tris(dibenzylideneacetone)dipalladium",
+      "ligand": "Tri-tert-butylphosphine",
+      "solvent": "Toluene",
+      "temperature": NaN,
+      "time": 24.0,
+      "reference": "Angewandte Chemie, International Edition (2021), 60(5), 2455-2463. | Liu, Xinrui; et al | Angewandte Chemie, International Edition (2021), 60(5), 2455-2463.",
+      "reaction_id": "31-172-CAS-23301388"
+    },
+    {
+      "reaction_smiles": "Clc1ccccn1 . COc1ccc(CNCCN(C)C)cc1>>COc1ccc(CN(CCN(C)C)c2ccccn2)cc1",
+      "similarity": 0.23363095238095238,
+      "yield": 84,
+      "catalyst": "Tris(dibenzylideneacetone)dipalladium",
+      "ligand": "Dicyclohexyl[3, 6-dimethoxy-2′, 4′, 6′-tris(1-methylethyl)[1, 1′-biphenyl]-2-yl]phosphine",
+      "solvent": "Toluene",
+      "temperature": 80.0,
+      "time": 18.0,
+      "reference": "Angewandte Chemie, International Edition (2021), 60(5), 2455-2463. | Liu, Xinrui; et al | Angewandte Chemie, International Edition (2021), 60(5), 2455-2463.",
+      "reaction_id": "31-172-CAS-23214307"
+    },
+    {
+      "reaction_smiles": "Brc1ccccn1 . c1ccc2c(c1)Nc1ccccc1N2>>c1ccc(N2c3ccccc3N(c3ccccn3)c3ccccc32)nc1",
+      "similarity": 0.22956989247311826,
+      "yield": 92,
+      "catalyst": "Tris(dibenzylideneacetone)dipalladium",
+      "ligand": "Tri-tert-butylphosphonium tetrafluoroborate",
+      "solvent": "Toluene",
+      "temperature": 115.0,
+      "time": 24.0,
+      "reference": "Angewandte Chemie, International Edition (2021), 60(5), 2455-2463. | Liu, Xinrui; et al | Angewandte Chemie, International Edition (2021), 60(5), 2455-2463.",
+      "reaction_id": "31-614-CAS-35436066"
+    },
+    {
+      "reaction_smiles": "NNc1ccccc1 . BrCc1ccccc1Br>>c1ccc(-n2cc3ccccc3n2)cc1",
+      "similarity": 0.22794117647058823,
+      "yield": 64,
+      "catalyst": "Palladium chloride",
+      "ligand": "Tri-tert-butylphosphonium tetrafluoroborate",
+      "solvent": "Dimethyl sulfoxide",
+      "temperature": 120.0,
+      "time": 24.0,
+      "reference": "Journal of the American Chemical Society (2024), 146(48), 33035-33047. | Raguram, Elaine Reichert; et al | Journal of the American Chemical Society (2024), 146(48), 33035-33047.",
+      "reaction_id": "31-172-CAS-23125330"
+    },
+    {
+      "reaction_smiles": "NNc1ccccc1 . BrCc1ccccc1Br>>c1ccc(-n2cc3ccccc3n2)cc1 . c1ccc(-n2ncc3ccccc32)cc1",
+      "similarity": 0.22794117647058823,
+      "yield": 53,
+      "catalyst": "Palladium chloride",
+      "ligand": "Tri-tert-butylphosphonium tetrafluoroborate",
+      "solvent": "Dimethyl sulfoxide, Water",
+      "temperature": 120.0,
+      "time": 10.0,
+      "reference": "Journal of the American Chemical Society (2024), 146(48), 33035-33047. | Raguram, Elaine Reichert; et al | Journal of the American Chemical Society (2024), 146(48), 33035-33047.",
+      "reaction_id": "31-172-CAS-23128184"
+    },
+    {
+      "reaction_smiles": "NNc1ccccc1 . BrCc1ccccc1I>>c1ccc(-n2cc3ccccc3n2)cc1",
+      "similarity": 0.22794117647058823,
+      "yield": 66,
+      "catalyst": "Palladium chloride",
+      "ligand": "Tri-tert-butylphosphonium tetrafluoroborate",
+      "solvent": "Dimethyl sulfoxide",
+      "temperature": 120.0,
+      "time": 22.0,
+      "reference": "Organic Letters (2022), 24(20), 3736-3740. | Scattolin, Thomas; et al | Organic Letters (2022), 24(20), 3736-3740.",
+      "reaction_id": "31-172-CAS-23129370"
+    }
+  ],
+  "general": {
+    "ligands": [],
+    "solvents": [],
+    "bases": [],
+    "top_hits": [
+      {
+        "reaction_id": "31-614-CAS-31442449",
+        "reaction_type": "Other",
+        "dataset_file": "Amide-formation.tsv",
+        "cond_key": "none/none/1|+1′-Carbonyldiimidazole|+530-62-1|530-62-1/2-Methyltetrahydrofuran|96-47-9",
+        "similarity": 0.51,
+        "reactant_smiles": "O=C(O)c1ccncc1 . Nc1ccccc1",
+        "product_smiles": "O=C(Nc1ccccc1)c1ccncc1",
+        "reaction_smiles": "O=C(O)c1ccncc1 . Nc1ccccc1>>O=C(Nc1ccccc1)c1ccncc1",
+        "ligands": [],
+        "solvents": [
+          "2-Methyltetrahydrofuran"
+        ],
+        "bases": [],
+        "temperature": "60.0",
+        "time": "16.5",
+        "yield_pct": 81.0,
+        "catalyst": null,
+        "reference": "Bioorganic & Medicinal Chemistry Letters (2020), 30(2), 126846. | Reddyrajula, Rajkumar; et al | Bioorganic & Medicinal Chemistry Letters (2020), 30(2), 126846.",
+        "core_detail": null,
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-614-CAS-34115259",
+        "reaction_type": "Buchwald",
+        "dataset_file": "Buchwald-2021-2014.tsv",
+        "cond_key": "Pd/1|161265-03-8/Sodium tert-butoxide|865-48-5/Toluene|108-88-3",
+        "similarity": 0.358,
+        "reactant_smiles": "c1ccc(Nc2ccccc2)cc1 . Brc1cccc(I)c1 . Nc1ccccc1",
+        "product_smiles": "c1ccc(Nc2cccc(N(c3ccccc3)c3ccccc3)c2)cc1",
+        "reaction_smiles": "c1ccc(Nc2ccccc2)cc1 . Brc1cccc(I)c1 . Nc1ccccc1>>c1ccc(Nc2cccc(N(c3ccccc3)c3ccccc3)c2)cc1",
+        "ligands": [
+          "1"
+        ],
+        "solvents": [
+          "Toluene"
+        ],
+        "bases": [],
+        "temperature": "110.0",
+        "time": "26.0",
+        "yield_pct": 90.0,
+        "catalyst": null,
+        "reference": "Angewandte Chemie, International Edition (2021), 60(5), 2455-2463. | Liu, Xinrui; et al | Angewandte Chemie, International Edition (2021), 60(5), 2455-2463.",
+        "core_detail": null,
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-614-CAS-41844052",
+        "reaction_type": "Ullmann",
+        "dataset_file": "Ullman-2020-2024.tsv",
+        "cond_key": "Cu/Guar gum|9000-30-0/Triethylamine|121-44-8/Dimethylformamide|68-12-2",
+        "similarity": 0.348,
+        "reactant_smiles": "Clc1ccccc1 . c1c[nH]cn1",
+        "product_smiles": "c1ccc(-n2ccnc2)cc1",
+        "reaction_smiles": "Clc1ccccc1 . c1c[nH]cn1>>c1ccc(-n2ccnc2)cc1",
+        "ligands": [
+          "Guar gum"
+        ],
+        "solvents": [
+          "Dimethylformamide"
+        ],
+        "bases": [
+          "Et3N"
+        ],
+        "temperature": "80.0",
+        "time": "15.0",
+        "yield_pct": 60.0,
+        "catalyst": null,
+        "reference": "ACS Applied Polymer Materials (2024), 6(9), 5256-5267. | Chern, Yaw-Terng; et al | ACS Applied Polymer Materials (2024), 6(9), 5256-5267.",
+        "core_detail": null,
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-614-CAS-37213507",
+        "reaction_type": "Other",
+        "dataset_file": "Amide-formation.tsv",
+        "cond_key": "none/none/Thionyl chloride|7719-09-7+Triethylamine|121-44-8/Acetonitrile|75-05-8",
+        "similarity": 0.318,
+        "reactant_smiles": "O=C(O)c1nc(Cl)ccc1Cl . Nc1ccccc1",
+        "product_smiles": "O=C(Nc1ccccc1)c1nc(Cl)ccc1Cl",
+        "reaction_smiles": "O=C(O)c1nc(Cl)ccc1Cl . Nc1ccccc1>>O=C(Nc1ccccc1)c1nc(Cl)ccc1Cl",
+        "ligands": [],
+        "solvents": [
+          "Acetonitrile"
+        ],
+        "bases": [
+          "Et3N"
+        ],
+        "temperature": "85.0",
+        "time": "9.0",
+        "yield_pct": 86.0,
+        "catalyst": null,
+        "reference": "Bioorganic & Medicinal Chemistry Letters (2020), 30(2), 126846. | Reddyrajula, Rajkumar; et al | Bioorganic & Medicinal Chemistry Letters (2020), 30(2), 126846.",
+        "core_detail": null,
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-614-CAS-25091086",
+        "reaction_type": "Buchwald",
+        "dataset_file": "Buchwald-2021-2014.tsv",
+        "cond_key": "Pd/Tri-tert-butylphosphonium tetrafluoroborate|131274-22-1/Sodium tert-butoxide|865-48-5/Water|7732-18-5+Xylene|1330-20-7",
+        "similarity": 0.314,
+        "reactant_smiles": "c1ccc2c(c1)[nH]c1ccccc12 . Brc1ccncc1",
+        "product_smiles": "c1ccc2c(c1)c1ccccc1n2-c1ccncc1",
+        "reaction_smiles": "c1ccc2c(c1)[nH]c1ccccc12 . Brc1ccncc1>>c1ccc2c(c1)c1ccccc1n2-c1ccncc1",
+        "ligands": [
+          "Tri-tert-butylphosphonium tetrafluoroborate"
+        ],
+        "solvents": [
+          "Xylene",
+          "Water"
+        ],
+        "bases": [],
+        "temperature": "160.0",
+        "time": "48.0",
+        "yield_pct": 81.0,
+        "catalyst": null,
+        "reference": "Organic Letters (2022), 24(20), 3736-3740. | Scattolin, Thomas; et al | Organic Letters (2022), 24(20), 3736-3740.",
+        "core_detail": null,
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-614-CAS-23948240",
+        "reaction_type": "Ullmann",
+        "dataset_file": "Ullman-2020-2024.tsv",
+        "cond_key": "Cu(I)/1,10-Phenanthroline|66-71-7/Potassium carbonate|584-08-7/Dimethylformamide|68-12-2",
+        "similarity": 0.311,
+        "reactant_smiles": "c1ccc2c(c1)[nH]c1ccccc12 . Brc1ccncc1.Cl",
+        "product_smiles": "c1ccc2c(c1)c1ccccc1n2-c1ccncc1",
+        "reaction_smiles": "c1ccc2c(c1)[nH]c1ccccc12 . Brc1ccncc1.Cl>>c1ccc2c(c1)c1ccccc1n2-c1ccncc1",
+        "ligands": [
+          "1,10-Phenanthroline"
+        ],
+        "solvents": [
+          "Dimethylformamide"
+        ],
+        "bases": [],
+        "temperature": "25.0",
+        "time": "254808.0",
+        "yield_pct": 78.0,
+        "catalyst": null,
+        "reference": "Organic Letters (2022), 24(5), 1253-1257. | Bhunia, Subhajit; et al | Organic Letters (2022), 24(5), 1253-1257.",
+        "core_detail": null,
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-614-CAS-41322613",
+        "reaction_type": "Other",
+        "dataset_file": "Amide-formation.tsv",
+        "cond_key": "none/none/1-Ethyl-3-(3′-dimethylaminopropyl)carbodiimide hydrochloride|25952-53-8+Hydrochloric acid|7647-01-0/Dichloromethane|75-09-2+Methanol|67-56-1+Water|7732-18-5",
+        "similarity": 0.288,
+        "reactant_smiles": "Nc1ccccc1 . O=C(O)C#Cc1ccccc1",
+        "product_smiles": "O=C(C#Cc1ccccc1)Nc1ccccc1",
+        "reaction_smiles": "Nc1ccccc1 . O=C(O)C#Cc1ccccc1>>O=C(C#Cc1ccccc1)Nc1ccccc1",
+        "ligands": [],
+        "solvents": [
+          "Dichloromethane",
+          "Water",
+          "Methanol"
+        ],
+        "bases": [],
+        "temperature": "25.0",
+        "time": "20.167",
+        "yield_pct": 97.0,
+        "catalyst": null,
+        "reference": "Bioorganic & Medicinal Chemistry Letters (2020), 30(2), 126846. | Reddyrajula, Rajkumar; et al | Bioorganic & Medicinal Chemistry Letters (2020), 30(2), 126846.",
+        "core_detail": null,
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-614-CAS-33566669",
+        "reaction_type": "Ullmann",
+        "dataset_file": "Ullman-2020-2024.tsv",
+        "cond_key": "Cu(I)/N1,N2-Bis(2-furanylmethyl)ethanediamide|69010-90-8/Tripotassium phosphate|7778-53-2/Sulfolane|126-33-0",
+        "similarity": 0.287,
+        "reactant_smiles": "c1ccc2c(c1)Nc1ccccc1O2 . Brc1ccncc1",
+        "product_smiles": "c1ccc2c(c1)Oc1ccccc1N2c1ccncc1",
+        "reaction_smiles": "c1ccc2c(c1)Nc1ccccc1O2 . Brc1ccncc1>>c1ccc2c(c1)Oc1ccccc1N2c1ccncc1",
+        "ligands": [
+          "N1,N2-Bis(2-furanylmethyl)ethanediamide"
+        ],
+        "solvents": [
+          "Sulfolane"
+        ],
+        "bases": [],
+        "temperature": "100.0",
+        "time": "18.333",
+        "yield_pct": 99.0,
+        "catalyst": null,
+        "reference": "ACS Applied Electronic Materials (2020), 2(2), 604-617. | Moon, Yu Kyung; et al | ACS Applied Electronic Materials (2020), 2(2), 604-617.",
+        "core_detail": null,
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-172-CAS-22770671",
+        "reaction_type": "Ullmann",
+        "dataset_file": "Ullman-2020-2024.tsv",
+        "cond_key": "Cu(I)/Carbon nitride (C3N4)|143334-20-7/Cesium carbonate|534-17-8/Dimethylformamide|68-12-2",
+        "similarity": 0.283,
+        "reactant_smiles": "c1c[nH]cn1 . Ic1ccccc1",
+        "product_smiles": "c1ccc(-n2ccnc2)cc1",
+        "reaction_smiles": "c1c[nH]cn1 . Ic1ccccc1>>c1ccc(-n2ccnc2)cc1",
+        "ligands": [
+          "Carbon nitride (C3N4)"
+        ],
+        "solvents": [
+          "Dimethylformamide"
+        ],
+        "bases": [],
+        "temperature": "25.0",
+        "time": "12.0",
+        "yield_pct": 89.0,
+        "catalyst": null,
+        "reference": "Applied Organometallic Chemistry (2021), 35(1), e6051. | Sardarian, A. R.; et al | Applied Organometallic Chemistry (2021), 35(1), e6051.",
+        "core_detail": null,
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-172-CAS-23294676",
+        "reaction_type": "Ullmann",
+        "dataset_file": "Ullman-2020-2024.tsv",
+        "cond_key": "Cu(I)/2588211-74-7|2588211-74-7/Cesium carbonate|534-17-8/Ethanol|64-17-5",
+        "similarity": 0.283,
+        "reactant_smiles": "Brc1ccccc1 . c1c[nH]cn1",
+        "product_smiles": "c1ccc(-n2ccnc2)cc1",
+        "reaction_smiles": "Brc1ccccc1 . c1c[nH]cn1>>c1ccc(-n2ccnc2)cc1",
+        "ligands": [],
+        "solvents": [
+          "Ethanol"
+        ],
+        "bases": [],
+        "temperature": "80.0",
+        "time": "12.0",
+        "yield_pct": 65.0,
+        "catalyst": null,
+        "reference": "Green Chemistry (2023), 25(9), 3425-3430. | Wu, Jianglong; et al | Green Chemistry (2023), 25(9), 3425-3430.",
+        "core_detail": null,
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-172-CAS-23295786",
+        "reaction_type": "Ullmann",
+        "dataset_file": "Ullman-2020-2024.tsv",
+        "cond_key": "Cu(I)/2588211-74-7|2588211-74-7/Cesium carbonate|534-17-8/Ethanol|64-17-5",
+        "similarity": 0.283,
+        "reactant_smiles": "c1c[nH]cn1 . Ic1ccccc1",
+        "product_smiles": "c1ccc(-n2ccnc2)cc1",
+        "reaction_smiles": "c1c[nH]cn1 . Ic1ccccc1>>c1ccc(-n2ccnc2)cc1",
+        "ligands": [],
+        "solvents": [
+          "Ethanol"
+        ],
+        "bases": [],
+        "temperature": "80.0",
+        "time": "12.0",
+        "yield_pct": 99.0,
+        "catalyst": null,
+        "reference": "ACS Applied Electronic Materials (2020), 2(2), 604-617. | Moon, Yu Kyung; et al | ACS Applied Electronic Materials (2020), 2(2), 604-617.",
+        "core_detail": null,
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-172-CAS-23421310",
+        "reaction_type": "Ullmann",
+        "dataset_file": "Ullman-2020-2024.tsv",
+        "cond_key": "Cu(I)/95-14-7|95-14-7/Potassium tert-butoxide|865-47-4/Dimethyl sulfoxide|67-68-5",
+        "similarity": 0.283,
+        "reactant_smiles": "c1c[nH]cn1 . Ic1ccccc1",
+        "product_smiles": "c1ccc(-n2ccnc2)cc1",
+        "reaction_smiles": "c1c[nH]cn1 . Ic1ccccc1>>c1ccc(-n2ccnc2)cc1",
+        "ligands": [],
+        "solvents": [
+          "Dimethyl sulfoxide"
+        ],
+        "bases": [],
+        "temperature": "110.0",
+        "time": "15.0",
+        "yield_pct": 87.0,
+        "catalyst": null,
+        "reference": "Applied Organometallic Chemistry (2021), 35(1), e6051. | Sardarian, A. R.; et al | Applied Organometallic Chemistry (2021), 35(1), e6051.",
+        "core_detail": null,
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-172-CAS-23730362",
+        "reaction_type": "Ullmann",
+        "dataset_file": "Ullman-2020-2024.tsv",
+        "cond_key": "Cu(II)/2659278-63-2|2659278-63-2+7447-39-4|7447-39-4/Potassium hydroxide|1310-58-3/Dimethylformamide|68-12-2",
+        "similarity": 0.283,
+        "reactant_smiles": "c1c[nH]cn1 . Ic1ccccc1",
+        "product_smiles": "c1ccc(-n2ccnc2)cc1",
+        "reaction_smiles": "c1c[nH]cn1 . Ic1ccccc1>>c1ccc(-n2ccnc2)cc1",
+        "ligands": [],
+        "solvents": [
+          "Dimethylformamide"
+        ],
+        "bases": [],
+        "temperature": "100.0",
+        "time": "12.0",
+        "yield_pct": 88.0,
+        "catalyst": null,
+        "reference": "Applied Organometallic Chemistry (2021), 35(1), e6051. | Sardarian, A. R.; et al | Applied Organometallic Chemistry (2021), 35(1), e6051.",
+        "core_detail": null,
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-614-CAS-24278381",
+        "reaction_type": "Ullmann",
+        "dataset_file": "Ullman-2020-2024.tsv",
+        "cond_key": "Cu/Chitosan alginate|213250-84-1/Potassium hydroxide|1310-58-3/Dimethylformamide|68-12-2",
+        "similarity": 0.283,
+        "reactant_smiles": "c1c[nH]cn1 . Ic1ccccc1",
+        "product_smiles": "c1ccc(-n2ccnc2)cc1",
+        "reaction_smiles": "c1c[nH]cn1 . Ic1ccccc1>>c1ccc(-n2ccnc2)cc1",
+        "ligands": [
+          "Chitosan alginate"
+        ],
+        "solvents": [
+          "Dimethylformamide"
+        ],
+        "bases": [],
+        "temperature": "100.0",
+        "time": "10.0",
+        "yield_pct": 90.0,
+        "catalyst": null,
+        "reference": "Applied Organometallic Chemistry (2021), 35(1), e6051. | Sardarian, A. R.; et al | Applied Organometallic Chemistry (2021), 35(1), e6051.",
+        "core_detail": null,
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-614-CAS-24491057",
+        "reaction_type": "Ullmann",
+        "dataset_file": "Ullman-2020-2024.tsv",
+        "cond_key": "Cu/Chitosan|9012-76-4+Sodium alginate|9005-38-3/Potassium hydroxide|1310-58-3/Dimethyl sulfoxide|67-68-5",
+        "similarity": 0.283,
+        "reactant_smiles": "c1c[nH]cn1 . Ic1ccccc1",
+        "product_smiles": "c1ccc(-n2ccnc2)cc1",
+        "reaction_smiles": "c1c[nH]cn1 . Ic1ccccc1>>c1ccc(-n2ccnc2)cc1",
+        "ligands": [
+          "Sodium alginate",
+          "Chitosan"
+        ],
+        "solvents": [
+          "Dimethyl sulfoxide"
+        ],
+        "bases": [],
+        "temperature": "100.0",
+        "time": "10.0",
+        "yield_pct": 90.0,
+        "catalyst": null,
+        "reference": "Applied Organometallic Chemistry (2021), 35(1), e6051. | Sardarian, A. R.; et al | Applied Organometallic Chemistry (2021), 35(1), e6051.",
+        "core_detail": null,
+        "core_generic": null
+      }
+    ]
+  }
+}

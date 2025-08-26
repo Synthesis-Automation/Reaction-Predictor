@@ -223,7 +223,14 @@ class EnhancedRecommendationEngine:
     
     def get_recommendations(self, reaction_smiles: str, reaction_type: str = "Auto-detect") -> Dict:
         """Get comprehensive recommendations including ligands and solvents"""
-        
+        # Merge any runtime-provided QUARC options (e.g., from CLI/GUI) before use
+        try:
+            cli_opts = getattr(self, '_cli_quarc_options', None)
+            if isinstance(cli_opts, dict):
+                self._quarc_opts.update({k: v for k, v in cli_opts.items() if v is not None})
+        except Exception:
+            pass
+
         try:
             # Determine actual reaction type
             actual_reaction_type = self.analyze_reaction_type(reaction_smiles, reaction_type)
