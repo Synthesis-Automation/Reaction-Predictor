@@ -296,6 +296,32 @@ def create_placeholder_image(reaction_smiles: str, width: int = 600, height: int
     painter.end()
     return QPixmap.fromImage(image)
 
+def scale_pixmap_to_fit(pixmap: QPixmap, max_width: int, max_height: int) -> QPixmap:
+    """Scale a pixmap to fit within max dimensions while preserving aspect ratio"""
+    if pixmap.isNull():
+        return pixmap
+    
+    # Get current size
+    current_width = pixmap.width()
+    current_height = pixmap.height()
+    
+    # Calculate scaling factor to fit within max dimensions
+    width_ratio = max_width / current_width if current_width > 0 else 1.0
+    height_ratio = max_height / current_height if current_height > 0 else 1.0
+    scale_factor = min(width_ratio, height_ratio, 1.0)  # Don't scale up, only down
+    
+    # If no scaling needed, return original
+    if scale_factor >= 1.0:
+        return pixmap
+    
+    # Calculate new dimensions
+    new_width = int(current_width * scale_factor)
+    new_height = int(current_height * scale_factor)
+    
+    # Scale the pixmap smoothly
+    from PyQt6.QtCore import Qt
+    return pixmap.scaled(new_width, new_height, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+
 class SimplePredictionWorker(QThread):
     """Enhanced prediction worker with recommendation engine"""
     
@@ -541,7 +567,7 @@ class SampleReactionsBrowser(QDialog):
         self.details_image_label.setMinimumHeight(200)
         self.details_image_label.setMaximumHeight(280)
         self.details_image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.details_image_label.setScaledContents(True)
+        self.details_image_label.setScaledContents(False)  # Preserve aspect ratio
         self.details_image_label.setStyleSheet("""
             QLabel {
                 background-color: #404040;
@@ -971,12 +997,20 @@ class SampleReactionsBrowser(QDialog):
                 if not pixmap or pixmap.isNull():
                     placeholder = create_placeholder_image(smiles_part, 580, 200)
                     if placeholder and not placeholder.isNull():
-                        self.details_image_label.setPixmap(placeholder)
+                        # Scale to fit label while preserving aspect ratio
+                        scaled_placeholder = scale_pixmap_to_fit(placeholder, 
+                                                               self.details_image_label.width() or 580, 
+                                                               self.details_image_label.maximumHeight())
+                        self.details_image_label.setPixmap(scaled_placeholder)
                     else:
                         self.details_image_label.clear()
                         self.details_image_label.setText("Could not generate reaction image")
                 else:
-                    self.details_image_label.setPixmap(pixmap)
+                    # Scale to fit label while preserving aspect ratio
+                    scaled_pixmap = scale_pixmap_to_fit(pixmap, 
+                                                      self.details_image_label.width() or 580, 
+                                                      self.details_image_label.maximumHeight())
+                    self.details_image_label.setPixmap(scaled_pixmap)
             else:
                 self.details_image_label.clear()
                 self.details_image_label.setText("Invalid reaction format")
@@ -2021,16 +2055,19 @@ class SimpleReactionGUI(QMainWindow):
                             }
                         """
                     )
-                    image_label.setScaledContents(True)
+                    image_label.setScaledContents(False)  # Preserve aspect ratio
 
                     if pixmap and not pixmap.isNull():
-                        image_label.setPixmap(pixmap)
+                        # Scale to fit within reasonable bounds while preserving aspect ratio
+                        scaled_pixmap = scale_pixmap_to_fit(pixmap, 480, 140)
+                        image_label.setPixmap(scaled_pixmap)
                         container_layout.addWidget(image_label)
                     else:
                         # Fallback to placeholder pixmap
                         placeholder = create_placeholder_image(reaction_smiles, 480, 140)
                         if placeholder and not placeholder.isNull():
-                            image_label.setPixmap(placeholder)
+                            scaled_placeholder = scale_pixmap_to_fit(placeholder, 480, 140)
+                            image_label.setPixmap(scaled_placeholder)
                             container_layout.addWidget(image_label)
                         else:
                             # Final textual fallback
