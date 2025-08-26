@@ -831,6 +831,16 @@ class SampleReactionsBrowser(QDialog):
                     if any(tok in r for tok in tokens):
                         filtered.append(r)
 
+            # Special helper for C-N reactions (includes all C-N coupling types)
+            def add_cn_reactions():
+                for r in self.all_reactions:
+                    # Match all C-N coupling reactions
+                    if any(pattern in r for pattern in [
+                        "Buchwald-Hartwig", "Ullmann C-N", "Chan-Lam",
+                        "(C-N -", "(B-H -"  # Our comprehensive C-N test set
+                    ]):
+                        filtered.append(r)
+
             # Coupling-only toggle
             if coupling_only:
                 from sample_reactions import get_coupling_reactions
@@ -840,17 +850,24 @@ class SampleReactionsBrowser(QDialog):
             if cc:
                 add_by_tokens(["Suzuki", "Stille", "Sonogashira", "Heck", "Negishi", "Kumada"])
             if cn:
-                add_by_tokens(["Buchwald-Hartwig", "Ullmann C-N", "Chan-Lam"])
+                add_cn_reactions()  # Use special C-N handler
             if co:
                 add_by_tokens(["Ullmann Ether", "Mitsunobu"])
             if cs:
                 add_by_tokens(["C-S Coupling", "Thioether Formation"])
 
-            # Subcategories
+            # Subcategories - enhanced C-N handling
             if any(chk for _, chk in cc_sub):
                 add_by_tokens([name for name, chk in cc_sub if chk])
             if any(chk for _, chk in cn_sub):
-                add_by_tokens([name for name, chk in cn_sub if chk])
+                if self.category_checkboxes["cn_bh"].isChecked():
+                    # Buchwald-Hartwig: both explicit labels and our C-N test set
+                    add_by_tokens(["Buchwald-Hartwig", "(B-H -", "(C-N -"])
+                if self.category_checkboxes["cn_ullmann"].isChecked():
+                    # Ullmann: both explicit labels and our C-N test set
+                    add_by_tokens(["Ullmann C-N", "(C-N -"])
+                if self.category_checkboxes["cn_chanlam"].isChecked():
+                    add_by_tokens(["Chan-Lam"])
             if any(chk for _, chk in co_sub):
                 add_by_tokens([name for name, chk in co_sub if chk])
             if any(chk for _, chk in cs_sub):

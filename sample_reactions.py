@@ -3,11 +3,11 @@ Sample Reactions Data
 ====================
 
 This file contains comprehensive sample reaction SMILES for testing
-and demonstration purposes - over 50 diverse examples covering
-various reaction types.
+and demonstration purposes - over 80 diverse examples covering
+various reaction types, with extensive C-N coupling coverage.
 """
 
-# Comprehensive sample reactions for testing - over 50 diverse examples
+# Comprehensive sample reactions for testing - over 80 diverse examples
 SAMPLE_REACTIONS = [
     "Select a sample reaction...",
     
@@ -42,10 +42,11 @@ SAMPLE_REACTIONS = [
     "Brc1ccccc1.c1ccc([Zn]Cl)cc1>>c1ccc(-c2ccccc2)cc1 (Negishi - Ph-Ph)",
     
     # ═══════════════════════════════════════════════════════════
-    # C-N COUPLING REACTIONS (Amination)
+    # C-N COUPLING REACTIONS (Comprehensive Test Set)
+    # Both Ullmann (Cu-catalyzed) and Buchwald-Hartwig (Pd-catalyzed)
     # ═══════════════════════════════════════════════════════════
     
-    # Buchwald-Hartwig Amination (Basic examples - more comprehensive collection below)
+    # Classic Buchwald-Hartwig Examples (Pd-catalyzed)
     "Brc1ccccc1.Nc1ccccc1>>c1ccc(Nc2ccccc2)cc1 (Buchwald-Hartwig - Diphenylamine)",
     "Clc1ccncc1.NCC>>CCNc1ccncc1 (Buchwald-Hartwig - Pyridine ethylamine)",
     "Brc1ccc(C(F)(F)F)cc1.NC1CCCCC1>>FC(F)(F)c1ccc(NC2CCCCC2)cc1 (B-H - Cyclohexylamine)",
@@ -53,20 +54,72 @@ SAMPLE_REACTIONS = [
     "Brc1ccc2ccccc2c1.NCC>>CCNc1ccc2ccccc2c1 (B-H - Naphthylamine)",
     "Clc1nc2ccccc2[nH]1.Nc1ccccc1>>c1ccc(Nc2nc3ccccc3[nH]2)cc1 (B-H - Benzimidazole)",
 
-    # Ullmann C-N (Copper-catalyzed N-arylation / Goldberg-type)
-    # Fixed SMILES for amines so both reactants parse and render
-    "Brc1ccccc1.Nc1ccccc1>>c1ccc(Nc2ccccc2)cc1 (Ullmann C-N - Aniline formation)",
-    "Clc1ccc(C)cc1.CC(N)C>>Cc1ccc(NC(C)C)cc1 (Ullmann C-N - Isopropylamine coupling)",
-    # Additional focused Ullmann examples
-    "Brc1ccccc1.CN>>c1ccc(NC)cc1 (Ullmann C-N - Methylamine coupling)",
-    "Brc1ccccc1.CCN>>c1ccc(NCC)cc1 (Ullmann C-N - Ethylamine coupling)",
-    "Brc1ccccc1.N1CCOCC1>>c1ccc(N1CCOCC1)cc1 (Ullmann C-N - Morpholine coupling)",
-    "Brc1ccccc1.N1CCCCC1>>c1ccc(N2CCCCC2)cc1 (Ullmann C-N - Piperidine coupling)",
-    "Clc1ccncc1.Nc1ccccc1>>c1ccc(Nc2ccncc2)cc1 (Ullmann C-N - 4-chloropyridine + aniline)",
-    "Ic1ccccc1.CN(C)C>>CN(C)c1ccccc1 (Ullmann C-N - Dimethylamine with aryl iodide)",
-    "Brc1ccc(OC)cc1.Nc1ccccc1>>COc1ccc(Nc2ccccc2)cc1 (Ullmann C-N - Anisyl bromide + aniline)",
-    "Brc1ccc(C(F)(F)F)cc1.CN(C)C>>CN(C)c1ccc(C(F)(F)F)cc1 (Ullmann C-N - CF3 aryl + dimethylamine)",
-    "Brc1ccncc1.NC(C)C>>c1ccc(NC(C)C)cn1 (Ullmann C-N - Heteroaryl bromide + i-PrNH2)",
+    # ═══════════════════════════════════════════════════════════
+    # COMPREHENSIVE C-N COUPLING TEST SET (Ullmann & Buchwald)
+    # 40+ diverse examples covering substrate scope and selectivity
+    # ═══════════════════════════════════════════════════════════
+    
+    # Primary anilines with various aryl halides
+    "Brc1ccccc1.Nc1ccccc1>>c1ccc(Nc2ccccc2)cc1 (C-N - Ph-Br + aniline → diphenylamine)",
+    "Clc1ccccc1.Nc1ccccc1>>c1ccc(Nc2ccccc2)cc1 (C-N - Ph-Cl + aniline → diphenylamine)",
+    "Ic1ccccc1.Nc1ccccc1>>c1ccc(Nc2ccccc2)cc1 (C-N - Ph-I + aniline → diphenylamine)",
+    "Brc1ccc(OC)cc1.Nc1ccccc1>>COc1ccc(Nc2ccccc2)cc1 (C-N - 4-MeO-Ph-Br + aniline)",
+    "Brc1ccc(C)cc1.Nc1ccccc1>>Cc1ccc(Nc2ccccc2)cc1 (C-N - 4-Me-Ph-Br + aniline)",
+    "Brc1ccc(C(F)(F)F)cc1.Nc1ccccc1>>FC(F)(F)c1ccc(Nc2ccccc2)cc1 (C-N - 4-CF3-Ph-Br + aniline)",
+    "Brc1ccc(C#N)cc1.Nc1ccccc1>>N#Cc1ccc(Nc2ccccc2)cc1 (C-N - 4-CN-Ph-Br + aniline)",
+    "Brc1ccc([N+](=O)[O-])cc1.Nc1ccccc1>>[O-][N+](=O)c1ccc(Nc2ccccc2)cc1 (C-N - 4-NO2-Ph-Br + aniline)",
+    "Brc1ccc(C(=O)C)cc1.Nc1ccccc1>>CC(=O)c1ccc(Nc2ccccc2)cc1 (C-N - 4-acetyl-Ph-Br + aniline)",
+    "Brc1ccc(F)cc1.Nc1ccccc1>>Fc1ccc(Nc2ccccc2)cc1 (C-N - 4-F-Ph-Br + aniline)",
+    
+    # Heteroaryl halides with aniline
+    "Clc1ccncc1.Nc1ccccc1>>c1ccc(Nc2ccncc2)cc1 (C-N - 4-Cl-pyridine + aniline)",
+    "Brc1ccncc1.Nc1ccccc1>>c1ccc(Nc2ccncc2)cc1 (C-N - 4-Br-pyridine + aniline)",
+    "Clc1cccnc1.Nc1ccccc1>>c1ccc(Nc2cccnc2)cc1 (C-N - 3-Cl-pyridine + aniline)",
+    "Brc1cnccn1.Nc1ccccc1>>c1ccc(Nc2cnccn2)cc1 (C-N - 2-Br-pyrimidine + aniline)",
+    "Clc1cccc2ncccc12.Nc1ccccc1>>c1ccc(Nc2cccc3ncccc23)cc1 (C-N - 4-Cl-quinoline + aniline)",
+    "Brc1ccc2[nH]ccc2c1.Nc1ccccc1>>c1ccc(Nc2ccc3[nH]ccc3c2)cc1 (C-N - 5-Br-indole + aniline)",
+    
+    # Substituted anilines with aryl halides
+    "Brc1ccccc1.Nc1ccc(C)cc1>>Cc1ccc(Nc2ccccc2)cc1 (C-N - Ph-Br + 4-methylaniline)",
+    "Brc1ccccc1.Nc1ccc(OC)cc1>>COc1ccc(Nc2ccccc2)cc1 (C-N - Ph-Br + 4-methoxyaniline)",
+    "Brc1ccccc1.Nc1ccc(F)cc1>>Fc1ccc(Nc2ccccc2)cc1 (C-N - Ph-Br + 4-fluoroaniline)",
+    "Brc1ccccc1.Nc1ccc(C(F)(F)F)cc1>>FC(F)(F)c1ccc(Nc2ccccc2)cc1 (C-N - Ph-Br + 4-CF3-aniline)",
+    "Brc1ccccc1.Nc1cccc(C)c1>>Cc1cccc(Nc2ccccc2)c1 (C-N - Ph-Br + 3-methylaniline)",
+    "Brc1ccccc1.Nc1cc(C)cc(C)c1>>Cc1cc(C)cc(Nc2ccccc2)c1 (C-N - Ph-Br + 3,5-dimethylaniline)",
+    
+    # Primary aliphatic amines
+    "Brc1ccccc1.CN>>CNc1ccccc1 (C-N - Ph-Br + methylamine)",
+    "Brc1ccccc1.CCN>>CCNc1ccccc1 (C-N - Ph-Br + ethylamine)",
+    "Brc1ccccc1.CCCN>>CCCNc1ccccc1 (C-N - Ph-Br + propylamine)",
+    "Brc1ccccc1.CC(C)N>>CC(C)Nc1ccccc1 (C-N - Ph-Br + isopropylamine)",
+    "Brc1ccccc1.CC(C)(C)N>>CC(C)(C)Nc1ccccc1 (C-N - Ph-Br + tert-butylamine)",
+    "Brc1ccccc1.NCc1ccccc1>>c1ccc(CNc2ccccc2)cc1 (C-N - Ph-Br + benzylamine)",
+    "Brc1ccccc1.NCCOC>>COCCNc1ccccc1 (C-N - Ph-Br + 2-methoxyethylamine)",
+    
+    # Secondary aliphatic amines
+    "Brc1ccccc1.CCN(CC)CC>>CCN(CC)c1ccccc1 (C-N - Ph-Br + diethylamine)",
+    "Brc1ccccc1.CN(C)Cc1ccccc1>>CN(Cc1ccccc1)c2ccccc2 (C-N - Ph-Br + N,N-dimethylbenzylamine)",
+    
+    # Cyclic amines (heterocycles)
+    "Brc1ccccc1.N1CCCC1>>c1ccc(N2CCCC2)cc1 (C-N - Ph-Br + pyrrolidine)",
+    "Brc1ccccc1.N1CCCCC1>>c1ccc(N2CCCCC2)cc1 (C-N - Ph-Br + piperidine)",
+    "Brc1ccccc1.N1CCOCC1>>c1ccc(N2CCOCC2)cc1 (C-N - Ph-Br + morpholine)",
+    "Brc1ccccc1.N1CCN(C)CC1>>CN1CCN(c2ccccc2)CC1 (C-N - Ph-Br + N-methylpiperazine)",
+    "Brc1ccccc1.N1CCC(O)CC1>>OC1CCN(c2ccccc2)CC1 (C-N - Ph-Br + 4-hydroxypiperidine)",
+    "Brc1ccccc1.N1Cc2ccccc2C1>>c1ccc(N2Cc3ccccc3C2)cc1 (C-N - Ph-Br + tetrahydroisoquinoline)",
+    
+    # Dihalide substrates (potential bis-amination)
+    "Brc1ccc(Br)cc1.Nc1ccccc1>>c1ccc(Nc2ccc(Nc3ccccc3)cc2)cc1 (C-N - 1,4-dibromobenzene + aniline)",
+    
+    # Ortho-substituted challenging substrates
+    "Brc1ccccc1C.Nc1ccccc1>>Cc1ccccc1Nc1ccccc1 (C-N - 2-methylbromobenzene + aniline)",
+    "Brc1ccccc1OC.Nc1ccccc1>>COc1ccccc1Nc1ccccc1 (C-N - 2-bromoanisole + aniline)",
+    "Brc1ccccc1C(=O)C.Nc1ccccc1>>CC(=O)c1ccccc1Nc1ccccc1 (C-N - 2-bromoacetophenone + aniline)",
+    
+    # Pharmaceutical-relevant scaffolds
+    "Clc1ccc2nc(Cl)ccc2c1.Nc1ccccc1>>c1ccc(Nc2ccc3cc(Nc4ccccc4)ccc3n2)cc1 (C-N - 4,7-dichloroquinoline + aniline)",
+    "Brc1ccc2c(c1)OCO2.Nc1ccccc1>>c1ccc(Nc2ccc3c(c2)OCO3)cc1 (C-N - 5-bromobenzo[d][1,3]dioxole + aniline)",
+    "Clc1nc2ccccc2s1.Nc1ccccc1>>c1ccc(Nc2nc3ccccc3s2)cc1 (C-N - 2-chlorobenzothiazole + aniline)",
     
     # Chan-Lam Coupling (C-N)
     "c1ccccc1B(O)O.Nc1ccccc1>>[O]>>c1ccc(Nc2ccccc2)cc1 (Chan-Lam - Oxidative)",
