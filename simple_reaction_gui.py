@@ -2223,15 +2223,37 @@ class SimpleReactionGUI(QMainWindow):
                 pass
             
             # Read the dataset
-            # Support CSV and TSV datasets uniformly
-            if dataset_path.lower().endswith('.tsv'):
-                df = pd.read_csv(dataset_path, sep='\t')
+            # Support JSONL format
+            if dataset_path.lower().endswith('.jsonl'):
+                # Load JSONL file
+                reactions_data = []
+                with open(dataset_path, 'r', encoding='utf-8') as f:
+                    for line in f:
+                        line = line.strip()
+                        if line:
+                            try:
+                                reaction = json.loads(line)
+                                reactions_data.append(reaction)
+                            except json.JSONDecodeError as e:
+                                print(f"Error parsing JSONL line: {e}")
+                                continue
+                
+                if not reactions_data:
+                    print("No valid reactions in JSONL dataset")
+                    return self.get_mock_related_reactions(input_smiles)
             else:
-                df = pd.read_csv(dataset_path)
-            
-            if df.empty:
-                print("Dataset is empty")
-                return self.get_mock_related_reactions(input_smiles)
+                # Legacy CSV/TSV support
+                if dataset_path.lower().endswith('.tsv'):
+                    df = pd.read_csv(dataset_path, sep='\t')
+                else:
+                    df = pd.read_csv(dataset_path)
+                
+                if df.empty:
+                    print("Dataset is empty")
+                    return self.get_mock_related_reactions(input_smiles)
+                
+                # Convert DataFrame to list of dicts for unified processing
+                reactions_data = df.to_dict('records')
             
             # Parse input reaction
             if ">>" not in input_smiles:
@@ -2242,7 +2264,7 @@ class SimpleReactionGUI(QMainWindow):
             
             if not rdkit_available:
                 # Fallback: simple text similarity
-                return self._get_fallback_similar_reactions(df, input_smiles, top_k)
+                return self._get_fallback_similar_reactions(reactions_data, input_smiles, top_k, is_jsonl=dataset_path.lower().endswith('.jsonl'))
             
             # Calculate chemical similarity using RDKit
             input_reactant_mol = Chem.MolFromSmiles(input_reactants.strip())
@@ -2250,7 +2272,7 @@ class SimpleReactionGUI(QMainWindow):
             
             if input_reactant_mol is None or input_product_mol is None:
                 print("Failed to parse input molecules")
-                return self._get_fallback_similar_reactions(df, input_smiles, top_k)
+                return self._get_fallback_similar_reactions(reactions_data, input_smiles, top_k, is_jsonl=dataset_path.lower().endswith('.jsonl'))
             
             # Generate fingerprints for input
             input_reactant_fp = rdMolDescriptors.GetMorganFingerprintAsBitVect(input_reactant_mol, 2, nBits=2048)
@@ -2258,11 +2280,18 @@ class SimpleReactionGUI(QMainWindow):
             
             similarities = []
             
-            for idx, row in df.iterrows():
+            for idx, reaction_data in enumerate(reactions_data):
                 try:
-                    # Get reactant and product SMILES from dataset
-                    reactant_smiles = row.get('ReactantSMILES', '')
-                    product_smiles = row.get('ProductSMILES', '')
+                    # Extract SMILES based on format
+                    if dataset_path.lower().endswith('.jsonl'):
+                        # JSONL format
+                        smiles_data = reaction_data.get('smiles', {})
+                        reactant_smiles = smiles_data.get('reactants', '')
+                        product_smiles = smiles_data.get('products', '')
+                    else:
+                        # Legacy CSV/TSV format
+                        reactant_smiles = reaction_data.get('ReactantSMILES', '')
+                        product_smiles = reaction_data.get('ProductSMILES', '')
                     
                     if not reactant_smiles or not product_smiles:
                         continue
@@ -2285,19 +2314,24 @@ class SimpleReactionGUI(QMainWindow):
                     # Combined similarity (average of reactant and product similarity)
                     combined_similarity = (reactant_similarity + product_similarity) / 2.0
                     
-                    # Create reaction entry
-                    reaction_entry = {
-                        'reaction_smiles': f"{reactant_smiles}>>{product_smiles}",
-                        'similarity': combined_similarity,
-                        'yield': row.get('Yield_%', 0.0),
-                        'catalyst': self._parse_json_field(row.get('CatalystCoreDetail', row.get('CoreDetail', '[]'))),
-                        'ligand': self._parse_json_field(row.get('Ligand', '[]')),
-                        'solvent': self._parse_json_field(row.get('Solvent', '[]')),
-                        'temperature': row.get('Temperature_C', ''),
-                        'time': row.get('Time_h', ''),
-                        'reference': row.get('Reference', ''),
-                        'reaction_id': row.get('ReactionID', f'RXN_{idx}')
-                    }
+                    # Create reaction entry based on format
+                    if dataset_path.lower().endswith('.jsonl'):
+                        # JSONL format - extract data from structured format
+                        reaction_entry = self._extract_jsonl_reaction_data(reaction_data, reactant_smiles, product_smiles, combined_similarity, idx)
+                    else:
+                        # Legacy format
+                        reaction_entry = {
+                            'reaction_smiles': f"{reactant_smiles}>>{product_smiles}",
+                            'similarity': combined_similarity,
+                            'yield': reaction_data.get('Yield_%', 0.0),
+                            'catalyst': self._parse_json_field(reaction_data.get('CatalystCoreDetail', reaction_data.get('CoreDetail', '[]'))),
+                            'ligand': self._parse_json_field(reaction_data.get('Ligand', '[]')),
+                            'solvent': self._parse_json_field(reaction_data.get('Solvent', '[]')),
+                            'temperature': reaction_data.get('Temperature_C', ''),
+                            'time': reaction_data.get('Time_h', ''),
+                            'reference': reaction_data.get('Reference', ''),
+                            'reaction_id': reaction_data.get('ReactionID', f'RXN_{idx}')
+                        }
                     
                     similarities.append((combined_similarity, reaction_entry))
                     
@@ -2307,7 +2341,7 @@ class SimpleReactionGUI(QMainWindow):
             
             if not similarities:
                 print("No valid similarities calculated")
-                return self._get_fallback_similar_reactions(df, input_smiles, top_k)
+                return self._get_fallback_similar_reactions(reactions_data, input_smiles, top_k, is_jsonl=dataset_path.lower().endswith('.jsonl'))
             
             # Sort by similarity (highest first) and return top_k
             similarities.sort(key=lambda x: x[0], reverse=True)
@@ -2320,6 +2354,89 @@ class SimpleReactionGUI(QMainWindow):
             print(f"Error in dataset similarity calculation: {e}")
             # Fallback to mock data if anything goes wrong
             return self.get_mock_related_reactions(input_smiles)
+    
+    def _extract_jsonl_reaction_data(self, reaction_data, reactant_smiles, product_smiles, similarity, idx):
+        """Extract and format reaction data from JSONL format"""
+        try:
+            # Extract basic reaction info
+            reaction_entry = {
+                'reaction_smiles': f"{reactant_smiles}>>{product_smiles}",
+                'similarity': similarity,
+                'reaction_id': reaction_data.get('reaction_id', f'RXN_{idx}')
+            }
+            
+            # Extract conditions
+            conditions = reaction_data.get('conditions', {})
+            reaction_entry['yield'] = conditions.get('yield_pct', 0.0)
+            reaction_entry['temperature'] = conditions.get('temperature_c', '')
+            reaction_entry['time'] = conditions.get('time_h', '')
+            
+            # Extract catalyst information
+            catalyst_info = reaction_data.get('catalyst', {})
+            core_catalysts = catalyst_info.get('core', [])
+            ligands = catalyst_info.get('ligands', [])
+            
+            # Format catalyst names
+            if core_catalysts:
+                catalyst_names = [cat.get('name', '') for cat in core_catalysts if cat.get('name')]
+                reaction_entry['catalyst'] = ', '.join(catalyst_names) if catalyst_names else 'N/A'
+            else:
+                reaction_entry['catalyst'] = 'N/A'
+            
+            # Format ligand names
+            if ligands:
+                ligand_names = [lig.get('name', '') for lig in ligands if lig.get('name')]
+                reaction_entry['ligand'] = ', '.join(ligand_names) if ligand_names else 'N/A'
+            else:
+                reaction_entry['ligand'] = 'N/A'
+            
+            # Extract solvent information
+            solvents = reaction_data.get('solvents', [])
+            if solvents:
+                solvent_names = [sol.get('name', '') for sol in solvents if sol.get('name')]
+                reaction_entry['solvent'] = ', '.join(solvent_names) if solvent_names else 'N/A'
+            else:
+                reaction_entry['solvent'] = 'N/A'
+            
+            # Extract reference information
+            reference = reaction_data.get('reference', {})
+            if reference:
+                title = reference.get('title', '')
+                authors = reference.get('authors', '')
+                citation = reference.get('citation', '')
+                doi = reference.get('doi', '')
+                
+                ref_parts = []
+                if title:
+                    ref_parts.append(title)
+                if authors:
+                    ref_parts.append(f"Authors: {authors}")
+                if citation:
+                    ref_parts.append(citation)
+                if doi:
+                    ref_parts.append(f"DOI: {doi}")
+                
+                reaction_entry['reference'] = ' | '.join(ref_parts) if ref_parts else 'N/A'
+            else:
+                reaction_entry['reference'] = 'N/A'
+            
+            return reaction_entry
+            
+        except Exception as e:
+            print(f"Error extracting JSONL reaction data: {e}")
+            # Return minimal entry
+            return {
+                'reaction_smiles': f"{reactant_smiles}>>{product_smiles}",
+                'similarity': similarity,
+                'yield': 0.0,
+                'catalyst': 'N/A',
+                'ligand': 'N/A',
+                'solvent': 'N/A',
+                'temperature': '',
+                'time': '',
+                'reference': 'N/A',
+                'reaction_id': f'RXN_{idx}'
+            }
     
     def _parse_json_field(self, json_str):
         """Parse JSON field from dataset, handling various formats"""
@@ -2371,7 +2488,7 @@ class SimpleReactionGUI(QMainWindow):
         except (json.JSONDecodeError, ValueError):
             return str(json_str) if json_str else 'N/A'
     
-    def _get_fallback_similar_reactions(self, df, input_smiles, top_k):
+    def _get_fallback_similar_reactions(self, reactions_data, input_smiles, top_k, is_jsonl=False):
         """Fallback similarity when RDKit is not available"""
         import json
         
@@ -2382,32 +2499,54 @@ class SimpleReactionGUI(QMainWindow):
             hash_int = int(hash_obj.hexdigest()[:8], 16)
             
             # Select random but deterministic subset
-            n_reactions = min(len(df), 20)  # Work with subset for efficiency
-            start_idx = hash_int % max(1, len(df) - n_reactions)
-            subset_df = df.iloc[start_idx:start_idx + n_reactions]
+            n_reactions = min(len(reactions_data), 20)  # Work with subset for efficiency
+            start_idx = hash_int % max(1, len(reactions_data) - n_reactions)
+            
+            if is_jsonl:
+                # Handle JSONL format
+                subset_data = reactions_data[start_idx:start_idx + n_reactions]
+            else:
+                # Handle DataFrame (legacy format)
+                subset_data = reactions_data[start_idx:start_idx + n_reactions]
             
             selected_reactions = []
             
-            for idx, row in subset_df.head(top_k).iterrows():
+            # Process subset based on format
+            for idx, reaction_data in enumerate(subset_data[:top_k]):
                 try:
-                    reactant_smiles = row.get('ReactantSMILES', '')
-                    product_smiles = row.get('ProductSMILES', '')
-                    
-                    if not reactant_smiles or not product_smiles:
-                        continue
-                    
-                    reaction_entry = {
-                        'reaction_smiles': f"{reactant_smiles}>>{product_smiles}",
-                        'similarity': 0.5 + (hash_int % 30) / 100.0,  # Fake similarity 0.5-0.8
-                        'yield': row.get('Yield_%', 0.0),
-                        'catalyst': self._parse_json_field(row.get('CatalystCoreDetail', row.get('CoreDetail', '[]'))),
-                        'ligand': self._parse_json_field(row.get('Ligand', '[]')),
-                        'solvent': self._parse_json_field(row.get('Solvent', '[]')),
-                        'temperature': row.get('Temperature_C', ''),
-                        'time': row.get('Time_h', ''),
-                        'reference': row.get('Reference', ''),
-                        'reaction_id': row.get('ReactionID', f'RXN_{idx}')
-                    }
+                    if is_jsonl:
+                        # JSONL format
+                        smiles_data = reaction_data.get('smiles', {})
+                        reactant_smiles = smiles_data.get('reactants', '')
+                        product_smiles = smiles_data.get('products', '')
+                        
+                        if not reactant_smiles or not product_smiles:
+                            continue
+                        
+                        # Create reaction entry for JSONL
+                        fake_similarity = 0.5 + (hash_int % 30) / 100.0  # Fake similarity 0.5-0.8
+                        reaction_entry = self._extract_jsonl_reaction_data(reaction_data, reactant_smiles, product_smiles, fake_similarity, idx)
+                        
+                    else:
+                        # Legacy CSV/TSV format
+                        reactant_smiles = reaction_data.get('ReactantSMILES', '')
+                        product_smiles = reaction_data.get('ProductSMILES', '')
+                        
+                        if not reactant_smiles or not product_smiles:
+                            continue
+                        
+                        reaction_entry = {
+                            'reaction_smiles': f"{reactant_smiles}>>{product_smiles}",
+                            'similarity': 0.5 + (hash_int % 30) / 100.0,  # Fake similarity 0.5-0.8
+                            'yield': reaction_data.get('Yield_%', 0.0),
+                            'catalyst': self._parse_json_field(reaction_data.get('CatalystCoreDetail', reaction_data.get('CoreDetail', '[]'))),
+                            'ligand': self._parse_json_field(reaction_data.get('Ligand', '[]')),
+                            'solvent': self._parse_json_field(reaction_data.get('Solvent', '[]')),
+                            'temperature': reaction_data.get('Temperature_C', ''),
+                            'time': reaction_data.get('Time_h', ''),
+                            'reference': reaction_data.get('Reference', ''),
+                            'reaction_id': reaction_data.get('ReactionID', f'RXN_{idx}')
+                        }
                     
                     selected_reactions.append(reaction_entry)
                     

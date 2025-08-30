@@ -465,84 +465,167 @@ class EnhancedRecommendationEngine:
             if not os.path.isdir(data_dir):
                 return None
 
-            # Collect similarities across all dataset files (CSV/TSV)
+            # Collect similarities across all dataset files (CSV/TSV/JSONL)
             candidates: List[Dict] = []
             import csv
             for fname in os.listdir(data_dir):
-                if not (fname.lower().endswith('.csv') or fname.lower().endswith('.tsv')):
+                if not (fname.lower().endswith('.csv') or fname.lower().endswith('.tsv') or fname.lower().endswith('.jsonl')):
                     continue
                 path = os.path.join(data_dir, fname)
                 try:
-                    with open(path, 'r', encoding='utf-8') as f:
-                        # Auto-select delimiter by extension
-                        if fname.lower().endswith('.tsv'):
-                            reader = csv.DictReader(f, delimiter='\t')
-                        else:
-                            reader = csv.DictReader(f)
-                        for row in reader:
-                            rs = row.get('ReactantSMILES') or ''
-                            ps = row.get('ProductSMILES') or ''
-                            rfp = _fp_from_mixture(rs)
-                            pfp = _fp_from_mixture(ps) if ps else None
-                            sim_r = 0.0
-                            sim_p = 0.0
-                            try:
-                                if qfp_r is not None and rfp is not None:
-                                    sim_r = DataStructs.TanimotoSimilarity(qfp_r, rfp)
-                                if qfp_p is not None and pfp is not None:
-                                    sim_p = DataStructs.TanimotoSimilarity(qfp_p, pfp)
-                            except Exception:
-                                pass
-                            # Weighted combination; favor product when available
-                            if qfp_p is not None and pfp is not None:
-                                sim = 0.6 * sim_p + 0.4 * sim_r
+                    if fname.lower().endswith('.jsonl'):
+                        # Handle JSONL format
+                        with open(path, 'r', encoding='utf-8') as f:
+                            for line in f:
+                                line = line.strip()
+                                if not line:
+                                    continue
+                                try:
+                                    reaction_data = json.loads(line)
+                                    # Extract SMILES from JSONL structure
+                                    smiles_data = reaction_data.get('smiles', {})
+                                    rs = smiles_data.get('reactants', '')
+                                    ps = smiles_data.get('products', '')
+                                    
+                                    if not rs or not ps:
+                                        continue
+                                    
+                                    rfp = _fp_from_mixture(rs)
+                                    pfp = _fp_from_mixture(ps) if ps else None
+                                    sim_r = 0.0
+                                    sim_p = 0.0
+                                    try:
+                                        if qfp_r is not None and rfp is not None:
+                                            sim_r = DataStructs.TanimotoSimilarity(qfp_r, rfp)
+                                        if qfp_p is not None and pfp is not None:
+                                            sim_p = DataStructs.TanimotoSimilarity(qfp_p, pfp)
+                                    except Exception:
+                                        pass
+                                    # Weighted combination; favor product when available
+                                    if qfp_p is not None and pfp is not None:
+                                        sim = 0.6 * sim_p + 0.4 * sim_r
+                                    else:
+                                        sim = sim_r
+                                    if sim <= 0:
+                                        continue
+                                    
+                                    # Extract data from JSONL structure
+                                    conditions = reaction_data.get('conditions', {})
+                                    catalyst_info = reaction_data.get('catalyst', {})
+                                    reference_info = reaction_data.get('reference', {})
+                                    
+                                    # Format catalyst information
+                                    core_catalysts = catalyst_info.get('core', [])
+                                    ligands = catalyst_info.get('ligands', [])
+                                    
+                                    catalyst_names = [cat.get('name', '') for cat in core_catalysts if cat.get('name')]
+                                    ligand_names = [lig.get('name', '') for lig in ligands if lig.get('name')]
+                                    
+                                    # Format solvent information
+                                    solvents = reaction_data.get('solvents', [])
+                                    solvent_names = [sol.get('name', '') for sol in solvents if sol.get('name')]
+                                    
+                                    # Format reagent information (bases, etc.)
+                                    reagents = reaction_data.get('reagents', [])
+                                    reagent_names = [reg.get('name', '') for reg in reagents if reg.get('name')]
+                                    base_names = [reg.get('name', '') for reg in reagents if reg.get('role') == 'BASE']
+                                    
+                                    candidates.append({
+                                        'ReactionID': reaction_data.get('reaction_id', ''),
+                                        'ReactionType': reaction_data.get('reaction_type', ''),
+                                        'CondKey': reaction_data.get('signatures', {}).get('cond_key', ''),
+                                        'ReactantSMILES': rs,
+                                        'ProductSMILES': ps,
+                                        'Ligand': ', '.join(ligand_names) if ligand_names else '',
+                                        'Reagent': ', '.join(reagent_names) if reagent_names else '',
+                                        'ReagentRole': ', '.join([reg.get('role', '') for reg in reagents if reg.get('role')]),
+                                        'RGTName': ', '.join(base_names) if base_names else '',
+                                        'SOLName': ', '.join(solvent_names) if solvent_names else '',
+                                        'Solvent': ', '.join(solvent_names) if solvent_names else '',
+                                        'CoreDetail': ', '.join(catalyst_names) if catalyst_names else '',
+                                        'CoreGeneric': ', '.join(catalyst_info.get('generic', [])) if catalyst_info.get('generic') else '',
+                                        'YieldPct': conditions.get('yield_pct', ''),
+                                        'Temperature': conditions.get('temperature_c', ''),
+                                        'Time': conditions.get('time_h', ''),
+                                        'CatalystLike': ', '.join(catalyst_names) if catalyst_names else '',
+                                        'Reference': reference_info.get('raw', '') or reference_info.get('title', ''),
+                                        'DatasetFile': fname,
+                                        'similarity': float(sim)
+                                    })
+                                except json.JSONDecodeError:
+                                    continue
+                    else:
+                        # Handle CSV/TSV format (legacy)
+                        with open(path, 'r', encoding='utf-8') as f:
+                            # Auto-select delimiter by extension
+                            if fname.lower().endswith('.tsv'):
+                                reader = csv.DictReader(f, delimiter='\t')
                             else:
-                                sim = sim_r
-                            if sim <= 0:
-                                continue
-                            # Flexible field harvesting for richer hit details
-                            yield_val = (
-                                row.get('Yield') or row.get('Yield_%') or row.get('Yield(%)') or
-                                row.get('Yield%') or row.get('Yield %') or row.get('Yield_pct') or ''
-                            )
-                            temp_val = (
-                                row.get('Temperature') or row.get('Temp') or row.get('Temperature_C') or
-                                row.get('TempC') or row.get('Temp_C') or ''
-                            )
-                            time_val = (
-                                row.get('Time') or row.get('Hours') or row.get('Time_h') or row.get('Duration') or ''
-                            )
-                            catalyst_val = (
-                                row.get('Catalyst') or row.get('Cat') or row.get('CopperSource') or
-                                row.get('PdSource') or row.get('Metal') or ''
-                            )
-                            reference_val = (
-                                row.get('Reference') or row.get('DOI') or row.get('URL') or
-                                row.get('Source') or row.get('JournalRef') or ''
-                            )
-                            candidates.append({
-                                'ReactionID': row.get('ReactionID') or '',
-                                'ReactionType': row.get('ReactionType') or '',
-                                'CondKey': row.get('CondKey') or '',
-                                'ReactantSMILES': rs,
-                                'ProductSMILES': ps,
-                                'Ligand': row.get('Ligand') or '',
-                                # Support both legacy and new columns
-                                'Reagent': row.get('Reagent') or row.get('ReagentRaw') or '',
-                                'ReagentRole': row.get('ReagentRole') or '',
-                                'RGTName': row.get('RGTName') or '',
-                                'SOLName': row.get('SOLName') or '',
-                                'Solvent': row.get('Solvent') or '',
-                                'CoreDetail': row.get('CoreDetail') or '',
-                                'CoreGeneric': row.get('CoreGeneric') or '',
-                                'YieldPct': yield_val,
-                                'Temperature': temp_val,
-                                'Time': time_val,
-                                'CatalystLike': catalyst_val,
-                                'Reference': reference_val,
-                                'DatasetFile': fname,
-                                'similarity': float(sim)
-                            })
+                                reader = csv.DictReader(f)
+                            for row in reader:
+                                rs = row.get('ReactantSMILES') or ''
+                                ps = row.get('ProductSMILES') or ''
+                                rfp = _fp_from_mixture(rs)
+                                pfp = _fp_from_mixture(ps) if ps else None
+                                sim_r = 0.0
+                                sim_p = 0.0
+                                try:
+                                    if qfp_r is not None and rfp is not None:
+                                        sim_r = DataStructs.TanimotoSimilarity(qfp_r, rfp)
+                                    if qfp_p is not None and pfp is not None:
+                                        sim_p = DataStructs.TanimotoSimilarity(qfp_p, pfp)
+                                except Exception:
+                                    pass
+                                # Weighted combination; favor product when available
+                                if qfp_p is not None and pfp is not None:
+                                    sim = 0.6 * sim_p + 0.4 * sim_r
+                                else:
+                                    sim = sim_r
+                                if sim <= 0:
+                                    continue
+                                # Flexible field harvesting for richer hit details
+                                yield_val = (
+                                    row.get('Yield') or row.get('Yield_%') or row.get('Yield(%)') or
+                                    row.get('Yield%') or row.get('Yield %') or row.get('Yield_pct') or ''
+                                )
+                                temp_val = (
+                                    row.get('Temperature') or row.get('Temp') or row.get('Temperature_C') or
+                                    row.get('TempC') or row.get('Temp_C') or ''
+                                )
+                                time_val = (
+                                    row.get('Time') or row.get('Hours') or row.get('Time_h') or row.get('Duration') or ''
+                                )
+                                catalyst_val = (
+                                    row.get('Catalyst') or row.get('Cat') or row.get('CopperSource') or
+                                    row.get('PdSource') or row.get('Metal') or ''
+                                )
+                                reference_val = (
+                                    row.get('Reference') or row.get('DOI') or row.get('URL') or
+                                    row.get('Source') or row.get('JournalRef') or ''
+                                )
+                                candidates.append({
+                                    'ReactionID': row.get('ReactionID') or '',
+                                    'ReactionType': row.get('ReactionType') or '',
+                                    'CondKey': row.get('CondKey') or '',
+                                    'ReactantSMILES': rs,
+                                    'ProductSMILES': ps,
+                                    'Ligand': row.get('Ligand') or '',
+                                    # Support both legacy and new columns
+                                    'Reagent': row.get('Reagent') or row.get('ReagentRaw') or '',
+                                    'ReagentRole': row.get('ReagentRole') or '',
+                                    'RGTName': row.get('RGTName') or '',
+                                    'SOLName': row.get('SOLName') or '',
+                                    'Solvent': row.get('Solvent') or '',
+                                    'CoreDetail': row.get('CoreDetail') or '',
+                                    'CoreGeneric': row.get('CoreGeneric') or '',
+                                    'YieldPct': yield_val,
+                                    'Temperature': temp_val,
+                                    'Time': time_val,
+                                    'CatalystLike': catalyst_val,
+                                    'Reference': reference_val,
+                                    'DatasetFile': fname,
+                                    'similarity': float(sim)
+                                })
                 except Exception:
                     continue
 
@@ -975,38 +1058,67 @@ class EnhancedRecommendationEngine:
                     return str(tok).strip() if tok is not None else ''
 
             for fname in os.listdir(data_dir):
-                if not (fname.lower().endswith('.csv') or fname.lower().endswith('.tsv')):
+                if not (fname.lower().endswith('.csv') or fname.lower().endswith('.tsv') or fname.lower().endswith('.jsonl')):
                     continue
                 path = os.path.join(data_dir, fname)
                 try:
-                    import csv
-                    with open(path, 'r', encoding='utf-8') as f:
-                        reader = csv.DictReader(f, delimiter='\t') if fname.lower().endswith('.tsv') else csv.DictReader(f)
-                        for row in reader:
-                            rtype = (row.get('ReactionType') or '').strip()
-                            if not rtype:
-                                continue
-                            # Simple match: same type token (case-insensitive)
-                            if rtype.lower() != (reaction_type or '').lower():
-                                continue
-                            lig_raw = row.get('Ligand') or ''
-                            if not lig_raw:
-                                continue
-                            # Ligand field often like ["L-Proline"] or a list string
-                            # Strip brackets/quotes and split by comma when safe
-                            items = []
-                            s = str(lig_raw).strip()
-                            # crude parse: remove [] and quotes
-                            s = s.strip('[]')
-                            s = s.replace('"', '').replace("'", '')
-                            # split by comma only if present
-                            parts = [p.strip() for p in s.split(',') if p.strip()]
-                            items = parts if parts else ([s] if s else [])
-                            for it in items:
-                                if not it:
+                    if fname.lower().endswith('.jsonl'):
+                        # Handle JSONL format
+                        with open(path, 'r', encoding='utf-8') as f:
+                            for line in f:
+                                line = line.strip()
+                                if not line:
                                     continue
-                                name = _name_only(it)
-                                evidence[name] = evidence.get(name, 0) + 1
+                                try:
+                                    reaction_data = json.loads(line)
+                                    # Check reaction type match
+                                    rtype = (reaction_data.get('reaction_type') or '').strip()
+                                    if not rtype:
+                                        continue
+                                    if rtype.lower() != (reaction_type or '').lower():
+                                        continue
+                                    
+                                    # Extract ligands from catalyst information
+                                    catalyst_info = reaction_data.get('catalyst', {})
+                                    ligands = catalyst_info.get('ligands', [])
+                                    
+                                    for ligand in ligands:
+                                        name = _name_only(ligand.get('name', ''))
+                                        if name:
+                                            evidence[name] = evidence.get(name, 0) + 1
+                                            
+                                except json.JSONDecodeError:
+                                    continue
+                    else:
+                        # Handle CSV/TSV format (legacy)
+                        import csv
+                        with open(path, 'r', encoding='utf-8') as f:
+                            reader = csv.DictReader(f, delimiter='\t') if fname.lower().endswith('.tsv') else csv.DictReader(f)
+                            for row in reader:
+                                rtype = (row.get('ReactionType') or '').strip()
+                                if not rtype:
+                                    continue
+                                # Simple match: same type token (case-insensitive)
+                                if rtype.lower() != (reaction_type or '').lower():
+                                    continue
+                                lig_raw = row.get('Ligand') or ''
+                                if not lig_raw:
+                                    continue
+                                # Ligand field often like ["L-Proline"] or a list string
+                                # Strip brackets/quotes and split by comma when safe
+                                items = []
+                                s = str(lig_raw).strip()
+                                # crude parse: remove [] and quotes
+                                s = s.strip('[]')
+                                s = s.replace('"', '').replace("'", '')
+                                # split by comma only if present
+                                parts = [p.strip() for p in s.split(',') if p.strip()]
+                                items = parts if parts else ([s] if s else [])
+                                for it in items:
+                                    if not it:
+                                        continue
+                                    name = _name_only(it)
+                                    evidence[name] = evidence.get(name, 0) + 1
                 except Exception:
                     # ignore a bad file
                     continue
@@ -1039,28 +1151,55 @@ class EnhancedRecommendationEngine:
                 except Exception:
                     return str(tok).strip() if tok is not None else ''
             for fname in os.listdir(data_dir):
-                if not (fname.lower().endswith('.csv') or fname.lower().endswith('.tsv')):
+                if not (fname.lower().endswith('.csv') or fname.lower().endswith('.tsv') or fname.lower().endswith('.jsonl')):
                     continue
                 path = os.path.join(data_dir, fname)
                 try:
-                    import csv
-                    with open(path, 'r', encoding='utf-8') as f:
-                        reader = csv.DictReader(f, delimiter='\t') if fname.lower().endswith('.tsv') else csv.DictReader(f)
-                        for row in reader:
-                            rtype = (row.get('ReactionType') or '').strip()
-                            if not rtype or rtype.lower() != (reaction_type or '').lower():
-                                continue
-                            raw = row.get('Solvent') or row.get('SOLName') or ''
-                            if not raw:
-                                continue
-                            s = str(raw).strip().strip('[]').replace('"', '').replace("'", '')
-                            parts = [p.strip() for p in s.split(',') if p.strip()]
-                            items = parts if parts else ([s] if s else [])
-                            for it in items:
-                                if not it:
+                    if fname.lower().endswith('.jsonl'):
+                        # Handle JSONL format
+                        with open(path, 'r', encoding='utf-8') as f:
+                            for line in f:
+                                line = line.strip()
+                                if not line:
                                     continue
-                                name = _name_only(it)
-                                evidence[name] = evidence.get(name, 0) + 1
+                                try:
+                                    reaction_data = json.loads(line)
+                                    # Check reaction type match
+                                    rtype = (reaction_data.get('reaction_type') or '').strip()
+                                    if not rtype:
+                                        continue
+                                    if rtype.lower() != (reaction_type or '').lower():
+                                        continue
+                                    
+                                    # Extract solvents
+                                    solvents = reaction_data.get('solvents', [])
+                                    for solvent in solvents:
+                                        name = _name_only(solvent.get('name', ''))
+                                        if name:
+                                            evidence[name] = evidence.get(name, 0) + 1
+                                            
+                                except json.JSONDecodeError:
+                                    continue
+                    else:
+                        # Handle CSV/TSV format (legacy)
+                        import csv
+                        with open(path, 'r', encoding='utf-8') as f:
+                            reader = csv.DictReader(f, delimiter='\t') if fname.lower().endswith('.tsv') else csv.DictReader(f)
+                            for row in reader:
+                                rtype = (row.get('ReactionType') or '').strip()
+                                if not rtype or rtype.lower() != (reaction_type or '').lower():
+                                    continue
+                                raw = row.get('Solvent') or row.get('SOLName') or ''
+                                if not raw:
+                                    continue
+                                s = str(raw).strip().strip('[]').replace('"', '').replace("'", '')
+                                parts = [p.strip() for p in s.split(',') if p.strip()]
+                                items = parts if parts else ([s] if s else [])
+                                for it in items:
+                                    if not it:
+                                        continue
+                                    name = _name_only(it)
+                                    evidence[name] = evidence.get(name, 0) + 1
                 except Exception:
                     continue
             if evidence:
@@ -1111,22 +1250,51 @@ class EnhancedRecommendationEngine:
                             break
 
             for fname in os.listdir(data_dir):
-                if not (fname.lower().endswith('.csv') or fname.lower().endswith('.tsv')):
+                if not (fname.lower().endswith('.csv') or fname.lower().endswith('.tsv') or fname.lower().endswith('.jsonl')):
                     continue
                 path = os.path.join(data_dir, fname)
                 try:
-                    import csv
-                    with open(path, 'r', encoding='utf-8') as f:
-                        reader = csv.DictReader(f, delimiter='\t') if fname.lower().endswith('.tsv') else csv.DictReader(f)
-                        for row in reader:
-                            rtype = (row.get('ReactionType') or '').strip()
-                            if not rtype or rtype.lower() != (reaction_type or '').lower():
-                                continue
-                            # check common columns
-                            # New column name Reagent (with roles in ReagentRole)
-                            _maybe_add(row.get('Reagent') or row.get('ReagentRaw') or '')
-                            _maybe_add(row.get('RGTName') or '')
-                            _maybe_add(row.get('Base') or '')
+                    if fname.lower().endswith('.jsonl'):
+                        # Handle JSONL format
+                        with open(path, 'r', encoding='utf-8') as f:
+                            for line in f:
+                                line = line.strip()
+                                if not line:
+                                    continue
+                                try:
+                                    reaction_data = json.loads(line)
+                                    # Check reaction type match
+                                    rtype = (reaction_data.get('reaction_type') or '').strip()
+                                    if not rtype:
+                                        continue
+                                    if rtype.lower() != (reaction_type or '').lower():
+                                        continue
+                                    
+                                    # Extract reagents (bases are usually marked with role "BASE")
+                                    reagents = reaction_data.get('reagents', [])
+                                    for reagent in reagents:
+                                        if reagent.get('role') == 'BASE':
+                                            _maybe_add(reagent.get('name', ''))
+                                        else:
+                                            # Also check general reagents for base keywords
+                                            _maybe_add(reagent.get('name', ''))
+                                            
+                                except json.JSONDecodeError:
+                                    continue
+                    else:
+                        # Handle CSV/TSV format (legacy)
+                        import csv
+                        with open(path, 'r', encoding='utf-8') as f:
+                            reader = csv.DictReader(f, delimiter='\t') if fname.lower().endswith('.tsv') else csv.DictReader(f)
+                            for row in reader:
+                                rtype = (row.get('ReactionType') or '').strip()
+                                if not rtype or rtype.lower() != (reaction_type or '').lower():
+                                    continue
+                                # check common columns
+                                # New column name Reagent (with roles in ReagentRole)
+                                _maybe_add(row.get('Reagent') or row.get('ReagentRaw') or '')
+                                _maybe_add(row.get('RGTName') or '')
+                                _maybe_add(row.get('Base') or '')
                 except Exception:
                     continue
             if evidence:
