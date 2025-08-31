@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "generated_at": "2025-08-31T15:12:09",
+    "analysis_type": "error",
+    "status": "Enhanced recommendations generated successfully"
+  },
+  "input": {
+    "reaction_smiles": "Clc1nc2ccccc2[nH]1.Nc1ccccc1>>c1ccc(Nc2nc3ccccc3[nH]2)cc1",
+    "selected_reaction_type": "C-N Coupling - Buchwald-Hartwig (Pd)"
+  },
+  "detection": {
+    "reaction_type": "C-N Coupling - Buchwald-Hartwig (Pd)"
+  },
+  "dataset": {},
+  "top_conditions": [],
+  "related_reactions": [
+    {
+      "reaction_smiles": "Brc1ccc(CN)cc1.c1ccc(N)cc1>>c1ccc(Nc2ccc(CN)cc2)cc1",
+      "yield": 89.7,
+      "catalyst": "Pd2(dba)3",
+      "ligand": "BINAP",
+      "similarity": 0.91
+    },
+    {
+      "reaction_smiles": "Brc1ccc(F)cc1.N1CCNCC1>>Fc1ccc(N2CCNCC2)cc1",
+      "yield": 93.1,
+      "catalyst": "Pd2(dba)3",
+      "ligand": "XPhos",
+      "similarity": 0.85
+    }
+  ]
+}

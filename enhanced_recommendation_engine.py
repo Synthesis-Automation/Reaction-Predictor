@@ -17,6 +17,12 @@ _ROOT = os.path.abspath(_HERE)
 if _ROOT not in sys.path:
     sys.path.insert(0, _ROOT)
 
+# Import dataset registry to check supported reaction types
+try:
+    from dataset_registry import DATASET_MAP
+except ImportError:
+    DATASET_MAP = {}
+
 try:
     from reagents.ligand import (
         recommend_ligands_for_reaction, 
@@ -187,12 +193,64 @@ class EnhancedRecommendationEngine:
         # Simple heuristic: more aromatic complexity in products
         return aromatic_products > aromatic_reactants * 1.2
     
+    def _is_reaction_type_supported(self, reaction_type: str) -> bool:
+        """Check if a reaction type is supported by the enhanced recommendation system"""
+        if not reaction_type or reaction_type.lower() in ['auto-detect', 'auto', '']:
+            return True  # Auto-detect is always allowed
+        
+        # Check against dataset registry
+        if DATASET_MAP and reaction_type in DATASET_MAP:
+            return True
+        
+        # Check against known reaction types that have special handling
+        supported_types = {
+            'ullmann', 'cross-coupling', 'c-n coupling - ullmann',
+            'amide formation', 'amidation - acid + amine', 'amide formation - acid + amine',
+            'buchwald-hartwig amination', 'c-n coupling - buchwald-hartwig'
+        }
+        
+        return reaction_type.lower() in supported_types
+    
     def get_recommendations(self, reaction_smiles: str, reaction_type: str = "Auto-detect") -> Dict:
         """Get comprehensive recommendations including ligands and solvents"""
         
         try:
+            # Check if the reaction type is supported (but allow auto-detect)
+            if reaction_type.lower() not in ['auto-detect', 'auto', ''] and not self._is_reaction_type_supported(reaction_type):
+                return {
+                    'analysis_type': 'error',
+                    'error': f'Reaction type "{reaction_type}" is not supported',
+                    'message': f'The reaction type "{reaction_type}" is not available in the current dataset. Supported types include: Ullmann, Buchwald-Hartwig, and Amide Formation reactions.',
+                    'status': 'unsupported_reaction_type',
+                    'reaction_type': reaction_type,
+                    'detected_from': reaction_type,
+                    'ligand_recommendations': [],
+                    'solvent_recommendations': [],
+                    'base_recommendations': [],
+                    'combined_conditions': [],
+                    'property_based_alternatives': {},
+                    'reaction_specific_notes': f"Please select a supported reaction type or use Auto-detect for automatic classification."
+                }
+            
             # Determine actual reaction type
             actual_reaction_type = self.analyze_reaction_type(reaction_smiles, reaction_type)
+            
+            # Check if the detected/provided reaction type is supported
+            if actual_reaction_type and not self._is_reaction_type_supported(actual_reaction_type):
+                return {
+                    'analysis_type': 'error',
+                    'error': f'Detected reaction type "{actual_reaction_type}" is not supported',
+                    'message': f'The detected reaction type "{actual_reaction_type}" is not available in the current dataset. The system currently supports Ullmann, Buchwald-Hartwig, and Amide Formation reactions.',
+                    'status': 'unsupported_detected_type',
+                    'reaction_type': actual_reaction_type,
+                    'detected_from': reaction_type,
+                    'ligand_recommendations': [],
+                    'solvent_recommendations': [],
+                    'base_recommendations': [],
+                    'combined_conditions': [],
+                    'property_based_alternatives': {},
+                    'reaction_specific_notes': f"The reaction pattern in '{reaction_smiles}' was classified as '{actual_reaction_type}' which is not currently supported."
+                }
             
             result = {
                 'analysis_type': 'enhanced',
@@ -487,8 +545,14 @@ class EnhancedRecommendationEngine:
             # Lazy import RDKit; if not available, gracefully skip
             try:
                 from rdkit import Chem
-                from rdkit.Chem import AllChem
+                from rdkit.Chem import AllChem, rdMolDescriptors
                 from rdkit import DataStructs
+                # Try to use the new MorganGenerator API (available in newer RDKit versions)
+                try:
+                    from rdkit.Chem.rdMolDescriptors import MorganGenerator
+                    use_morgan_generator = True
+                except ImportError:
+                    use_morgan_generator = False
             except Exception:
                 return None
 
