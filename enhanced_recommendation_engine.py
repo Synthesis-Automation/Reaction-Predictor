@@ -19,9 +19,18 @@ if _ROOT not in sys.path:
 
 # Import dataset registry to check supported reaction types
 try:
-    from dataset_registry import DATASET_MAP
+    from dataset_registry import DATASET_MAP, resolve_dataset_path
 except ImportError:
     DATASET_MAP = {}
+    resolve_dataset_path = None
+
+# Import automatic reaction type detection
+try:
+    from reaction_type_detector import detect_reaction_type
+    RXN_INSIGHT_AVAILABLE = True
+except ImportError:
+    RXN_INSIGHT_AVAILABLE = False
+    detect_reaction_type = None
 
 try:
     from reagents.ligand import (
@@ -88,7 +97,29 @@ class EnhancedRecommendationEngine:
             if mapped_type:
                 return mapped_type
         
-        # Auto-detect based on SMILES pattern analysis
+        # Try rxn-insight automatic detection first (if available)
+        if RXN_INSIGHT_AVAILABLE and detect_reaction_type:
+            try:
+                detection_result = detect_reaction_type(reaction_smiles)
+                if detection_result['detected_type'] and detection_result['detected_type'] != "Unknown":
+                    # Use rxn-insight result and map it to our system
+                    rxn_insight_type = detection_result['detected_type']
+                    mapped_type = self._map_reaction_type(rxn_insight_type)
+                    
+                    if mapped_type:
+                        print(f"rxn-insight detected: {detection_result['rxn_insight_class']} / {detection_result['rxn_insight_name']}")
+                        print(f"Mapped to: {mapped_type}")
+                        return mapped_type
+                    else:
+                        # If mapping failed, still return the rxn-insight result
+                        print(f"rxn-insight detected: {rxn_insight_type} (no internal mapping)")
+                        return rxn_insight_type
+            except Exception as e:
+                print(f"rxn-insight detection failed: {e}")
+                # Fall back to pattern-based detection
+                pass
+        
+        # Auto-detect based on SMILES pattern analysis (fallback)
         if ">>" not in reaction_smiles:
             return "General Organic Reaction"
         
@@ -144,6 +175,14 @@ class EnhancedRecommendationEngine:
             "C-N Coupling - Ullmann": "Ullmann",
             "C-O Coupling - Ullmann Ether": "Ullmann",
             "C-O Coupling - Ullmann": "Ullmann",
+            # rxn-insight detected types - add these mappings
+            "C-C Coupling - Suzuki": "Cross-Coupling",
+            "C-C Coupling - Stille": "Cross-Coupling", 
+            "C-C Coupling - Heck": "Cross-Coupling",
+            "C-C Coupling - Sonogashira": "Cross-Coupling",
+            "C-C Coupling - Negishi": "Cross-Coupling",
+            "Amide Formation": "Amide Formation",
+            "Amide Formation - Acid + Amine": "Amide Formation",
             # Other categories
             "Hydrogenation": "Hydrogenation",
             "Carbonylation": "Carbonylation",
@@ -198,7 +237,11 @@ class EnhancedRecommendationEngine:
         if not reaction_type or reaction_type.lower() in ['auto-detect', 'auto', '']:
             return True  # Auto-detect is always allowed
         
-        # Check against dataset registry
+        # Check against dataset registry using normalization
+        if resolve_dataset_path and resolve_dataset_path(reaction_type):
+            return True
+        
+        # Fallback: Check against dataset registry directly
         if DATASET_MAP and reaction_type in DATASET_MAP:
             return True
         
@@ -258,6 +301,21 @@ class EnhancedRecommendationEngine:
                 'detected_from': reaction_type,
                 'status': 'success'
             }
+            
+            # Add rxn-insight information if auto-detection was used
+            if reaction_type.lower() in ['auto-detect', 'auto', ''] and RXN_INSIGHT_AVAILABLE:
+                try:
+                    detection_result = detect_reaction_type(reaction_smiles)
+                    if detection_result and not detection_result.get('error'):
+                        result['auto_detection'] = {
+                            'method': 'rxn-insight',
+                            'rxn_insight_class': detection_result.get('rxn_insight_class'),
+                            'rxn_insight_name': detection_result.get('rxn_insight_name'),
+                            'confidence': detection_result.get('confidence'),
+                            'functional_groups': detection_result.get('functional_groups')
+                        }
+                except Exception:
+                    pass  # Silently handle any errors
             
             if not ENHANCED_REAGENTS_AVAILABLE:
                 result.update({

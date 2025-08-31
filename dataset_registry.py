@@ -20,8 +20,8 @@ from typing import Optional, Dict, List
 # Add new entries as you create more datasets.
 DATASET_MAP: Dict[str, str] = {
     # Buchwald (aliases) - Updated to JSONL format
-    "C-N Coupling - Buchwald-Hartwig": "Buchwald-2021-2014.jsonl",
-    "Buchwald-Hartwig Amination": "Buchwald-2021-2014.jsonl",
+    "C-N Coupling - Buchwald-Hartwig": "Buchwald-2021-2024.jsonl",
+    "Buchwald-Hartwig Amination": "Buchwald-2021-2024.jsonl",
 
     # Ullmann (C-N and C-O variants share the same dataset file for now) - Updated to JSONL format
     "C-N Coupling - Ullmann": "Ullman-2020-2024.jsonl",
@@ -42,12 +42,10 @@ DATASET_MAP: Dict[str, str] = {
 # Fallback keyword routing for unexpected labels
 KEYWORD_FALLBACKS: List[tuple[str, str]] = [
     ("ullmann", "Ullman-2020-2024.jsonl"),
-    ("buchwald", "Buchwald-2021-2014.jsonl"),
+    ("buchwald", "Buchwald-2021-2024.jsonl"),
     ("amid", "amide-formation-2021-2024.jsonl"),
     # Treat generic cross-coupling and Chan-Lam as falling back to the
     # Buchwald dataset for similarity browsing when nothing else is available
-    ("cross-coupling", "Buchwald-2021-2014.jsonl"),
-    ("chan-lam", "Buchwald-2021-2014.jsonl"),
 ]
 
 

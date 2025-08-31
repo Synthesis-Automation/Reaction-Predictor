@@ -3275,7 +3275,16 @@ appropriate dataset is available.
         text = f"""🧪 ENHANCED REACTION CONDITION RECOMMENDATIONS
 
 Reaction: {result['reaction_smiles']}
-Detected Type: {_display_reaction_type()}
+Detected Type: {_display_reaction_type()}"""
+
+        # Add auto-detection information if available
+        if 'auto_detection' in recommendations:
+            auto = recommendations['auto_detection']
+            text += f"""
+Auto-Detection: {auto.get('rxn_insight_name', 'N/A')} (confidence: {auto.get('confidence', 'unknown')})
+Classification: {auto.get('rxn_insight_class', 'N/A')}"""
+
+        text += f"""
 Status: {result['status']}
 
 """
@@ -3489,12 +3498,27 @@ Status: {result['status']}
     
     def _format_basic_results(self, result):
         """Format basic results for fallback cases"""
+        selected_type = result.get('selected_reaction_type', 'Not specified')
+        
+        # Check if auto-detection was used and successful
+        auto_info = ""
+        if 'auto_detection' in result:
+            auto = result['auto_detection']
+            selected_type = f"Auto-detected as {result.get('reaction_type', 'Unknown')}"
+            auto_info = f"""
+Auto-Detection Details:
+• Method: {auto.get('method', 'Unknown')}
+• Classification: {auto.get('rxn_insight_class', 'N/A')}
+• Reaction Name: {auto.get('rxn_insight_name', 'N/A')}
+• Confidence: {auto.get('confidence', 'unknown')}
+"""
+        
         text = f"""Prediction Completed
 
 Input Information:
 • Reaction SMILES: {result['reaction_smiles']}
-• Selected Reaction Type: {result.get('selected_reaction_type', 'Not specified')}
-
+• Selected Reaction Type: {selected_type}
+{auto_info}
 Status: {result['status']}
 """
         
