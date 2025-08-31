@@ -1,0 +1,797 @@
+{
+  "meta": {
+    "generated_at": "2025-08-31T20:58:27",
+    "analysis_type": "enhanced",
+    "status": "Enhanced recommendations generated successfully"
+  },
+  "input": {
+    "reaction_smiles": "Clc1nc2ccccc2[nH]1.Nc1ccccc1>>c1ccc(Nc2nc3ccccc3[nH]2)cc1",
+    "selected_reaction_type": "Auto detect reaction type"
+  },
+  "detection": {
+    "reaction_type": "Ullmann"
+  },
+  "dataset": {
+    "analytics": {
+      "source": "Ullmann",
+      "top": {
+        "ligands": [
+          {
+            "name": "none",
+            "pct": 0.408,
+            "count": 326
+          },
+          {
+            "name": "1",
+            "pct": 0.1564,
+            "count": 125
+          },
+          {
+            "name": "2-Benzenediamine",
+            "pct": 0.0851,
+            "count": 68
+          }
+        ],
+        "solvents": [
+          {
+            "name": "DMSO",
+            "pct": 0.2979,
+            "count": 238
+          },
+          {
+            "name": "DMF",
+            "pct": 0.199,
+            "count": 159
+          },
+          {
+            "name": "Toluene",
+            "pct": 0.1327,
+            "count": 106
+          }
+        ],
+        "bases": [
+          {
+            "name": "K2CO3",
+            "pct": 0.6233,
+            "count": 498
+          },
+          {
+            "name": "K3PO4",
+            "pct": 0.2678,
+            "count": 214
+          },
+          {
+            "name": "Cs2CO3",
+            "pct": 0.2453,
+            "count": 196
+          }
+        ]
+      },
+      "cooccurrence": {
+        "best_ligand_solvent": null,
+        "best_base_solvent": null
+      },
+      "numeric_stats": {
+        "temperature_c": null,
+        "time_h": null,
+        "yield_pct": null
+      },
+      "typical_catalyst_loading": "5-20 mol% Cu"
+    }
+  },
+  "top_conditions": [
+    {
+      "reaction": {
+        "smiles": "Clc1nc2ccccc2[nH]1.Nc1ccccc1>>c1ccc(Nc2nc3ccccc3[nH]2)cc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Clc1nc2ccccc2[nH]1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Nc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "CuI",
+          "cas": "7681-65-4",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "L-Proline",
+          "cas": null,
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "Cs2CO3",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "Dimethylformamide",
+          "abbreviation": "DMF",
+          "cas": "68-12-2",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-140°C",
+        "time": "6-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    },
+    {
+      "reaction": {
+        "smiles": "Clc1nc2ccccc2[nH]1.Nc1ccccc1>>c1ccc(Nc2nc3ccccc3[nH]2)cc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Clc1nc2ccccc2[nH]1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Nc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "CuI",
+          "cas": "7681-65-4",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "L-Proline",
+          "cas": null,
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "Cs2CO3",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "THF",
+          "abbreviation": "THF",
+          "cas": "109-99-9",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-140°C",
+        "time": "6-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    },
+    {
+      "reaction": {
+        "smiles": "Clc1nc2ccccc2[nH]1.Nc1ccccc1>>c1ccc(Nc2nc3ccccc3[nH]2)cc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Clc1nc2ccccc2[nH]1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Nc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "CuI",
+          "cas": "7681-65-4",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "L-Proline",
+          "cas": null,
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "Cs2CO3",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "N-Methyl-2-pyrrolidone",
+          "abbreviation": "NMP",
+          "cas": "872-50-4",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-140°C",
+        "time": "6-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    }
+  ],
+  "related_reactions": [
+    {
+      "reaction_smiles": "Nc1ccc(I)cc1.Nc1nc2ccccc2[nH]1>>Nc1ccc(-n2c(N)nc3ccccc32)cc1",
+      "similarity": 0.35902948402948404,
+      "reaction_id": "31-172-CAS-23902281",
+      "yield": 80.0,
+      "temperature": 90.0,
+      "time": 16.0,
+      "catalyst": "Copper(I) iodide",
+      "ligand": "N/A",
+      "solvent": "tert-Butanol",
+      "reference": "Discovery and development of 2-aminobenzimidazoles as potent antimalarials | Authors: Devine, Shane M.; et al | European Journal of Medicinal Chemistry (2021), 221, 113518. | DOI: 10.1016/j.ejmech.2021.113518"
+    },
+    {
+      "reaction_smiles": "FC(F)(F)c1ccc(Br)cc1.Clc1nc2ccccc2[nH]1>>FC(F)(F)c1ccc(-n2c(Cl)nc3ccccc32)cc1",
+      "similarity": 0.35433673469387755,
+      "reaction_id": "31-172-CAS-22704354",
+      "yield": 50.0,
+      "temperature": 25.0,
+      "time": 20.0,
+      "catalyst": "N/A",
+      "ligand": "[5, 5′-bis(trifluoromethyl)-2, 2′-bipyridine-κN1, κN1′]bis[3, 5-difluoro-2-[5-(trifluoromethyl)-2-pyridinyl-κN]phenyl-κC]-, hexafluorophosphate(1-) (1:1)",
+      "solvent": "Methyl cyanide, Ethyl acetate",
+      "reference": "HARC as an open-shell strategy to bypass oxidative addition in Ullmann-Goldberg couplings | Authors: Lavagnino, Marissa N.; et al | Proceedings of the National Academy of Sciences of the United States of America (2020), 117(35), 21058-21064. | DOI: 10.1073/pnas.2011831117"
+    },
+    {
+      "reaction_smiles": "Nc1ccc(Cl)cc1.c1ccc2[nH]nnc2c1>>Clc1ccc(-n2nnc3ccccc32)cc1",
+      "similarity": 0.32022144522144524,
+      "reaction_id": "31-614-CAS-33407710",
+      "yield": 73.0,
+      "temperature": 80.0,
+      "time": 13.0,
+      "catalyst": "Copper(I) chloride",
+      "ligand": "N/A",
+      "solvent": "Ethanol, Methanol",
+      "reference": "Copper-Promoted One-Pot Sandmeyer-Type Reaction for the Synthesis of N-Aryltriazoles | Authors: Cui, Menghan; et al | Journal of Organic Chemistry (2022), 87(15), 9654-9662. | DOI: 10.1021/acs.joc.2c00697"
+    },
+    {
+      "reaction_smiles": "Oc1ccccc1I.Nc1nc2ccccc2[nH]1>>Nc1nc2ccccc2n1-c1ccccc1O",
+      "similarity": 0.31842818428184283,
+      "reaction_id": "31-172-CAS-23904297",
+      "yield": 67.0,
+      "temperature": 90.0,
+      "time": 16.0,
+      "catalyst": "Copper(I) iodide",
+      "ligand": "N/A",
+      "solvent": "tert-Butanol",
+      "reference": "Discovery and development of 2-aminobenzimidazoles as potent antimalarials | Authors: Devine, Shane M.; et al | European Journal of Medicinal Chemistry (2021), 221, 113518. | DOI: 10.1016/j.ejmech.2021.113518"
+    },
+    {
+      "reaction_smiles": "Cc1ccc(I)cc1.Nc1nc2ccccc2[nH]1>>Cc1ccc(-n2c(N)nc3ccccc32)cc1",
+      "similarity": 0.30514316012725345,
+      "reaction_id": "31-172-CAS-23904762",
+      "yield": 56.0,
+      "temperature": null,
+      "time": null,
+      "catalyst": "Copper(I) iodide",
+      "ligand": "N/A",
+      "solvent": "tert-Butanol",
+      "reference": "Discovery and development of 2-aminobenzimidazoles as potent antimalarials | Authors: Devine, Shane M.; Challis, Matthew P.; Kigotho, Jomo K.; Siddiqui, Ghizal; De Paoli, Amanda; MacRaild, Christopher A.; Avery, Vicky M.; Creek, Darren J.; Norton, Raymond S.; Scammells, Peter J. | European Journal of Medicinal Chemistry (2021), 221113518"
+    },
+    {
+      "reaction_smiles": "Cc1cnc[nH]1.COc1nc(C(=O)Nc2nc3ccccc3[nH]2)ccc1Br>>COc1nc(C(=O)Nc2nc3ccccc3[nH]2)ccc1-n1cnc(C)c1",
+      "similarity": 0.29549071618037137,
+      "reaction_id": "31-614-CAS-37226076",
+      "yield": 82.0,
+      "temperature": 120.0,
+      "time": 9.0,
+      "catalyst": "Copper(I) iodide",
+      "ligand": "trans-1, 2-Diaminocyclohexane",
+      "solvent": "1, 4-Dioxane",
+      "reference": "Synthesis of Benzothiazole/Benzimidazole-Conjugated Imidazoles as Anticancer Agents and Their Molecular Modeling | Authors: Ravi, Kurapati; et al | Russian Journal of Organic Chemistry (2023), 59(5), 915-923. | DOI: 10.1134/s1070428023050226"
+    },
+    {
+      "reaction_smiles": "Nc1nc2ccccc2[nH]1.O=c1[nH]cccc1I>>Nc1nc2ccccc2n1-c1ccc[nH]c1=O",
+      "similarity": 0.2931818181818182,
+      "reaction_id": "31-172-CAS-23904453",
+      "yield": 62.0,
+      "temperature": 90.0,
+      "time": 16.0,
+      "catalyst": "Copper(I) iodide",
+      "ligand": "N/A",
+      "solvent": "tert-Butanol",
+      "reference": "Discovery and development of 2-aminobenzimidazoles as potent antimalarials | Authors: Devine, Shane M.; et al | European Journal of Medicinal Chemistry (2021), 221, 113518. | DOI: 10.1016/j.ejmech.2021.113518"
+    },
+    {
+      "reaction_smiles": "Brc1ccccc1.c1ccc(-c2nc3ccccc3[nH]2)nc1>>c1ccc(-n2c(-c3ccccn3)nc3ccccc32)cc1",
+      "similarity": 0.28820116054158607,
+      "reaction_id": "31-614-CAS-36529204",
+      "yield": 76.0,
+      "temperature": 110.0,
+      "time": 4.0,
+      "catalyst": "Copper(1+)",
+      "ligand": "N/A",
+      "solvent": "DMSO",
+      "reference": "An efficient 2-(2-Pyridyl)imidazole based copper catalyst for N-Arylation of N-heterocycles | Authors: Sarkar, Gayetri; et al | Molecular Catalysis (2023), 545, 113212. | DOI: 10.1016/j.mcat.2023.113212"
+    },
+    {
+      "reaction_smiles": "Ic1ccccc1.c1ccc(-c2nc3ccccc3[nH]2)nc1>>c1ccc(-n2c(-c3ccccn3)nc3ccccc32)cc1",
+      "similarity": 0.28820116054158607,
+      "reaction_id": "31-614-CAS-36529212",
+      "yield": 84.0,
+      "temperature": 110.0,
+      "time": 4.0,
+      "catalyst": "Copper(1+)",
+      "ligand": "N/A",
+      "solvent": "DMSO",
+      "reference": "An efficient 2-(2-Pyridyl)imidazole based copper catalyst for N-Arylation of N-heterocycles | Authors: Sarkar, Gayetri; et al | Molecular Catalysis (2023), 545, 113212. | DOI: 10.1016/j.mcat.2023.113212"
+    },
+    {
+      "reaction_smiles": "Nc1ccc(Br)cc1.c1ccc2[nH]nnc2c1>>Brc1ccc(-n2nnc3ccccc32)cc1",
+      "similarity": 0.28519955654101997,
+      "reaction_id": "31-614-CAS-33407707",
+      "yield": 78.0,
+      "temperature": 80.0,
+      "time": 13.0,
+      "catalyst": "Copper(I) chloride",
+      "ligand": "N/A",
+      "solvent": "Ethanol, Methanol",
+      "reference": "Copper-Promoted One-Pot Sandmeyer-Type Reaction for the Synthesis of N-Aryltriazoles | Authors: Cui, Menghan; et al | Journal of Organic Chemistry (2022), 87(15), 9654-9662. | DOI: 10.1021/acs.joc.2c00697"
+    },
+    {
+      "reaction_smiles": "Oc1cccc(I)c1.Nc1nc2ccccc2[nH]1>>Nc1nc2ccccc2n1-c1cccc(O)c1",
+      "similarity": 0.2850185528756957,
+      "reaction_id": "31-172-CAS-23904398",
+      "yield": 51.0,
+      "temperature": 90.0,
+      "time": 16.0,
+      "catalyst": "Copper(I) iodide",
+      "ligand": "N/A",
+      "solvent": "tert-Butanol",
+      "reference": "Discovery and development of 2-aminobenzimidazoles as potent antimalarials | Authors: Devine, Shane M.; et al | European Journal of Medicinal Chemistry (2021), 221, 113518. | DOI: 10.1016/j.ejmech.2021.113518"
+    },
+    {
+      "reaction_smiles": "Nc1nc2ccccc2[nH]1.Oc1cccnc1I>>Nc1nc2ccccc2n1-c1ncccc1O",
+      "similarity": 0.27888888888888885,
+      "reaction_id": "31-172-CAS-23905087",
+      "yield": 69.0,
+      "temperature": 90.0,
+      "time": 16.0,
+      "catalyst": "Copper(I) iodide",
+      "ligand": "N/A",
+      "solvent": "tert-Butanol",
+      "reference": "Discovery and development of 2-aminobenzimidazoles as potent antimalarials | Authors: Devine, Shane M.; et al | European Journal of Medicinal Chemistry (2021), 221, 113518. | DOI: 10.1016/j.ejmech.2021.113518"
+    },
+    {
+      "reaction_smiles": "c1ccc2[nH]nnc2c1.Ic1ccccc1>>c1ccc(-n2nnc3ccccc32)cc1",
+      "similarity": 0.2782051282051282,
+      "reaction_id": "31-172-CAS-23294987",
+      "yield": 79.0,
+      "temperature": 80.0,
+      "time": 12.0,
+      "catalyst": "Copper(I) iodide",
+      "ligand": "2588211-74-7",
+      "solvent": "Ethanol",
+      "reference": "L-Proline N-oxide dihydrazides as an efficient ligand for cross-coupling reactions of aryl iodides and bromides with amines and phenols | Authors: Ding, Zhiqiang; et al | Tetrahedron (2021), 79, 131826. | DOI: 10.1016/j.tet.2020.131826"
+    },
+    {
+      "reaction_smiles": "c1ccc2[nH]nnc2c1.Ic1ccccc1>>c1ccc(-n2nnc3ccccc32)cc1",
+      "similarity": 0.2782051282051282,
+      "reaction_id": "31-614-CAS-31334882",
+      "yield": 75.0,
+      "temperature": 120.0,
+      "time": 12.0,
+      "catalyst": "Copper, Iron zinc oxide (Fe2ZnO4)",
+      "ligand": "N/A",
+      "solvent": "Ethanol",
+      "reference": "Magnetic Recyclable Cu/ZnFe2O4 for Catalytic Reduction of Nitroarenes and C-N Bond Formation Reactions | Authors: Zhang, Ruike; et al | Catalysis Letters (2022), 152(11), 3506-3516. | DOI: 10.1007/s10562-021-03906-z"
+    },
+    {
+      "reaction_smiles": "c1ccc2[nH]nnc2c1.Ic1ccccc1>>c1ccc(-n2nnc3ccccc32)cc1",
+      "similarity": 0.2782051282051282,
+      "reaction_id": "31-614-CAS-33994214",
+      "yield": 77.0,
+      "temperature": 100.0,
+      "time": 12.0,
+      "catalyst": "Copper",
+      "ligand": "Phenanthroline",
+      "solvent": "Ethanol",
+      "reference": "Phenanthroline-based microporous organic materials for removal of Cu(II) from aqueous solution and reutilization of spent adsorbent as catalysts | Authors: Tian, Baodong; et al | Water Science & Technology (2022), 86(3), 496. | DOI: 10.2166/wst.2022.218"
+    }
+  ],
+  "general": {
+    "ligands": [],
+    "solvents": [],
+    "bases": [],
+    "top_hits": [
+      {
+        "reaction_id": "31-614-CAS-32698104",
+        "reaction_type": "Buchwald",
+        "dataset_file": "Buchwald-2021-2024.jsonl",
+        "cond_key": "Pd/[3,6-Dimethoxy-2′,4′,6′-tris(1-methylethyl)[1,1′-biphenyl]-2-yl]bis(1,1-dimethylethyl)phosphine|1160861-53-9/Tripotassium phosphate|7778-53-2/tert-Butanol|75-65-0",
+        "similarity": 0.539,
+        "reactant_smiles": "Brc1ccccc1.Nc1nc2ccccc2[nH]1",
+        "product_smiles": "c1ccc(Nc2nc3ccccc3[nH]2)cc1.c1ccc(Nc2nc3ccccc3n2-c2ccccc2)cc1.Nc1nc2ccccc2n1-c1ccccc1",
+        "reaction_smiles": "Brc1ccccc1.Nc1nc2ccccc2[nH]1>>c1ccc(Nc2nc3ccccc3[nH]2)cc1.c1ccc(Nc2nc3ccccc3n2-c2ccccc2)cc1.Nc1nc2ccccc2n1-c1ccccc1",
+        "ligands": [
+          "3",
+          "6-Dimethoxy-2′",
+          "4′",
+          "6′-tris(1-methylethyl)[1",
+          "1′-biphenyl]-2-yl]bis(1",
+          "1-dimethylethyl)phosphine"
+        ],
+        "solvents": [
+          "tert-Butanol"
+        ],
+        "bases": [],
+        "temperature": 120.0,
+        "time": 20.05,
+        "yield_pct": 89.0,
+        "catalyst": "Tris(dibenzylideneacetone)dipalladium",
+        "reference": "Design and Application of a Screening Set for Monophosphine Ligands in Cross-Coupling | Gensch, Tobias; et al | ACS Catalysis (2022), 12(13), 7773-7780. | 10.1021/acscatal.2c01970",
+        "core_detail": "Tris(dibenzylideneacetone)dipalladium",
+        "core_generic": "Pd"
+      },
+      {
+        "reaction_id": "31-614-CAS-35153686",
+        "reaction_type": "Other",
+        "dataset_file": "amide-formation-2021-2024.jsonl",
+        "cond_key": "none/none/1-Ethyl-3-(3-dimethylaminopropyl)carbodiimide|1892-57-5+1-Ethyl-3-(3′-dimethylaminopropyl)carbodiimide|+1-Hydroxybenzotriazole|2592-95-2+Triethylamine|121-44-8/DMF|68-12-2+Dimethylformamide|+Water|7732-18-5",
+        "similarity": 0.334,
+        "reactant_smiles": "O=C(O)Cc1ccc(Cl)cc1.Cl.NCCc1nc2ccccc2[nH]1",
+        "product_smiles": "O=C(Cc1ccc(Cl)cc1)NCCc1nc2ccccc2[nH]1",
+        "reaction_smiles": "O=C(O)Cc1ccc(Cl)cc1.Cl.NCCc1nc2ccccc2[nH]1>>O=C(Cc1ccc(Cl)cc1)NCCc1nc2ccccc2[nH]1",
+        "ligands": [],
+        "solvents": [
+          "DMF",
+          "Water"
+        ],
+        "bases": [
+          "Et3N"
+        ],
+        "temperature": 25.0,
+        "time": 8.25,
+        "yield_pct": 97.0,
+        "catalyst": null,
+        "reference": "Hit-to-lead optimization of a 2-aminobenzimidazole series as new candidates for chagas disease | de Oliveira Rezende, Celso Junior; et al | European Journal of Medicinal Chemistry (2023), 246, 114925. | 10.1016/j.ejmech.2022.114925",
+        "core_detail": null,
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-614-CAS-39174753",
+        "reaction_type": "Other",
+        "dataset_file": "amide-formation-2021-2024.jsonl",
+        "cond_key": "none/none/Acetic Acid|64-19-7/Water|7732-18-5",
+        "similarity": 0.332,
+        "reactant_smiles": "Nc1ccccc1N.CC(=O)C(=O)O.[Na]",
+        "product_smiles": "Cc1nc2ccccc2[nH]c1=O",
+        "reaction_smiles": "Nc1ccccc1N.CC(=O)C(=O)O.[Na]>>Cc1nc2ccccc2[nH]c1=O",
+        "ligands": [],
+        "solvents": [
+          "Water"
+        ],
+        "bases": [],
+        "temperature": 25.0,
+        "time": 3.0,
+        "yield_pct": 81.0,
+        "catalyst": null,
+        "reference": "Exploring the Dispersion and Electrostatic Components in Arene-Arene Interactions between Ligands and G4 DNA to Develop G4-Ligands | Andreasson, Maans; et al | Journal of Medicinal Chemistry (2024), 67(3), 2202-2219. | 10.1021/acs.jmedchem.3c02127",
+        "core_detail": null,
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-172-CAS-23902281",
+        "reaction_type": "Ullmann",
+        "dataset_file": "Ullman-2020-2024.jsonl",
+        "cond_key": "Cu(I)/none/8-Hydroxyquinoline|148-24-3+Cesium carbonate|534-17-8/tert-Butanol|75-65-0",
+        "similarity": 0.328,
+        "reactant_smiles": "Nc1ccc(I)cc1.Nc1nc2ccccc2[nH]1",
+        "product_smiles": "Nc1ccc(-n2c(N)nc3ccccc32)cc1",
+        "reaction_smiles": "Nc1ccc(I)cc1.Nc1nc2ccccc2[nH]1>>Nc1ccc(-n2c(N)nc3ccccc32)cc1",
+        "ligands": [],
+        "solvents": [
+          "tert-Butanol"
+        ],
+        "bases": [],
+        "temperature": 90.0,
+        "time": 16.0,
+        "yield_pct": 80.0,
+        "catalyst": "Copper(I) iodide",
+        "reference": "Discovery and development of 2-aminobenzimidazoles as potent antimalarials | Devine, Shane M.; et al | European Journal of Medicinal Chemistry (2021), 221, 113518. | 10.1016/j.ejmech.2021.113518",
+        "core_detail": "Copper(I) iodide",
+        "core_generic": "Cu(I)"
+      },
+      {
+        "reaction_id": "31-172-CAS-22704354",
+        "reaction_type": "Ullmann",
+        "dataset_file": "Ullman-2020-2024.jsonl",
+        "cond_key": "Cu+Ir/[5,5′-bis(trifluoromethyl)-2,2′-bipyridine-κN1,κN1′]bis[3,5-difluoro-2-[5-(trifluoromethyl)-2-pyridinyl-κN]phenyl-κC]-|13395-16-9+hexafluorophosphate(1-) (1:1)|1973375-72-2/1,1,1,3,3,3-Hexamethyl-2-(trimethylsilyl)-2-trisilanol|7428-60-6+Methyl 1-thio-β-D-galactopyranoside|155-30-6+Potassium fluoride|7789-23-3+Tetrapropylammonium bromide|1941-30-6/Acetonitrile|+Ethyl acetate|141-78-6+Methyl cyanide|75-05-8",
+        "similarity": 0.32,
+        "reactant_smiles": "FC(F)(F)c1ccc(Br)cc1.Clc1nc2ccccc2[nH]1",
+        "product_smiles": "FC(F)(F)c1ccc(-n2c(Cl)nc3ccccc32)cc1",
+        "reaction_smiles": "FC(F)(F)c1ccc(Br)cc1.Clc1nc2ccccc2[nH]1>>FC(F)(F)c1ccc(-n2c(Cl)nc3ccccc32)cc1",
+        "ligands": [
+          "5",
+          "5′-bis(trifluoromethyl)-2",
+          "2′-bipyridine-κN1",
+          "κN1′]bis[3",
+          "5-difluoro-2-[5-(trifluoromethyl)-2-pyridinyl-κN]phenyl-κC]-",
+          "hexafluorophosphate(1-) (1:1)"
+        ],
+        "solvents": [
+          "Methyl cyanide",
+          "Ethyl acetate"
+        ],
+        "bases": [],
+        "temperature": 25.0,
+        "time": 20.0,
+        "yield_pct": 50.0,
+        "catalyst": null,
+        "reference": "HARC as an open-shell strategy to bypass oxidative addition in Ullmann-Goldberg couplings | Lavagnino, Marissa N.; et al | Proceedings of the National Academy of Sciences of the United States of America (2020), 117(35), 21058-21064. | 10.1073/pnas.2011831117",
+        "core_detail": null,
+        "core_generic": "Cu, Ir"
+      },
+      {
+        "reaction_id": "31-614-CAS-37226076",
+        "reaction_type": "Ullmann",
+        "dataset_file": "Ullman-2020-2024.jsonl",
+        "cond_key": "Cu(I)/trans-1,2-Diaminocyclohexane|1121-22-8/Potassium carbonate|584-08-7/1,4-Dioxane|123-91-1",
+        "similarity": 0.305,
+        "reactant_smiles": "Cc1cnc[nH]1.COc1nc(C(=O)Nc2nc3ccccc3[nH]2)ccc1Br",
+        "product_smiles": "COc1nc(C(=O)Nc2nc3ccccc3[nH]2)ccc1-n1cnc(C)c1",
+        "reaction_smiles": "Cc1cnc[nH]1.COc1nc(C(=O)Nc2nc3ccccc3[nH]2)ccc1Br>>COc1nc(C(=O)Nc2nc3ccccc3[nH]2)ccc1-n1cnc(C)c1",
+        "ligands": [
+          "trans-1",
+          "2-Diaminocyclohexane"
+        ],
+        "solvents": [
+          "1",
+          "4-Dioxane"
+        ],
+        "bases": [],
+        "temperature": 120.0,
+        "time": 9.0,
+        "yield_pct": 82.0,
+        "catalyst": "Copper(I) iodide",
+        "reference": "Synthesis of Benzothiazole/Benzimidazole-Conjugated Imidazoles as Anticancer Agents and Their Molecular Modeling | Ravi, Kurapati; et al | Russian Journal of Organic Chemistry (2023), 59(5), 915-923. | 10.1134/s1070428023050226",
+        "core_detail": "Copper(I) iodide",
+        "core_generic": "Cu(I)"
+      },
+      {
+        "reaction_id": "31-614-CAS-31857598",
+        "reaction_type": "Other",
+        "dataset_file": "amide-formation-2021-2024.jsonl",
+        "cond_key": "none/none/none/Water|7732-18-5",
+        "similarity": 0.301,
+        "reactant_smiles": "Nc1ccccc1N.O=CC(=O)O",
+        "product_smiles": "O=c1cnc2ccccc2[nH]1",
+        "reaction_smiles": "Nc1ccccc1N.O=CC(=O)O>>O=c1cnc2ccccc2[nH]1",
+        "ligands": [],
+        "solvents": [
+          "Water"
+        ],
+        "bases": [],
+        "temperature": null,
+        "time": 2.0,
+        "yield_pct": 97.0,
+        "catalyst": null,
+        "reference": "A Computer-Driven Scaffold-Hopping Approach Generating New PTP1B Inhibitors from the Pyrrolo[1,2-a]quinoxaline Core | Garcia-Marin, Javier; et al | ChemMedChem (2021), 16(18), 2895-2906. | 10.1002/cmdc.202100338",
+        "core_detail": null,
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-172-CAS-23904297",
+        "reaction_type": "Ullmann",
+        "dataset_file": "Ullman-2020-2024.jsonl",
+        "cond_key": "Cu(I)/none/8-Hydroxyquinoline|148-24-3+Cesium carbonate|534-17-8/tert-Butanol|75-65-0",
+        "similarity": 0.299,
+        "reactant_smiles": "Oc1ccccc1I.Nc1nc2ccccc2[nH]1",
+        "product_smiles": "Nc1nc2ccccc2n1-c1ccccc1O",
+        "reaction_smiles": "Oc1ccccc1I.Nc1nc2ccccc2[nH]1>>Nc1nc2ccccc2n1-c1ccccc1O",
+        "ligands": [],
+        "solvents": [
+          "tert-Butanol"
+        ],
+        "bases": [],
+        "temperature": 90.0,
+        "time": 16.0,
+        "yield_pct": 67.0,
+        "catalyst": "Copper(I) iodide",
+        "reference": "Discovery and development of 2-aminobenzimidazoles as potent antimalarials | Devine, Shane M.; et al | European Journal of Medicinal Chemistry (2021), 221, 113518. | 10.1016/j.ejmech.2021.113518",
+        "core_detail": "Copper(I) iodide",
+        "core_generic": "Cu(I)"
+      },
+      {
+        "reaction_id": "31-614-CAS-33407710",
+        "reaction_type": "Ullmann",
+        "dataset_file": "Ullman-2020-2024.jsonl",
+        "cond_key": "Cu(I)/none/Tetrafluoroboric acid|16872-11-0+tert-Butyl nitrite|540-80-7/Ethanol|64-17-5+Methanol|67-56-1",
+        "similarity": 0.297,
+        "reactant_smiles": "Nc1ccc(Cl)cc1.c1ccc2[nH]nnc2c1",
+        "product_smiles": "Clc1ccc(-n2nnc3ccccc32)cc1",
+        "reaction_smiles": "Nc1ccc(Cl)cc1.c1ccc2[nH]nnc2c1>>Clc1ccc(-n2nnc3ccccc32)cc1",
+        "ligands": [],
+        "solvents": [
+          "Ethanol",
+          "Methanol"
+        ],
+        "bases": [],
+        "temperature": 80.0,
+        "time": 13.0,
+        "yield_pct": 73.0,
+        "catalyst": "Copper(I) chloride",
+        "reference": "Copper-Promoted One-Pot Sandmeyer-Type Reaction for the Synthesis of N-Aryltriazoles | Cui, Menghan; et al | Journal of Organic Chemistry (2022), 87(15), 9654-9662. | 10.1021/acs.joc.2c00697",
+        "core_detail": "Copper(I) chloride",
+        "core_generic": "Cu(I)"
+      },
+      {
+        "reaction_id": "31-614-CAS-37213507",
+        "reaction_type": "Other",
+        "dataset_file": "amide-formation-2021-2024.jsonl",
+        "cond_key": "none/none/Thionyl chloride|7719-09-7+Triethylamine|121-44-8/Acetonitrile|+Methyl cyanide|75-05-8",
+        "similarity": 0.297,
+        "reactant_smiles": "O=C(O)c1nc(Cl)ccc1Cl.Nc1ccccc1",
+        "product_smiles": "O=C(Nc1ccccc1)c1nc(Cl)ccc1Cl",
+        "reaction_smiles": "O=C(O)c1nc(Cl)ccc1Cl.Nc1ccccc1>>O=C(Nc1ccccc1)c1nc(Cl)ccc1Cl",
+        "ligands": [],
+        "solvents": [
+          "Methyl cyanide"
+        ],
+        "bases": [
+          "Et3N"
+        ],
+        "temperature": 85.0,
+        "time": 9.0,
+        "yield_pct": 86.0,
+        "catalyst": "DMF",
+        "reference": "Rhodium(III)-Picolinamide Complexes Act as Anticancer and Antimetastasis Agents via Inducing Apoptosis and Autophagy | Gu, Yun-Qiong; et al | Journal of Medicinal Chemistry (2023), 66(14), 9592-9606. | 10.1021/acs.jmedchem.3c00318",
+        "core_detail": "DMF",
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-172-CAS-23904762",
+        "reaction_type": "Other",
+        "dataset_file": "Ullman-2020-2024.jsonl",
+        "cond_key": "none/none/148-24-3|148-24-3+Cesium carbonate|534-17-8/tert-Butanol|75-65-0",
+        "similarity": 0.283,
+        "reactant_smiles": "Cc1ccc(I)cc1.Nc1nc2ccccc2[nH]1",
+        "product_smiles": "Cc1ccc(-n2c(N)nc3ccccc32)cc1",
+        "reaction_smiles": "Cc1ccc(I)cc1.Nc1nc2ccccc2[nH]1>>Cc1ccc(-n2c(N)nc3ccccc32)cc1",
+        "ligands": [],
+        "solvents": [
+          "tert-Butanol"
+        ],
+        "bases": [],
+        "temperature": null,
+        "time": null,
+        "yield_pct": 56.0,
+        "catalyst": "Copper(I) iodide",
+        "reference": "Discovery and development of 2-aminobenzimidazoles as potent antimalarials | Devine, Shane M.; Challis, Matthew P.; Kigotho, Jomo K.; Siddiqui, Ghizal; De Paoli, Amanda; MacRaild, Christopher A.; Avery, Vicky M.; Creek, Darren J.; Norton, Raymond S.; Scammells, Peter J. | European Journal of Medicinal Chemistry (2021), 221113518",
+        "core_detail": "Copper(I) iodide",
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-614-CAS-31807390",
+        "reaction_type": "Buchwald",
+        "dataset_file": "Buchwald-2021-2024.jsonl",
+        "cond_key": "Pd/PtBu3|13716-12-6+Tri-tert-butylphosphine|/Potassium carbonate|584-08-7+Water|7732-18-5/PhMe|108-88-3+Toluene|",
+        "similarity": 0.281,
+        "reactant_smiles": "c1ccc2c(c1)[nH]c1ccccc12.CC1234[BH]567[BH]89%10[BH]5%11%12[BH]85%13[BH]98%14[BH]%1061[BH]821[CH]326[BH]%115([BH]%12724)B%13%1416CC(=O)C1=CC=C(I)C=C1",
+        "product_smiles": "CC1234[BH]567[BH]89%10[BH]5%11%12[BH]85%13[BH]98%14[BH]%1061[BH]821[CH]326[BH]%115([BH]%12724)B%13%1416CC(=O)C1=CC=C(N2C3=CC=CC=C3C3=CC=CC=C32)C=C1",
+        "reaction_smiles": "c1ccc2c(c1)[nH]c1ccccc12.CC1234[BH]567[BH]89%10[BH]5%11%12[BH]85%13[BH]98%14[BH]%1061[BH]821[CH]326[BH]%115([BH]%12724)B%13%1416CC(=O)C1=CC=C(I)C=C1>>CC1234[BH]567[BH]89%10[BH]5%11%12[BH]85%13[BH]98%14[BH]%1061[BH]821[CH]326[BH]%115([BH]%12724)B%13%1416CC(=O)C1=CC=C(N2C3=CC=CC=C3C3=CC=CC=C32)C=C1",
+        "ligands": [
+          "PtBu3"
+        ],
+        "solvents": [
+          "PhMe"
+        ],
+        "bases": [],
+        "temperature": 120.0,
+        "time": 12.0,
+        "yield_pct": 90.0,
+        "catalyst": "Pd(OAc)2",
+        "reference": "Iridium-Catalyzed Selective B(4)-H Acylmethylation of o-Carboranes with Sulfoxonium Ylides | Zhang, Lin-Bao; et al | Organic Letters (2022), 24(6), 1318-1322. | 10.1021/acs.orglett.1c04335",
+        "core_detail": "Pd(OAc)2",
+        "core_generic": "Pd"
+      },
+      {
+        "reaction_id": "31-614-CAS-45136808",
+        "reaction_type": "Ullmann",
+        "dataset_file": "Ullman-2020-2024.jsonl",
+        "cond_key": "Cu(I)/L-Proline|147-85-3/Potassium carbonate|584-08-7/DMSO|67-68-5+Dimethyl sulfoxide|",
+        "similarity": 0.281,
+        "reactant_smiles": "c1ccc2c(c1)[nH]c1ccccc12.FC1=CC=C(SB2345[BH]678[H]9[BH]62%10[BH]326[BH]3%11%12[CH]%13([CH]7%14[BH]%1337[BH]%1484[BH]7%1125)B9%12%106N2=CC=C(Br)C=C2)C=C1",
+        "product_smiles": "FC1=CC=C(SB2345[BH]678[H]9[BH]62%10[BH]326[BH]3%11%12[CH]%13([CH]7%14[BH]%1337[BH]%1484[BH]7%1125)B9%12%106N2=CC=C(N3C4=CC=CC=C4C4=CC=CC=C43)C=C2)C=C1",
+        "reaction_smiles": "c1ccc2c(c1)[nH]c1ccccc12.FC1=CC=C(SB2345[BH]678[H]9[BH]62%10[BH]326[BH]3%11%12[CH]%13([CH]7%14[BH]%1337[BH]%1484[BH]7%1125)B9%12%106N2=CC=C(Br)C=C2)C=C1>>FC1=CC=C(SB2345[BH]678[H]9[BH]62%10[BH]326[BH]3%11%12[CH]%13([CH]7%14[BH]%1337[BH]%1484[BH]7%1125)B9%12%106N2=CC=C(N3C4=CC=CC=C4C4=CC=CC=C43)C=C2)C=C1",
+        "ligands": [
+          "L-Proline"
+        ],
+        "solvents": [
+          "DMSO"
+        ],
+        "bases": [],
+        "temperature": 130.0,
+        "time": 20.0,
+        "yield_pct": 57.0,
+        "catalyst": "Copper(I) iodide",
+        "reference": "Dative Bonding Activation Enables Precise Functionalization of the Remote B-H Bond of nido-Carborane Clusters | Ren, Hongyuan; et al | Journal of the American Chemical Society (2024), 146(38), 26543-26555. | 10.1021/jacs.4c10728",
+        "core_detail": "Copper(I) iodide",
+        "core_generic": "Cu(I)"
+      },
+      {
+        "reaction_id": "31-172-CAS-23904453",
+        "reaction_type": "Ullmann",
+        "dataset_file": "Ullman-2020-2024.jsonl",
+        "cond_key": "Cu(I)/none/8-Hydroxyquinoline|148-24-3+Cesium carbonate|534-17-8/tert-Butanol|75-65-0",
+        "similarity": 0.275,
+        "reactant_smiles": "Nc1nc2ccccc2[nH]1.O=c1[nH]cccc1I",
+        "product_smiles": "Nc1nc2ccccc2n1-c1ccc[nH]c1=O",
+        "reaction_smiles": "Nc1nc2ccccc2[nH]1.O=c1[nH]cccc1I>>Nc1nc2ccccc2n1-c1ccc[nH]c1=O",
+        "ligands": [],
+        "solvents": [
+          "tert-Butanol"
+        ],
+        "bases": [],
+        "temperature": 90.0,
+        "time": 16.0,
+        "yield_pct": 62.0,
+        "catalyst": "Copper(I) iodide",
+        "reference": "Discovery and development of 2-aminobenzimidazoles as potent antimalarials | Devine, Shane M.; et al | European Journal of Medicinal Chemistry (2021), 221, 113518. | 10.1016/j.ejmech.2021.113518",
+        "core_detail": "Copper(I) iodide",
+        "core_generic": "Cu(I)"
+      },
+      {
+        "reaction_id": "31-172-CAS-23294987",
+        "reaction_type": "Ullmann",
+        "dataset_file": "Ullman-2020-2024.jsonl",
+        "cond_key": "Cu(I)/2588211-74-7|2588211-74-7/Cesium carbonate|534-17-8/Ethanol|64-17-5",
+        "similarity": 0.274,
+        "reactant_smiles": "c1ccc2[nH]nnc2c1.Ic1ccccc1",
+        "product_smiles": "c1ccc(-n2nnc3ccccc32)cc1",
+        "reaction_smiles": "c1ccc2[nH]nnc2c1.Ic1ccccc1>>c1ccc(-n2nnc3ccccc32)cc1",
+        "ligands": [],
+        "solvents": [
+          "Ethanol"
+        ],
+        "bases": [],
+        "temperature": 80.0,
+        "time": 12.0,
+        "yield_pct": 79.0,
+        "catalyst": "Copper(I) iodide",
+        "reference": "L-Proline N-oxide dihydrazides as an efficient ligand for cross-coupling reactions of aryl iodides and bromides with amines and phenols | Ding, Zhiqiang; et al | Tetrahedron (2021), 79, 131826. | 10.1016/j.tet.2020.131826",
+        "core_detail": "Copper(I) iodide",
+        "core_generic": "Cu(I)"
+      }
+    ]
+  }
+}

@@ -88,11 +88,27 @@ class EnhancedRecommendationEngine:
             except:
                 pass
     
+    def _is_auto_detect(self, reaction_type: str) -> bool:
+        """Check if the reaction type indicates auto-detection should be used"""
+        if not reaction_type:
+            return True
+        
+        auto_detect_strings = [
+            'auto-detect', 'auto', 'auto detect reaction type', 
+            'auto detect', 'automatic', 'detect automatically'
+        ]
+        
+        # Check for separator lines (category headers in dropdown)
+        if '─' in reaction_type and ('───────' in reaction_type or 'Reactions' in reaction_type):
+            return True
+            
+        return reaction_type.lower().strip() in auto_detect_strings
+    
     def analyze_reaction_type(self, reaction_smiles: str, suggested_type: str = None) -> str:
         """Analyze and determine the reaction type from SMILES"""
         
         # If user specified a type, try to map it
-        if suggested_type and suggested_type not in ("Auto-detect", "Auto detect reaction type"):
+        if suggested_type and not self._is_auto_detect(suggested_type):
             mapped_type = self._map_reaction_type(suggested_type)
             if mapped_type:
                 return mapped_type
@@ -234,7 +250,7 @@ class EnhancedRecommendationEngine:
     
     def _is_reaction_type_supported(self, reaction_type: str) -> bool:
         """Check if a reaction type is supported by the enhanced recommendation system"""
-        if not reaction_type or reaction_type.lower() in ['auto-detect', 'auto', '']:
+        if self._is_auto_detect(reaction_type):
             return True  # Auto-detect is always allowed
         
         # Check against dataset registry using normalization
@@ -259,7 +275,7 @@ class EnhancedRecommendationEngine:
         
         try:
             # Check if the reaction type is supported (but allow auto-detect)
-            if reaction_type.lower() not in ['auto-detect', 'auto', ''] and not self._is_reaction_type_supported(reaction_type):
+            if not self._is_auto_detect(reaction_type) and not self._is_reaction_type_supported(reaction_type):
                 return {
                     'analysis_type': 'error',
                     'error': f'Reaction type "{reaction_type}" is not supported',
@@ -303,7 +319,7 @@ class EnhancedRecommendationEngine:
             }
             
             # Add rxn-insight information if auto-detection was used
-            if reaction_type.lower() in ['auto-detect', 'auto', ''] and RXN_INSIGHT_AVAILABLE:
+            if self._is_auto_detect(reaction_type) and RXN_INSIGHT_AVAILABLE:
                 try:
                     detection_result = detect_reaction_type(reaction_smiles)
                     if detection_result and not detection_result.get('error'):
@@ -331,7 +347,7 @@ class EnhancedRecommendationEngine:
             # If user left type as Auto-detect, also compute a general, cross-dataset
             # similarity-based recommendation set as supplemental guidance.
             try:
-                if (reaction_type or '').lower().startswith('auto'):
+                if self._is_auto_detect(reaction_type):
                     gen = self._get_general_similarity_recommendations(reaction_smiles)
                     if gen:
                         result['general_recommendations'] = gen
