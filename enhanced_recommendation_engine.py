@@ -547,12 +547,17 @@ class EnhancedRecommendationEngine:
                 from rdkit import Chem
                 from rdkit.Chem import AllChem, rdMolDescriptors
                 from rdkit import DataStructs
+                
                 # Try to use the new MorganGenerator API (available in newer RDKit versions)
                 try:
-                    from rdkit.Chem.rdMolDescriptors import MorganGenerator
+                    from rdkit.Chem.rdFingerprintGenerator import GetMorganGenerator
                     use_morgan_generator = True
                 except ImportError:
                     use_morgan_generator = False
+                    # Suppress deprecation warnings for the old API
+                    import warnings
+                    warnings.filterwarnings("ignore", category=UserWarning, message=".*MorganGenerator.*")
+                    warnings.filterwarnings("ignore", category=DeprecationWarning, message=".*MorganGenerator.*")
             except Exception:
                 return None
 
@@ -576,7 +581,16 @@ class EnhancedRecommendationEngine:
                 mols = _mols_from_mixture(smistr)
                 if not mols:
                     return None
-                fps = [AllChem.GetMorganFingerprintAsBitVect(m, 2, nBits=2048) for m in mols]
+                
+                # Use the new MorganGenerator API if available
+                if use_morgan_generator:
+                    # Create generator with radius=2, fpSize=2048
+                    generator = GetMorganGenerator(radius=2, fpSize=2048)
+                    fps = [generator.GetFingerprint(m) for m in mols]
+                else:
+                    # Fall back to the deprecated API
+                    fps = [AllChem.GetMorganFingerprintAsBitVect(m, 2, nBits=2048) for m in mols]
+                
                 # Combine by bitwise OR
                 combo = fps[0]
                 for fv in fps[1:]:

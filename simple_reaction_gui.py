@@ -2242,6 +2242,16 @@ class SimpleReactionGUI(QMainWindow):
             try:
                 from rdkit import Chem
                 from rdkit.Chem import DataStructs, rdMolDescriptors
+                # Try to use the new MorganGenerator API (available in newer RDKit versions)
+                try:
+                    from rdkit.Chem.rdFingerprintGenerator import GetMorganGenerator
+                    use_morgan_generator = True
+                except ImportError:
+                    use_morgan_generator = False
+                    # Suppress deprecation warnings for the old API
+                    import warnings
+                    warnings.filterwarnings("ignore", category=UserWarning, message=".*MorganGenerator.*")
+                    warnings.filterwarnings("ignore", category=DeprecationWarning, message=".*MorganGenerator.*")
                 rdkit_available = True
             except ImportError:
                 rdkit_available = False
@@ -2312,9 +2322,19 @@ class SimpleReactionGUI(QMainWindow):
                 print("Failed to parse input molecules")
                 return self._get_fallback_similar_reactions(reactions_data, input_smiles, top_k, is_jsonl=dataset_path.lower().endswith('.jsonl'))
             
+            # Helper function to generate fingerprints
+            def get_morgan_fingerprint(mol):
+                if use_morgan_generator:
+                    # Use the new MorganGenerator API
+                    generator = GetMorganGenerator(radius=2, fpSize=2048)
+                    return generator.GetFingerprint(mol)
+                else:
+                    # Fall back to the deprecated API
+                    return rdMolDescriptors.GetMorganFingerprintAsBitVect(mol, 2, nBits=2048)
+            
             # Generate fingerprints for input
-            input_reactant_fp = rdMolDescriptors.GetMorganFingerprintAsBitVect(input_reactant_mol, 2, nBits=2048)
-            input_product_fp = rdMolDescriptors.GetMorganFingerprintAsBitVect(input_product_mol, 2, nBits=2048)
+            input_reactant_fp = get_morgan_fingerprint(input_reactant_mol)
+            input_product_fp = get_morgan_fingerprint(input_product_mol)
             
             similarities = []
             
@@ -2342,8 +2362,8 @@ class SimpleReactionGUI(QMainWindow):
                         continue
                     
                     # Generate fingerprints for dataset reaction
-                    dataset_reactant_fp = rdMolDescriptors.GetMorganFingerprintAsBitVect(dataset_reactant_mol, 2, nBits=2048)
-                    dataset_product_fp = rdMolDescriptors.GetMorganFingerprintAsBitVect(dataset_product_mol, 2, nBits=2048)
+                    dataset_reactant_fp = get_morgan_fingerprint(dataset_reactant_mol)
+                    dataset_product_fp = get_morgan_fingerprint(dataset_product_mol)
                     
                     # Calculate Tanimoto similarity
                     reactant_similarity = DataStructs.TanimotoSimilarity(input_reactant_fp, dataset_reactant_fp)
