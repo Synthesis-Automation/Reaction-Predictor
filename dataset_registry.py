@@ -33,15 +33,17 @@ DATASET_MAP: Dict[str, str] = {
     "Ullmann Ether Synthesis": "Ullman-2020-2024.jsonl",
 
     # Amide formation / amidation - Updated to JSONL format
-    "Amidation": "Amide-formation.jsonl",
-    "Amide formation": "Amide-formation.jsonl",
+    "Amidation": "amide-formation-2021-2024.jsonl",
+    "Amide formation": "amide-formation-2021-2024.jsonl",
+    "Amidation - Acid + Amine": "amide-formation-2021-2024.jsonl",
+    "Amide Formation - Acid + Amine": "amide-formation-2021-2024.jsonl",
 }
 
 # Fallback keyword routing for unexpected labels
 KEYWORD_FALLBACKS: List[tuple[str, str]] = [
     ("ullmann", "Ullman-2020-2024.jsonl"),
     ("buchwald", "Buchwald-2021-2014.jsonl"),
-    ("amid", "Amide-formation.jsonl"),
+    ("amid", "amide-formation-2021-2024.jsonl"),
     # Treat generic cross-coupling and Chan-Lam as falling back to the
     # Buchwald dataset for similarity browsing when nothing else is available
     ("cross-coupling", "Buchwald-2021-2014.jsonl"),

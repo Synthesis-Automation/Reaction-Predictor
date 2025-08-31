@@ -267,7 +267,52 @@ SAMPLE_REACTIONS = [
     # ═══════════════════════════════════════════════════════════
     
     "c1ccc([N+](=O)[O-])cc1.Nc1ccccc1>>c1ccc2[nH]c3ccccc3c2c1 (Carbazole synthesis)",
-    "Nc1ccccc1.c1ccc(C=O)cc1>>c1ccc2nc(-c3ccccc3)cc(-c3ccccc3)c2c1 (Quinoline synthesis)"
+    "Nc1ccccc1.c1ccc(C=O)cc1>>c1ccc2nc(-c3ccccc3)cc(-c3ccccc3)c2c1 (Quinoline synthesis)",
+    
+    # ═══════════════════════════════════════════════════════════
+    # AMIDE FORMATION REACTIONS (Acid + Amine → Amide)
+    # ═══════════════════════════════════════════════════════════
+    
+    # Simple carboxylic acid + amine amidations
+    "O=C(O)c1ccccc1.Nc1ccccc1>>O=C(Nc1ccccc1)c1ccccc1 (Amide: Benzoic acid + aniline)",
+    "CC(=O)O.NCc1ccccc1>>CC(=O)NCc1ccccc1 (Amide: Acetic acid + benzylamine)",
+    "O=C(O)CCc1ccccc1.NC1CCCCC1>>O=C(N1CCCCC1)CCc1ccccc1 (Amide: Phenylacetic acid + cyclohexylamine)",
+    "CC(C)(C)C(=O)O.Nc1ccc(C)cc1>>CC(C)(C)C(=O)Nc1ccc(C)cc1 (Amide: Pivalic acid + p-toluidine)",
+    "O=C(O)c1ccc(F)cc1.NCCc1ccccc1>>O=C(NCCc1ccccc1)c1ccc(F)cc1 (Amide: 4-Fluorobenzoic acid + phenethylamine)",
+    
+    # Aromatic acids with different amines
+    "O=C(O)c1ccc(OC)cc1.NC1CC1>>COc1ccc(C(=O)NC2CC2)cc1 (Amide: p-Methoxybenzoic acid + cyclopropylamine)",
+    "O=C(O)c1ccc(C#N)cc1.NCCCC>>N#Cc1ccc(C(=O)NCCCC)cc1 (Amide: 4-Cyanobenzoic acid + butylamine)",
+    "O=C(O)c1ccc([N+](=O)[O-])cc1.NC(C)(C)C>>CC(C)(C)NC(=O)c1ccc([N+](=O)[O-])cc1 (Amide: 4-Nitrobenzoic acid + tert-butylamine)",
+    "O=C(O)c1cccc(Cl)c1.NCc1ccncc1>>O=C(NCc1ccncc1)c1cccc(Cl)c1 (Amide: 3-Chlorobenzoic acid + 4-picolylamine)",
+    "O=C(O)c1ccc2ccccc2c1.NC1CCNCC1>>O=C(N1CCC(N)CC1)c1ccc2ccccc2c1 (Amide: 2-Naphthoic acid + 4-aminopiperidine)",
+    
+    # Heteroaromatic carboxylic acids
+    "O=C(O)c1ccncc1.Nc1ccccc1>>O=C(Nc1ccccc1)c1ccncc1 (Amide: Isonicotinic acid + aniline)",
+    "O=C(O)c1cnccn1.NCc1ccc(F)cc1>>O=C(NCc1ccc(F)cc1)c1cnccn1 (Amide: Pyrimidine-2-carboxylic acid + 4-fluorobenzylamine)",
+    "O=C(O)c1cccs1.NC1CCOCC1>>O=C(N1CCOCC1)c1cccs1 (Amide: Thiophene-3-carboxylic acid + morpholine)",
+    "O=C(O)c1cc[nH]c1.NCCOc1ccccc1>>O=C(NCCOc1ccccc1)c1cc[nH]c1 (Amide: Pyrrole-3-carboxylic acid + 2-phenoxyethylamine)",
+    "O=C(O)c1ccc[nH]1.NC1CCC(C)(C)CC1>>O=C(NC1CCC(C)(C)CC1)c1ccc[nH]1 (Amide: Pyrrole-2-carboxylic acid + 4,4-dimethylcyclohexylamine)",
+    
+    # Aliphatic carboxylic acids  
+    "CCCCCCCC(=O)O.Nc1ccc(OC)cc1>>CCCCCCCC(=O)Nc1ccc(OC)cc1 (Amide: Octanoic acid + p-anisidine)",
+    "CC(C)CC(=O)O.NCc1ccc(Cl)cc1>>CC(C)CC(=O)NCc1ccc(Cl)cc1 (Amide: Isovaleric acid + 4-chlorobenzylamine)",
+    "CCC(C)C(=O)O.NC1CCN(C)CC1>>CCC(C)C(=O)N1CCN(C)CC1 (Amide: 2-Methylbutyric acid + N-methylpiperazine)",
+    "O=C(O)C1CCCCC1.NCCc1ccc[nH]1>>O=C(NCCc1ccc[nH]1)C1CCCCC1 (Amide: Cyclohexanecarboxylic acid + tryptamine)",
+    
+    # Amino acids as starting materials
+    "CC(C)CC(N)C(=O)O.NCc1ccccc1>>CC(C)CC(N)C(=O)NCc1ccccc1 (Amide: Leucine + benzylamine)",
+    "N[C@@H](Cc1ccccc1)C(=O)O.NC1CCCCC1>>N[C@@H](Cc1ccccc1)C(=O)N1CCCCC1 (Amide: Phenylalanine + cyclohexylamine)",
+    
+    # Secondary amines (N-substituted amides)
+    "O=C(O)c1ccccc1.CN(C)c1ccccc1>>CN(C)c1ccccc1.O=C(N(C)c1ccccc1)c1ccccc1 (Amide: Benzoic acid + N,N-dimethylaniline → tertiary amide)",
+    "CC(=O)O.N1CCCC1>>CC(=O)N1CCCC1 (Amide: Acetic acid + pyrrolidine)",
+    "O=C(O)c1ccc(Br)cc1.N1CCOCC1>>O=C(N1CCOCC1)c1ccc(Br)cc1 (Amide: 4-Bromobenzoic acid + morpholine)",
+    
+    # Coupling reagent-specific examples (indicated in labels)
+    "O=C(O)c1ccccc1.Nc1ccccc1>>O=C(Nc1ccccc1)c1ccccc1 (Amide: EDC/HOBt coupling)",
+    "CC(C)(C)C(=O)O.NCc1ccccc1>>CC(C)(C)C(=O)NCc1ccccc1 (Amide: DCC/NHS coupling)",
+    "O=C(O)c1ccc(OC)cc1.NC1CCCCC1>>COc1ccc(C(=O)N1CCCCC1)cc1 (Amide: HATU/DIPEA coupling)"
 ]
 
 # ═══════════════════════════════════════════════════════════
@@ -403,6 +448,73 @@ BUCHWALD_HARTWIG_REACTIONS = [
     
     # Long-chain substrates for macrocyclization
     "Brc1ccccc1CCCCCCCCC(=O)Nc1ccccc1Br>>O=C1CCCCCCCc2ccccc2N1c1ccccc1 (B-H: macrocycle formation)",
+    
+    # ═══════════════════════════════════════════════════════════
+    # AMIDE FORMATION REACTIONS (Acid + Amine → Amide)
+    # Various coupling agents and conditions
+    # ═══════════════════════════════════════════════════════════
+    
+    # Simple carboxylic acid + amine amidations
+    "O=C(O)c1ccccc1.Nc1ccccc1>>O=C(Nc1ccccc1)c1ccccc1 (Amide: Benzoic acid + aniline)",
+    "CC(=O)O.NCc1ccccc1>>CC(=O)NCc1ccccc1 (Amide: Acetic acid + benzylamine)",
+    "O=C(O)CCc1ccccc1.NC1CCCCC1>>O=C(N1CCCCC1)CCc1ccccc1 (Amide: Phenylacetic acid + cyclohexylamine)",
+    "CC(C)(C)C(=O)O.Nc1ccc(C)cc1>>CC(C)(C)C(=O)Nc1ccc(C)cc1 (Amide: Pivalic acid + p-toluidine)",
+    "O=C(O)c1ccc(F)cc1.NCCc1ccccc1>>O=C(NCCc1ccccc1)c1ccc(F)cc1 (Amide: 4-Fluorobenzoic acid + phenethylamine)",
+    
+    # Aromatic acids with different amines
+    "O=C(O)c1ccc(OC)cc1.NC1CC1>>COc1ccc(C(=O)NC2CC2)cc1 (Amide: p-Methoxybenzoic acid + cyclopropylamine)",
+    "O=C(O)c1ccc(C#N)cc1.NCCCC>>N#Cc1ccc(C(=O)NCCCC)cc1 (Amide: 4-Cyanobenzoic acid + butylamine)",
+    "O=C(O)c1ccc([N+](=O)[O-])cc1.NC(C)(C)C>>CC(C)(C)NC(=O)c1ccc([N+](=O)[O-])cc1 (Amide: 4-Nitrobenzoic acid + tert-butylamine)",
+    "O=C(O)c1cccc(Cl)c1.NCc1ccncc1>>O=C(NCc1ccncc1)c1cccc(Cl)c1 (Amide: 3-Chlorobenzoic acid + 4-picolylamine)",
+    "O=C(O)c1ccc2ccccc2c1.NC1CCNCC1>>O=C(N1CCC(N)CC1)c1ccc2ccccc2c1 (Amide: 2-Naphthoic acid + 4-aminopiperidine)",
+    
+    # Heteroaromatic carboxylic acids
+    "O=C(O)c1ccncc1.Nc1ccccc1>>O=C(Nc1ccccc1)c1ccncc1 (Amide: Isonicotinic acid + aniline)",
+    "O=C(O)c1cnccn1.NCc1ccc(F)cc1>>O=C(NCc1ccc(F)cc1)c1cnccn1 (Amide: Pyrimidine-2-carboxylic acid + 4-fluorobenzylamine)",
+    "O=C(O)c1cccs1.NC1CCOCC1>>O=C(N1CCOCC1)c1cccs1 (Amide: Thiophene-3-carboxylic acid + morpholine)",
+    "O=C(O)c1cc[nH]c1.NCCOc1ccccc1>>O=C(NCCOc1ccccc1)c1cc[nH]c1 (Amide: Pyrrole-3-carboxylic acid + 2-phenoxyethylamine)",
+    "O=C(O)c1ccc[nH]1.NC1CCC(C)(C)CC1>>O=C(NC1CCC(C)(C)CC1)c1ccc[nH]1 (Amide: Pyrrole-2-carboxylic acid + 4,4-dimethylcyclohexylamine)",
+    
+    # Aliphatic carboxylic acids
+    "CCCCCCCC(=O)O.Nc1ccc(OC)cc1>>CCCCCCCC(=O)Nc1ccc(OC)cc1 (Amide: Octanoic acid + p-anisidine)",
+    "CC(C)CC(=O)O.NCc1ccc(Cl)cc1>>CC(C)CC(=O)NCc1ccc(Cl)cc1 (Amide: Isovaleric acid + 4-chlorobenzylamine)",
+    "CCC(C)C(=O)O.NC1CCN(C)CC1>>CCC(C)C(=O)N1CCN(C)CC1 (Amide: 2-Methylbutyric acid + N-methylpiperazine)",
+    "O=C(O)C1CCCCC1.NCCc1ccc[nH]1>>O=C(NCCc1ccc[nH]1)C1CCCCC1 (Amide: Cyclohexanecarboxylic acid + tryptamine)",
+    "CC1CC(C(=O)O)CC(C)(C)C1.Nc1cccc(C)c1>>CC1CC(C(=O)Nc2cccc(C)c2)CC(C)(C)C1 (Amide: Camphoric acid derivative + m-toluidine)",
+    
+    # Amino acids as starting materials
+    "CC(C)CC(N)C(=O)O.NCc1ccccc1>>CC(C)CC(N)C(=O)NCc1ccccc1 (Amide: Leucine + benzylamine)",
+    "N[C@@H](Cc1ccccc1)C(=O)O.NC1CCCCC1>>N[C@@H](Cc1ccccc1)C(=O)N1CCCCC1 (Amide: Phenylalanine + cyclohexylamine)",
+    "N[C@@H](CC(=O)O)C(=O)O.NCc1ccc(OC)cc1>>N[C@@H](CC(=O)O)C(=O)NCc1ccc(OC)cc1 (Amide: Aspartic acid + 4-methoxybenzylamine)",
+    "N[C@@H](CCCCN)C(=O)O.Nc1ccc(C(F)(F)F)cc1>>N[C@@H](CCCCN)C(=O)Nc1ccc(C(F)(F)F)cc1 (Amide: Lysine + 4-trifluoromethylaniline)",
+    
+    # Dicarboxylic acids (mono-amide formation)
+    "O=C(O)CCCCCC(=O)O.Nc1ccccc1>>O=C(O)CCCCCC(=O)Nc1ccccc1 (Amide: Adipic acid mono-amide + aniline)",
+    "O=C(O)c1ccc(C(=O)O)cc1.NCc1ccncc1>>O=C(O)c1ccc(C(=O)NCc2ccncc2)cc1 (Amide: Terephthalic acid mono-amide + 4-picolylamine)",
+    "O=C(O)CCC(=O)O.NC1CCOCC1>>O=C(O)CCC(=O)N1CCOCC1 (Amide: Succinic acid mono-amide + morpholine)",
+    
+    # Secondary amines (N-substituted amides)
+    "O=C(O)c1ccccc1.CN(C)c1ccccc1>>CN(C)c1ccccc1.O=C(N(C)c1ccccc1)c1ccccc1 (Amide: Benzoic acid + N,N-dimethylaniline → tertiary amide)",
+    "CC(=O)O.N1CCCC1>>CC(=O)N1CCCC1 (Amide: Acetic acid + pyrrolidine)",
+    "O=C(O)c1ccc(Br)cc1.N1CCOCC1>>O=C(N1CCOCC1)c1ccc(Br)cc1 (Amide: 4-Bromobenzoic acid + morpholine)",
+    "O=C(O)CCc1ccccc1.N1CCN(c2ccccc2)CC1>>O=C(N1CCN(c2ccccc2)CC1)CCc1ccccc1 (Amide: Phenylacetic acid + N-phenylpiperazine)",
+    
+    # Substituted anilines
+    "O=C(O)c1ccccc1.Nc1ccc(Cl)c(Cl)c1>>O=C(Nc1ccc(Cl)c(Cl)c1)c1ccccc1 (Amide: Benzoic acid + 3,4-dichloroaniline)",
+    "CC(=O)O.Nc1cc(C)cc(C)c1>>CC(=O)Nc1cc(C)cc(C)c1 (Amide: Acetic acid + 3,5-dimethylaniline)",
+    "O=C(O)c1ccc(F)cc1.Nc1ccc(OCC(F)(F)F)cc1>>O=C(Nc1ccc(OCC(F)(F)F)cc1)c1ccc(F)cc1 (Amide: 4-Fluorobenzoic acid + 4-trifluoroethoxyaniline)",
+    
+    # Coupling reagent-specific examples (indicated in labels)
+    "O=C(O)c1ccccc1.Nc1ccccc1>>O=C(Nc1ccccc1)c1ccccc1 (Amide: EDC/HOBt coupling)",
+    "CC(C)(C)C(=O)O.NCc1ccccc1>>CC(C)(C)C(=O)NCc1ccccc1 (Amide: DCC/NHS coupling)",
+    "O=C(O)c1ccc(OC)cc1.NC1CCCCC1>>COc1ccc(C(=O)N1CCCCC1)cc1 (Amide: HATU/DIPEA coupling)",
+    "O=C(O)CCc1ccccc1.Nc1ccncc1>>O=C(Nc1ccncc1)CCc1ccccc1 (Amide: PyBOP/NMM coupling)",
+    "O=C(O)c1cccs1.NCCc1ccccc1>>O=C(NCCc1ccccc1)c1cccs1 (Amide: T3P/Et3N coupling)",
+    
+    # Mixed aliphatic/aromatic systems
+    "O=C(O)C(c1ccccc1)c1ccccc1.NCCCCCC>>O=C(NCCCCCC)C(c1ccccc1)c1ccccc1 (Amide: Diphenylacetic acid + hexylamine)",
+    "CCCCCCC(=O)O.Nc1ccc2[nH]c3ccccc3c2c1>>CCCCCCC(=O)Nc1ccc2[nH]c3ccccc3c2c1 (Amide: Heptanoic acid + 2-aminocarbazole)",
+    "O=C(O)c1ccc(Oc2ccccc2)cc1.NC1CC1C(F)(F)F>>O=C(NC1CC1C(F)(F)F)c1ccc(Oc2ccccc2)cc1 (Amide: 4-Phenoxybenzoic acid + 2-trifluoromethylcyclopropylamine)",
 ]
 
 def get_sample_reactions():
@@ -417,6 +529,10 @@ def get_coupling_reactions():
     """Get only coupling reaction examples"""
     return [r for r in SAMPLE_REACTIONS if any(coupling in r for coupling in 
             ["Suzuki", "Stille", "Sonogashira", "Heck", "Negishi", "Buchwald-Hartwig", "Chan-Lam", "Ullmann"])]
+
+def get_amide_formation_reactions():
+    """Get amide formation reaction examples (acid + amine → amide)"""
+    return [r for r in SAMPLE_REACTIONS if "(Amide:" in r]
 
 def get_cc_coupling_reactions():
     """Get C-C coupling examples (Suzuki, Stille, Sonogashira, Heck, Negishi, Kumada)"""

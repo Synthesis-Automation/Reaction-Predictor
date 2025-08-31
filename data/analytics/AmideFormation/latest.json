@@ -1,0 +1,312 @@
+{
+  "reaction_type": "Amide Formation",
+  "dataset_info": {
+    "total_reactions": 1000,
+    "source_file": "amide-formation-2021-2024.jsonl"
+  },
+  "top": {
+    "reagents": [
+      {
+        "name": "N,N-Diisopropylethylamine",
+        "count": 460,
+        "percentage": 46.0
+      },
+      {
+        "name": "O-(7-Azabenzotriazol-1-yl)-N,N,N',N'-tetramethyluronium hexafluorophosphate",
+        "count": 315,
+        "percentage": 31.5
+      },
+      {
+        "name": "1-Ethyl-3-(3-dimethylaminopropyl)carbodiimide hydrochloride",
+        "count": 247,
+        "percentage": 24.7
+      },
+      {
+        "name": "1-Hydroxybenzotriazole",
+        "count": 245,
+        "percentage": 24.5
+      },
+      {
+        "name": "Triethylamine",
+        "count": 216,
+        "percentage": 21.6
+      },
+      {
+        "name": "Hydrochloric acid",
+        "count": 83,
+        "percentage": 8.3
+      },
+      {
+        "name": "Oxalyl chloride",
+        "count": 76,
+        "percentage": 7.6
+      },
+      {
+        "name": "Water",
+        "count": 61,
+        "percentage": 6.1
+      },
+      {
+        "name": "Thionyl chloride",
+        "count": 47,
+        "percentage": 4.7
+      },
+      {
+        "name": "O-(Benzotriazol-1-yl)-N,N,N′,N′-tetramethyluronium tetrafluoroborate",
+        "count": 41,
+        "percentage": 4.1000000000000005
+      },
+      {
+        "name": "Sodium bicarbonate",
+        "count": 40,
+        "percentage": 4.0
+      },
+      {
+        "name": "N,N'-Dicyclohexylcarbodiimide",
+        "count": 33,
+        "percentage": 3.3000000000000003
+      },
+      {
+        "name": "O-Benzotriazol-1-yl-N,N,N',N'-tetramethyluronium hexafluorophosphate",
+        "count": 32,
+        "percentage": 3.2
+      },
+      {
+        "name": "Trifluoroacetic acid",
+        "count": 31,
+        "percentage": 3.1
+      },
+      {
+        "name": "N,N'-Carbonyldiimidazole",
+        "count": 29,
+        "percentage": 2.9000000000000004
+      },
+      {
+        "name": "Propylphosphonic anhydride",
+        "count": 28,
+        "percentage": 2.8000000000000003
+      },
+      {
+        "name": "1-Ethyl-3-(3-dimethylaminopropyl)carbodiimide",
+        "count": 27,
+        "percentage": 2.7
+      },
+      {
+        "name": "N-Methylmorpholine",
+        "count": 25,
+        "percentage": 2.5
+      },
+      {
+        "name": "Pyridine",
+        "count": 22,
+        "percentage": 2.1999999999999997
+      },
+      {
+        "name": "Ammonium chloride",
+        "count": 22,
+        "percentage": 2.1999999999999997
+      }
+    ],
+    "solvents": [
+      {
+        "name": "DMF",
+        "count": 445,
+        "percentage": 44.5
+      },
+      {
+        "name": "DCM",
+        "count": 418,
+        "percentage": 41.8
+      },
+      {
+        "name": "Water",
+        "count": 191,
+        "percentage": 19.1
+      },
+      {
+        "name": "THF",
+        "count": 101,
+        "percentage": 10.100000000000001
+      },
+      {
+        "name": "Ethyl acetate",
+        "count": 37,
+        "percentage": 3.6999999999999997
+      },
+      {
+        "name": "Methyl cyanide",
+        "count": 21,
+        "percentage": 2.1
+      },
+      {
+        "name": "1,4-Dioxane",
+        "count": 18,
+        "percentage": 1.7999999999999998
+      },
+      {
+        "name": "Ethanol",
+        "count": 17,
+        "percentage": 1.7000000000000002
+      },
+      {
+        "name": "Methanol",
+        "count": 14,
+        "percentage": 1.4000000000000001
+      },
+      {
+        "name": "Chloroform",
+        "count": 10,
+        "percentage": 1.0
+      },
+      {
+        "name": "Dimethylacetamide",
+        "count": 9,
+        "percentage": 0.8999999999999999
+      },
+      {
+        "name": "DMSO",
+        "count": 7,
+        "percentage": 0.7000000000000001
+      },
+      {
+        "name": "PhMe",
+        "count": 7,
+        "percentage": 0.7000000000000001
+      },
+      {
+        "name": "1,2-Dichloroethane",
+        "count": 7,
+        "percentage": 0.7000000000000001
+      },
+      {
+        "name": "2-Propanol",
+        "count": 6,
+        "percentage": 0.6
+      }
+    ],
+    "bases": [
+      {
+        "name": "N,N-Diisopropylethylamine",
+        "count": 272,
+        "percentage": 27.200000000000003
+      },
+      {
+        "name": "Triethylamine",
+        "count": 130,
+        "percentage": 13.0
+      },
+      {
+        "name": "1-Hydroxybenzotriazole",
+        "count": 111,
+        "percentage": 11.1
+      },
+      {
+        "name": "Oxalyl chloride",
+        "count": 67,
+        "percentage": 6.7
+      },
+      {
+        "name": "Thionyl chloride",
+        "count": 31,
+        "percentage": 3.1
+      },
+      {
+        "name": "N,N'-Carbonyldiimidazole",
+        "count": 29,
+        "percentage": 2.9000000000000004
+      },
+      {
+        "name": "Trifluoroacetic acid",
+        "count": 27,
+        "percentage": 2.7
+      },
+      {
+        "name": "O-(7-Azabenzotriazol-1-yl)-N,N,N',N'-tetramethyluronium hexafluorophosphate",
+        "count": 26,
+        "percentage": 2.6
+      },
+      {
+        "name": "Hydrochloric acid",
+        "count": 13,
+        "percentage": 1.3
+      },
+      {
+        "name": "Pyridine",
+        "count": 12,
+        "percentage": 1.2
+      }
+    ],
+    "catalysts": [
+      {
+        "name": "4-Dimethylaminopyridine",
+        "count": 95,
+        "percentage": 9.5
+      },
+      {
+        "name": "DMF",
+        "count": 50,
+        "percentage": 5.0
+      },
+      {
+        "name": "Iodine",
+        "count": 17,
+        "percentage": 1.7000000000000002
+      },
+      {
+        "name": "Triethyl phosphite",
+        "count": 17,
+        "percentage": 1.7000000000000002
+      },
+      {
+        "name": "Poly(oxy-1,2-ethanediyl)",
+        "count": 4,
+        "percentage": 0.4
+      },
+      {
+        "name": "Dimethylaminopyridine",
+        "count": 4,
+        "percentage": 0.4
+      },
+      {
+        "name": "N,N-Diisopropylethylamine",
+        "count": 2,
+        "percentage": 0.2
+      },
+      {
+        "name": "Tetrabutylammonium chloride",
+        "count": 1,
+        "percentage": 0.1
+      },
+      {
+        "name": "N-Methylmorpholine",
+        "count": 1,
+        "percentage": 0.1
+      },
+      {
+        "name": "Propylphosphonic anhydride",
+        "count": 1,
+        "percentage": 0.1
+      }
+    ]
+  },
+  "conditions": {
+    "temperature": {
+      "avg": 24.055384615384614,
+      "min": -25.0,
+      "max": 200.0,
+      "samples": 975
+    },
+    "time": {
+      "avg": 23.438613265306124,
+      "min": 0.167,
+      "max": 11189.0,
+      "samples": 980
+    },
+    "yield": {
+      "avg": 88.354,
+      "min": 80.0,
+      "max": 100.0,
+      "samples": 1000
+    }
+  }
+}

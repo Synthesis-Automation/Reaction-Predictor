@@ -40,7 +40,8 @@ from reaction_types import get_reaction_types
 from sample_reactions import (
     get_sample_reactions, get_coupling_reactions, get_reduction_reactions,
     get_oxidation_reactions, get_substitution_reactions, get_elimination_reactions,
-    get_cycloaddition_reactions, get_buchwald_hartwig_reactions, search_reactions
+    get_cycloaddition_reactions, get_buchwald_hartwig_reactions, search_reactions,
+    get_amide_formation_reactions
 )
 
 def create_reaction_image(reaction_smiles: str, width: int = 600, height: int = 200) -> QPixmap:
@@ -535,6 +536,22 @@ class SampleReactionsBrowser(QDialog):
 
         category_layout.addLayout(sub_layout)
 
+        # Non-coupling reaction types
+        non_coupling_layout = QHBoxLayout()
+        
+        # Amide formation and other non-coupling reactions
+        non_coupling_items = [
+            ("Amide Formation", "amide_formation"),
+            ("Reductions", "reductions"),
+            ("Oxidations", "oxidations"),
+            ("Substitutions", "substitutions"),
+            ("Eliminations", "eliminations"),
+            ("Cycloadditions", "cycloadditions"),
+        ]
+        non_coupling_layout.addWidget(add_checkboxes_grid("Non-Coupling Reactions", non_coupling_items))
+        
+        category_layout.addLayout(non_coupling_layout)
+
         filter_layout.addLayout(category_layout)
         layout.addWidget(filter_group)
         
@@ -899,18 +916,39 @@ class SampleReactionsBrowser(QDialog):
             if any(chk for _, chk in cs_sub):
                 add_by_tokens([name for name, chk in cs_sub if chk])
 
+            # Individual non-coupling reaction types
+            if self.category_checkboxes.get("amide_formation", QCheckBox()).isChecked():
+                from sample_reactions import get_amide_formation_reactions
+                filtered.extend(get_amide_formation_reactions())
+            
+            if self.category_checkboxes.get("reductions", QCheckBox()).isChecked():
+                filtered.extend(get_reduction_reactions())
+            
+            if self.category_checkboxes.get("oxidations", QCheckBox()).isChecked():
+                filtered.extend(get_oxidation_reactions())
+            
+            if self.category_checkboxes.get("substitutions", QCheckBox()).isChecked():
+                filtered.extend(get_substitution_reactions())
+            
+            if self.category_checkboxes.get("eliminations", QCheckBox()).isChecked():
+                filtered.extend(get_elimination_reactions())
+            
+            if self.category_checkboxes.get("cycloadditions", QCheckBox()).isChecked():
+                filtered.extend(get_cycloaddition_reactions())
+
             # Non-coupling quick toggle (common other categories)
             if non_coupling:
                 from sample_reactions import (
                     get_reduction_reactions, get_oxidation_reactions,
                     get_substitution_reactions, get_elimination_reactions,
-                    get_cycloaddition_reactions,
+                    get_cycloaddition_reactions, get_amide_formation_reactions
                 )
                 filtered.extend(get_reduction_reactions())
                 filtered.extend(get_oxidation_reactions())
                 filtered.extend(get_substitution_reactions())
                 filtered.extend(get_elimination_reactions())
                 filtered.extend(get_cycloaddition_reactions())
+                filtered.extend(get_amide_formation_reactions())
         except Exception as e:
             print(f"Error filtering by category: {e}")
             return self.all_reactions.copy()
@@ -1072,8 +1110,8 @@ Notes:
             return "C-N Coupling - Ullmann (Cu)"
         elif "esterification" in reaction_lower:
             return "Esterification"
-        elif "amidation" in reaction_lower:
-            return "Amidation"
+        elif "amidation" in reaction_lower or "(amide:" in reaction_lower:
+            return "Amide Formation"
         elif "hydrogenation" in reaction_lower:
             return "Hydrogenation"
         elif "oxidation" in reaction_lower:
@@ -1617,8 +1655,8 @@ class SimpleReactionGUI(QMainWindow):
         self.reaction_type_combo = QComboBox()
         self.reaction_type_combo.setMinimumHeight(22)
         self.reaction_type_combo.setMaximumHeight(22)
-        self.reaction_type_combo.setMinimumWidth(180)
-        self.reaction_type_combo.setMaximumWidth(200)
+        self.reaction_type_combo.setMinimumWidth(300)
+        self.reaction_type_combo.setMaximumWidth(400)
         
         # Load reaction types
         try:

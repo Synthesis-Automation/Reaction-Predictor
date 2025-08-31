@@ -142,7 +142,9 @@ class EnhancedRecommendationEngine:
             "Hydrogenation": "Hydrogenation",
             "Carbonylation": "Carbonylation",
             "Oxidation": "C-H_Activation",
-            "C-H Activation": "C-H_Activation"
+            "C-H Activation": "C-H_Activation",
+            "Amidation - Acid + Amine": "Amide Formation",
+            "Amide Formation - Acid + Amine": "Amide Formation"
         }
         return mapping.get(base_gui)
     
@@ -272,7 +274,11 @@ class EnhancedRecommendationEngine:
                 except Exception:
                     evidence_bases = None
                 try:
-                    evidence_ligands = self._extract_priors(priors, 'ligands')
+                    # For amide formation, reagents are used instead of ligands
+                    if (reaction_type or '').lower().startswith('amide formation'):
+                        evidence_ligands = self._extract_priors(priors, 'reagents')
+                    else:
+                        evidence_ligands = self._extract_priors(priors, 'ligands')
                 except Exception:
                     evidence_ligands = None
             else:
@@ -282,12 +288,29 @@ class EnhancedRecommendationEngine:
                 evidence_bases = self._harvest_evidence_bases(reaction_type)
 
             # Get top ligands for this reaction type, with evidence-aware boost
-            ligands = recommend_ligands_for_reaction(
-                reaction_type=reaction_type,
-                top_n=5,
-                min_compatibility=0.4,
-                evidence_ligands=evidence_ligands or None
-            )
+            if (reaction_type or '').lower().startswith('amide formation'):
+                # For amide formation, use coupling reagents from evidence instead of traditional ligands
+                ligands = []
+                if evidence_ligands:
+                    # Convert evidence to ligand recommendations format
+                    total_count = sum(evidence_ligands.values())
+                    for reagent_name, count in sorted(evidence_ligands.items(), key=lambda x: x[1], reverse=True)[:5]:
+                        score = min(0.95, 0.5 + (count / total_count) * 0.45)  # Scale to 0.5-0.95 range
+                        ligands.append({
+                            'ligand': reagent_name,
+                            'compatibility_score': score,
+                            'applications': 'Coupling reagent for amide formation',
+                            'reaction_suitability': 'High compatibility for amide bond formation',
+                            'type': 'coupling_reagent'
+                        })
+            else:
+                # Traditional ligand recommendations for other reaction types
+                ligands = recommend_ligands_for_reaction(
+                    reaction_type=reaction_type,
+                    top_n=5,
+                    min_compatibility=0.4,
+                    evidence_ligands=evidence_ligands or None
+                )
             # Drop placeholder/dummy items
             if ligands:
                 ligands = [L for L in ligands if str(L.get('ligand') or '').strip().lower() not in ('none', 'n/a', '-')]
@@ -300,12 +323,44 @@ class EnhancedRecommendationEngine:
             recommendations['ligand_recommendations'] = ligands
             
             # Get top solvents for this reaction type (pass evidence for gentle boost)
-            solvents = recommend_solvents_for_reaction(
-                reaction_type=reaction_type,
-                top_n=5,
-                min_compatibility=0.4,
-                evidence_solvents=evidence_solvents or None
-            )
+            if (reaction_type or '').lower().startswith('amide formation'):
+                # For amide formation, use solvents from evidence instead of traditional recommendations
+                solvents = []
+                if evidence_solvents:
+                    # Load solvent abbreviations
+                    solv_abbrev = {}
+                    try:
+                        from reagents.solvent import create_solvent_dataframe  # type: ignore
+                        sdf = create_solvent_dataframe()
+                        for _, rowx in sdf.iterrows():
+                            nm = str(rowx.get('name') or '').strip()
+                            ab = str(rowx.get('abbreviation') or '').strip()
+                            if nm:
+                                solv_abbrev[nm] = ab or nm
+                    except Exception:
+                        pass
+                    
+                    # Convert evidence to solvent recommendations format
+                    total_count = sum(evidence_solvents.values())
+                    for solvent_name, count in sorted(evidence_solvents.items(), key=lambda x: x[1], reverse=True)[:5]:
+                        score = min(0.95, 0.5 + (count / total_count) * 0.45)  # Scale to 0.5-0.95 range
+                        solvents.append({
+                            'solvent': solvent_name,
+                            'abbreviation': solv_abbrev.get(solvent_name, solvent_name),
+                            'compatibility_score': score,
+                            'properties': 'Suitable for amide formation reactions',
+                            'applications': 'Amide coupling, peptide synthesis, organic transformations',
+                            'reaction_suitability': 'Proven effective for amide bond formation',
+                            'type': 'amide_solvent'
+                        })
+            else:
+                # Traditional solvent recommendations for other reaction types
+                solvents = recommend_solvents_for_reaction(
+                    reaction_type=reaction_type,
+                    top_n=5,
+                    min_compatibility=0.4,
+                    evidence_solvents=evidence_solvents or None
+                )
             # Apply analytics priors to solvents if configured
             if priors and self._analytics_cfg['enabled'] and self._analytics_cfg['apply_to']['solvents']:
                 try:
@@ -316,12 +371,28 @@ class EnhancedRecommendationEngine:
             
             # Try to get base recommendations if available
             try:
-                from reagents.base import recommend_bases_for_reaction  # type: ignore
-                bases = recommend_bases_for_reaction(
-                    reaction_type=reaction_type,
-                    top_n=5,
-                    min_compatibility=0.4
-                )
+                if (reaction_type or '').lower().startswith('amide formation'):
+                    # For amide formation, use bases from evidence instead of traditional recommendations
+                    bases = []
+                    if evidence_bases:
+                        # Convert evidence to base recommendations format
+                        total_count = sum(evidence_bases.values())
+                        for base_name, count in sorted(evidence_bases.items(), key=lambda x: x[1], reverse=True)[:5]:
+                            score = min(0.95, 0.5 + (count / total_count) * 0.45)  # Scale to 0.5-0.95 range
+                            bases.append({
+                                'base': base_name,
+                                'compatibility_score': score,
+                                'properties': 'Base suitable for amide formation reactions',
+                                'type': 'amide_base'
+                            })
+                else:
+                    # Traditional base recommendations for other reaction types
+                    from reagents.base import recommend_bases_for_reaction  # type: ignore
+                    bases = recommend_bases_for_reaction(
+                        reaction_type=reaction_type,
+                        top_n=5,
+                        min_compatibility=0.4
+                    )
                 # Apply analytics priors to bases if configured
                 if priors and self._analytics_cfg['enabled'] and self._analytics_cfg['apply_to']['bases']:
                     try:
@@ -874,13 +945,17 @@ class EnhancedRecommendationEngine:
     def _load_analytics_summary(self, reaction_type: str) -> Optional[dict]:
         """Load data/analytics/<reaction_type>/latest.json if present.
 
-        For Milestone 2, we support Ullmann only.
+        For Milestone 2, we support Ullmann and Amide Formation.
         """
         try:
             rt = (reaction_type or '').strip()
-            if rt.lower() != 'ullmann':
+            if rt.lower() == 'ullmann':
+                base = os.path.join(_ROOT, 'data', 'analytics', 'Ullmann')
+            elif rt.lower() == 'amide formation':
+                base = os.path.join(_ROOT, 'data', 'analytics', 'AmideFormation')
+            else:
                 return None
-            base = os.path.join(_ROOT, 'data', 'analytics', 'Ullmann')
+                
             latest = os.path.join(base, 'latest.json')
             if os.path.exists(latest):
                 with open(latest, 'r', encoding='utf-8') as f:
@@ -901,7 +976,11 @@ class EnhancedRecommendationEngine:
             pri = {}
             for item in top:
                 nm = str(item.get('name') or '').strip()
-                pct = float(item.get('pct') or 0.0)
+                # Handle both 'pct' and 'percentage' fields
+                pct = float(item.get('pct') or item.get('percentage') or 0.0)
+                # Convert percentage to decimal if it's > 1 (e.g., 46.0 -> 0.46)
+                if pct > 1.0:
+                    pct = pct / 100.0
                 if not nm or pct <= 0:
                     continue
                 pri[nm] = pct
@@ -1075,17 +1154,36 @@ class EnhancedRecommendationEngine:
                                     rtype = (reaction_data.get('reaction_type') or '').strip()
                                     if not rtype:
                                         continue
-                                    if rtype.lower() != (reaction_type or '').lower():
-                                        continue
                                     
-                                    # Extract ligands from catalyst information
-                                    catalyst_info = reaction_data.get('catalyst', {})
-                                    ligands = catalyst_info.get('ligands', [])
+                                    # Special handling for amide formation dataset which uses "Other" 
+                                    if (reaction_type or '').lower().startswith('amide formation'):
+                                        # For amide formation, we use the dataset if it's the amide-formation dataset
+                                        if 'amide-formation' not in fname.lower():
+                                            continue
+                                    else:
+                                        # Standard reaction type matching
+                                        if rtype.lower() != (reaction_type or '').lower():
+                                            continue
                                     
-                                    for ligand in ligands:
-                                        name = _name_only(ligand.get('name', ''))
-                                        if name:
-                                            evidence[name] = evidence.get(name, 0) + 1
+                                    # For amide formation, look at reagents (coupling agents) instead of traditional ligands
+                                    if (reaction_type or '').lower().startswith('amide formation'):
+                                        # Extract coupling reagents (excluding bases)
+                                        reagents = reaction_data.get('reagents', [])
+                                        for reagent in reagents:
+                                            role = reagent.get('role', '')
+                                            if role != 'BASE':  # Skip bases, focus on coupling agents
+                                                name = _name_only(reagent.get('name', ''))
+                                                if name:
+                                                    evidence[name] = evidence.get(name, 0) + 1
+                                    else:
+                                        # Extract ligands from catalyst information for other reaction types
+                                        catalyst_info = reaction_data.get('catalyst', {})
+                                        ligands = catalyst_info.get('ligands', [])
+                                        
+                                        for ligand in ligands:
+                                            name = _name_only(ligand.get('name', ''))
+                                            if name:
+                                                evidence[name] = evidence.get(name, 0) + 1
                                             
                                 except json.JSONDecodeError:
                                     continue
@@ -1168,8 +1266,16 @@ class EnhancedRecommendationEngine:
                                     rtype = (reaction_data.get('reaction_type') or '').strip()
                                     if not rtype:
                                         continue
-                                    if rtype.lower() != (reaction_type or '').lower():
-                                        continue
+                                    
+                                    # Special handling for amide formation dataset which uses "Other" 
+                                    if (reaction_type or '').lower().startswith('amide formation'):
+                                        # For amide formation, we use the dataset if it's the amide-formation dataset
+                                        if 'amide-formation' not in fname.lower():
+                                            continue
+                                    else:
+                                        # Standard reaction type matching
+                                        if rtype.lower() != (reaction_type or '').lower():
+                                            continue
                                     
                                     # Extract solvents
                                     solvents = reaction_data.get('solvents', [])
@@ -1267,8 +1373,16 @@ class EnhancedRecommendationEngine:
                                     rtype = (reaction_data.get('reaction_type') or '').strip()
                                     if not rtype:
                                         continue
-                                    if rtype.lower() != (reaction_type or '').lower():
-                                        continue
+                                    
+                                    # Special handling for amide formation dataset which uses "Other" 
+                                    if (reaction_type or '').lower().startswith('amide formation'):
+                                        # For amide formation, we use the dataset if it's the amide-formation dataset
+                                        if 'amide-formation' not in fname.lower():
+                                            continue
+                                    else:
+                                        # Standard reaction type matching
+                                        if rtype.lower() != (reaction_type or '').lower():
+                                            continue
                                     
                                     # Extract reagents (bases are usually marked with role "BASE")
                                     reagents = reaction_data.get('reagents', [])

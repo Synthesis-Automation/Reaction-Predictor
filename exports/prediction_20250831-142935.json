@@ -1,0 +1,545 @@
+{
+  "meta": {
+    "generated_at": "2025-08-31T14:29:35",
+    "analysis_type": "enhanced",
+    "status": "Enhanced recommendations generated successfully"
+  },
+  "input": {
+    "reaction_smiles": "O=C(O)c1ccc(F)cc1.NCCc1ccccc1>>O=C(NCCc1ccccc1)c1ccc(F)cc1",
+    "selected_reaction_type": "Auto detect reaction type"
+  },
+  "detection": {
+    "reaction_type": "Cross-Coupling"
+  },
+  "dataset": {},
+  "top_conditions": [
+    {
+      "reaction": {
+        "smiles": "O=C(O)c1ccc(F)cc1.NCCc1ccccc1>>O=C(NCCc1ccccc1)c1ccc(F)cc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "O=C(O)c1ccc(F)cc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "NCCc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "Pd(OAc)2",
+          "cas": "3375-31-3",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "XPhos",
+          "cas": "98327-87-8",
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "Cs2CO3",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "THF",
+          "abbreviation": "THF",
+          "cas": "109-99-9",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-120°C",
+        "time": "4-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    },
+    {
+      "reaction": {
+        "smiles": "O=C(O)c1ccc(F)cc1.NCCc1ccccc1>>O=C(NCCc1ccccc1)c1ccc(F)cc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "O=C(O)c1ccc(F)cc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "NCCc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "Pd(OAc)2",
+          "cas": "3375-31-3",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "SPhos",
+          "cas": "161265-03-8",
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "Cs2CO3",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "Dimethylformamide",
+          "abbreviation": "DMF",
+          "cas": "68-12-2",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-120°C",
+        "time": "4-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    },
+    {
+      "reaction": {
+        "smiles": "O=C(O)c1ccc(F)cc1.NCCc1ccccc1>>O=C(NCCc1ccccc1)c1ccc(F)cc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "O=C(O)c1ccc(F)cc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "NCCc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "Pd(OAc)2",
+          "cas": "3375-31-3",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "SPhos",
+          "cas": "161265-03-8",
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "Cs2CO3",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "THF",
+          "abbreviation": "THF",
+          "cas": "109-99-9",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-120°C",
+        "time": "4-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    }
+  ],
+  "related_reactions": [
+    {
+      "reaction_smiles": "Brc1ccc(CN)cc1.c1ccc(N)cc1>>c1ccc(Nc2ccc(CN)cc2)cc1",
+      "yield": 89.7,
+      "catalyst": "Pd2(dba)3",
+      "ligand": "BINAP",
+      "similarity": 0.91
+    },
+    {
+      "reaction_smiles": "Brc1ccc(F)cc1.N1CCNCC1>>Fc1ccc(N2CCNCC2)cc1",
+      "yield": 93.1,
+      "catalyst": "Pd2(dba)3",
+      "ligand": "XPhos",
+      "similarity": 0.85
+    }
+  ],
+  "general": {
+    "ligands": [],
+    "solvents": [],
+    "bases": [],
+    "top_hits": [
+      {
+        "reaction_id": "31-614-CAS-24414263",
+        "reaction_type": "Other",
+        "dataset_file": "amide-formation-2021-2024.jsonl",
+        "cond_key": "none/none/1-Hydroxybenzotriazole|2592-95-2+Benzotriazol-1-yloxytripyrrolidinophosphonium hexafluorophosphate|128625-52-5+Diisopropylethylamine|+N,N-Diisopropylethylamine|7087-68-5/THF|109-99-9+Tetrahydrofuran|",
+        "similarity": 0.433,
+        "reactant_smiles": "O=C(O)c1cccc(I)c1.NCCC(c1ccc(F)cc1)c1ccc(F)cc1",
+        "product_smiles": "O=C(NCCC(c1ccc(F)cc1)c1ccc(F)cc1)c1cccc(I)c1",
+        "reaction_smiles": "O=C(O)c1cccc(I)c1.NCCC(c1ccc(F)cc1)c1ccc(F)cc1>>O=C(NCCC(c1ccc(F)cc1)c1ccc(F)cc1)c1cccc(I)c1",
+        "ligands": [],
+        "solvents": [
+          "THF"
+        ],
+        "bases": [],
+        "temperature": 25.0,
+        "time": 18.0,
+        "yield_pct": 85.0,
+        "catalyst": null,
+        "reference": "Design, Synthesis, and Structure-Activity Relationship Studies of Dual Inhibitors of Soluble Epoxide Hydrolase and 5-Lipoxygenase | Hiesinger, Kerstin; et al | Journal of Medicinal Chemistry (2020), 63(20), 11498-11521. | 10.1021/acs.jmedchem.0c00561",
+        "core_detail": null,
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-614-CAS-24031232",
+        "reaction_type": "Other",
+        "dataset_file": "amide-formation-2021-2024.jsonl",
+        "cond_key": "none/none/Diisopropylethylamine|+N,N-Diisopropylethylamine|7087-68-5+O-Benzotriazol-1-yl-N,N,N',N'-tetramethyluronium hexafluorophosphate|94790-37-1/THF|109-99-9+Tetrahydrofuran|",
+        "similarity": 0.427,
+        "reactant_smiles": "Nc1ccccc1.O=C(O)CCC(=O)c1ccc(F)cc1",
+        "product_smiles": "O=C(CCC(=O)c1ccc(F)cc1)Nc1ccccc1",
+        "reaction_smiles": "Nc1ccccc1.O=C(O)CCC(=O)c1ccc(F)cc1>>O=C(CCC(=O)c1ccc(F)cc1)Nc1ccccc1",
+        "ligands": [],
+        "solvents": [
+          "THF"
+        ],
+        "bases": [],
+        "temperature": 25.0,
+        "time": 9.0,
+        "yield_pct": 92.0,
+        "catalyst": null,
+        "reference": "Benzenesulfonamide Derivatives as Calcium/Calmodulin-Dependent Protein Kinase Inhibitors and Antiviral Agents against Dengue and Zika Virus Infections | Chen, Wei-Chia; et al | Journal of Medicinal Chemistry (2020), 63(3), 1313-1327. | 10.1021/acs.jmedchem.9b01779",
+        "core_detail": null,
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-367-CAS-22706649",
+        "reaction_type": "Other",
+        "dataset_file": "amide-formation-2021-2024.jsonl",
+        "cond_key": "none/none/Thionyl chloride|7719-09-7+Triethylamine|121-44-8+Water|7732-18-5/DCM|75-09-2+DMF|68-12-2+Dichloromethane|+Dimethylformamide|",
+        "similarity": 0.424,
+        "reactant_smiles": "O=C(O)c1ccccc1.C#CCN",
+        "product_smiles": "C#CCNC(=O)c1ccccc1",
+        "reaction_smiles": "O=C(O)c1ccccc1.C#CCN>>C#CCNC(=O)c1ccccc1",
+        "ligands": [],
+        "solvents": [
+          "DCM",
+          "DMF"
+        ],
+        "bases": [
+          "Et3N"
+        ],
+        "temperature": null,
+        "time": 0.167,
+        "yield_pct": 94.0,
+        "catalyst": "DMF",
+        "reference": "The bioisosteric modification of pyrazinamide derivatives led to potent antitubercular agents: Synthesis via click approach and molecular docking of pyrazine-1,2,3-triazoles | Reddyrajula, Rajkumar; et al | Bioorganic & Medicinal Chemistry Letters (2020), 30(2), 126846. | 10.1016/j.bmcl.2019.126846",
+        "core_detail": "DMF",
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-614-CAS-44298741",
+        "reaction_type": "Other",
+        "dataset_file": "amide-formation-2021-2024.jsonl",
+        "cond_key": "none/none/Thionyl chloride|7719-09-7/DCM|75-09-2+Dichloromethane|+Ethyl acetate|141-78-6",
+        "similarity": 0.423,
+        "reactant_smiles": "O=C(O)c1ccc(CBr)cc1.CCCN",
+        "product_smiles": "CCCNC(=O)c1ccc(CBr)cc1",
+        "reaction_smiles": "O=C(O)c1ccc(CBr)cc1.CCCN>>CCCNC(=O)c1ccc(CBr)cc1",
+        "ligands": [],
+        "solvents": [
+          "Ethyl acetate",
+          "DCM"
+        ],
+        "bases": [],
+        "temperature": 80.0,
+        "time": 11189.0,
+        "yield_pct": 91.0,
+        "catalyst": null,
+        "reference": "Discovery and Development of NLRP3 Inhibitors Targeting the LRR Domain to Disrupt NLRP3-NEK7 Interaction for the Treatment of Rheumatoid Arthritis | Li, Bing-yan; et al | Journal of Medicinal Chemistry (2024), 67(12), 9869-9895. | 10.1021/acs.jmedchem.3c02407",
+        "core_detail": null,
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-367-CAS-23337821",
+        "reaction_type": "Other",
+        "dataset_file": "amide-formation-2021-2024.jsonl",
+        "cond_key": "none/none/1-Ethyl-3-(3-dimethylaminopropyl)carbodiimide hydrochloride|25952-53-8+1-Ethyl-3-(3′-dimethylaminopropyl)carbodiimide hydrochloride|+1-Hydroxybenzotriazole|2592-95-2+Triethylamine|121-44-8+Water|7732-18-5/Dimethylacetamide|127-19-5",
+        "similarity": 0.422,
+        "reactant_smiles": "Nc1cccnc1.O=C(O)c1ccc(CNC(=O)c2ccc(F)cc2)cc1",
+        "product_smiles": "O=C(NCc1ccc(C(=O)Nc2cccnc2)cc1)c1ccc(F)cc1",
+        "reaction_smiles": "Nc1cccnc1.O=C(O)c1ccc(CNC(=O)c2ccc(F)cc2)cc1>>O=C(NCc1ccc(C(=O)Nc2cccnc2)cc1)c1ccc(F)cc1",
+        "ligands": [],
+        "solvents": [
+          "Dimethylacetamide"
+        ],
+        "bases": [
+          "Et3N"
+        ],
+        "temperature": 25.0,
+        "time": 24.0,
+        "yield_pct": 96.0,
+        "catalyst": null,
+        "reference": "A new chemotype with promise against Trypanosoma cruzi | Wang, Xiaofang; et al | Bioorganic & Medicinal Chemistry Letters (2020), 30(1), 126778. | 10.1016/j.bmcl.2019.126778",
+        "core_detail": null,
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-614-CAS-39391299",
+        "reaction_type": "Ullmann",
+        "dataset_file": "Ullman-2020-2024.jsonl",
+        "cond_key": "Cu/none/Dipotassium phosphate|7758-11-4/Acetonitrile|+Methyl cyanide|75-05-8",
+        "similarity": 0.413,
+        "reactant_smiles": "NNc1ccccc1.O=Cc1ccc(F)cc1",
+        "product_smiles": "O=C(NN(c1ccccc1)c1ccccc1)c1ccc(F)cc1",
+        "reaction_smiles": "NNc1ccccc1.O=Cc1ccc(F)cc1>>O=C(NN(c1ccccc1)c1ccccc1)c1ccc(F)cc1",
+        "ligands": [],
+        "solvents": [
+          "Methyl cyanide"
+        ],
+        "bases": [],
+        "temperature": null,
+        "time": 12.0,
+        "yield_pct": 75.0,
+        "catalyst": "Copper(II) triflate",
+        "reference": "An aerobic copper-catalyzed multi-component reaction strategy for N’,N’-diaryl acylhydrazine synthesis: reactions and mechanism | Deng, Lei; et al | Organic Chemistry Frontiers (2024), 11(4), 1132-1139. | 10.1039/d3qo01768k",
+        "core_detail": "Copper(II) triflate",
+        "core_generic": "Cu"
+      },
+      {
+        "reaction_id": "31-614-CAS-35272077",
+        "reaction_type": "Other",
+        "dataset_file": "amide-formation-2021-2024.jsonl",
+        "cond_key": "none/none/Diisopropylethylamine|+N,N-Diisopropylethylamine|7087-68-5+O-(7-Azabenzotriazol-1-yl)-N,N,N',N'-tetramethyluronium hexafluorophosphate|148893-10-1+O-(7-Azabenzotriazol-1-yl)-N,N,N′,N′-tetramethyluronium hexafluorophosphate|/THF|109-99-9+Tetrahydrofuran|",
+        "similarity": 0.407,
+        "reactant_smiles": "O=C(O)c1cnc2ccc(Cl)nn12.NCCc1ccccc1",
+        "product_smiles": "O=C(NCCc1ccccc1)c1cnc2ccc(Cl)nn12",
+        "reaction_smiles": "O=C(O)c1cnc2ccc(Cl)nn12.NCCc1ccccc1>>O=C(NCCc1ccccc1)c1cnc2ccc(Cl)nn12",
+        "ligands": [],
+        "solvents": [
+          "THF"
+        ],
+        "bases": [],
+        "temperature": null,
+        "time": 3.583,
+        "yield_pct": 83.0,
+        "catalyst": null,
+        "reference": "Function-oriented synthesis of Imidazo[1,2-a]pyrazine and Imidazo[1,2-b]pyridazine derivatives as potent PI3K/mTOR dual inhibitors | Li, Chuchu; et al | European Journal of Medicinal Chemistry (2023), 247, 115030. | 10.1016/j.ejmech.2022.115030",
+        "core_detail": null,
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-614-CAS-44298740",
+        "reaction_type": "Other",
+        "dataset_file": "amide-formation-2021-2024.jsonl",
+        "cond_key": "none/none/Thionyl chloride|7719-09-7/DCM|75-09-2+Dichloromethane|+Ethyl acetate|141-78-6",
+        "similarity": 0.399,
+        "reactant_smiles": "O=C(O)c1ccc(CBr)cc1.CCCCN",
+        "product_smiles": "CCCCNC(=O)c1ccc(CBr)cc1",
+        "reaction_smiles": "O=C(O)c1ccc(CBr)cc1.CCCCN>>CCCCNC(=O)c1ccc(CBr)cc1",
+        "ligands": [],
+        "solvents": [
+          "Ethyl acetate",
+          "DCM"
+        ],
+        "bases": [],
+        "temperature": 80.0,
+        "time": 5.0,
+        "yield_pct": 89.0,
+        "catalyst": null,
+        "reference": "Discovery and Development of NLRP3 Inhibitors Targeting the LRR Domain to Disrupt NLRP3-NEK7 Interaction for the Treatment of Rheumatoid Arthritis | Li, Bing-yan; et al | Journal of Medicinal Chemistry (2024), 67(12), 9869-9895. | 10.1021/acs.jmedchem.3c02407",
+        "core_detail": null,
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-614-CAS-36209034",
+        "reaction_type": "Other",
+        "dataset_file": "amide-formation-2021-2024.jsonl",
+        "cond_key": "none/none/1-Ethyl-3-(3-dimethylaminopropyl)carbodiimide hydrochloride|25952-53-8+1-Ethyl-3-(3′-dimethylaminopropyl)carbodiimide hydrochloride|/DCM|75-09-2+Dichloromethane|",
+        "similarity": 0.398,
+        "reactant_smiles": "O=C(O)c1ccc(F)cc1.Nc1cccc(C(F)(F)F)c1",
+        "product_smiles": "O=C(Nc1cccc(C(F)(F)F)c1)c1ccc(F)cc1",
+        "reaction_smiles": "O=C(O)c1ccc(F)cc1.Nc1cccc(C(F)(F)F)c1>>O=C(Nc1cccc(C(F)(F)F)c1)c1ccc(F)cc1",
+        "ligands": [],
+        "solvents": [
+          "DCM"
+        ],
+        "bases": [],
+        "temperature": 30.0,
+        "time": 24.333,
+        "yield_pct": 84.0,
+        "catalyst": "4-Dimethylaminopyridine",
+        "reference": "Activity of N-phenylbenzamide analogs against the neglected disease pathogen, Schistosoma mansoni | Kanyanta, Masebe; et al | Bioorganic & Medicinal Chemistry Letters (2023), 82, 129164. | 10.1016/j.bmcl.2023.129164",
+        "core_detail": "4-Dimethylaminopyridine",
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-614-CAS-44298736",
+        "reaction_type": "Other",
+        "dataset_file": "amide-formation-2021-2024.jsonl",
+        "cond_key": "none/none/Thionyl chloride|7719-09-7/DCM|75-09-2+Dichloromethane|+Ethyl acetate|141-78-6",
+        "similarity": 0.395,
+        "reactant_smiles": "O=C(O)c1ccc(CBr)cc1.COCCN",
+        "product_smiles": "COCCNC(=O)c1ccc(CBr)cc1",
+        "reaction_smiles": "O=C(O)c1ccc(CBr)cc1.COCCN>>COCCNC(=O)c1ccc(CBr)cc1",
+        "ligands": [],
+        "solvents": [
+          "Ethyl acetate",
+          "DCM"
+        ],
+        "bases": [],
+        "temperature": 80.0,
+        "time": 5.0,
+        "yield_pct": 83.0,
+        "catalyst": null,
+        "reference": "Discovery and Development of NLRP3 Inhibitors Targeting the LRR Domain to Disrupt NLRP3-NEK7 Interaction for the Treatment of Rheumatoid Arthritis | Li, Bing-yan; et al | Journal of Medicinal Chemistry (2024), 67(12), 9869-9895. | 10.1021/acs.jmedchem.3c02407",
+        "core_detail": null,
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-614-CAS-39391331",
+        "reaction_type": "Ullmann",
+        "dataset_file": "Ullman-2020-2024.jsonl",
+        "cond_key": "Cu/none/Dipotassium phosphate|7758-11-4/Acetonitrile|+Methyl cyanide|75-05-8",
+        "similarity": 0.391,
+        "reactant_smiles": "O=Cc1ccccc1.NNc1ccc(F)cc1",
+        "product_smiles": "O=C(NN(c1ccc(F)cc1)c1ccc(F)cc1)c1ccccc1",
+        "reaction_smiles": "O=Cc1ccccc1.NNc1ccc(F)cc1>>O=C(NN(c1ccc(F)cc1)c1ccc(F)cc1)c1ccccc1",
+        "ligands": [],
+        "solvents": [
+          "Methyl cyanide"
+        ],
+        "bases": [],
+        "temperature": null,
+        "time": 12.0,
+        "yield_pct": 54.0,
+        "catalyst": "Copper(II) triflate",
+        "reference": "An aerobic copper-catalyzed multi-component reaction strategy for N’,N’-diaryl acylhydrazine synthesis: reactions and mechanism | Deng, Lei; et al | Organic Chemistry Frontiers (2024), 11(4), 1132-1139. | 10.1039/d3qo01768k",
+        "core_detail": "Copper(II) triflate",
+        "core_generic": "Cu"
+      },
+      {
+        "reaction_id": "31-614-CAS-44298735",
+        "reaction_type": "Other",
+        "dataset_file": "amide-formation-2021-2024.jsonl",
+        "cond_key": "none/none/Thionyl chloride|7719-09-7/DCM|75-09-2+Dichloromethane|+Ethyl acetate|141-78-6",
+        "similarity": 0.39,
+        "reactant_smiles": "O=C(O)c1ccc(CBr)cc1.CCCCCN",
+        "product_smiles": "CCCCCNC(=O)c1ccc(CBr)cc1",
+        "reaction_smiles": "O=C(O)c1ccc(CBr)cc1.CCCCCN>>CCCCCNC(=O)c1ccc(CBr)cc1",
+        "ligands": [],
+        "solvents": [
+          "Ethyl acetate",
+          "DCM"
+        ],
+        "bases": [],
+        "temperature": 80.0,
+        "time": 5.0,
+        "yield_pct": 89.0,
+        "catalyst": null,
+        "reference": "Discovery and Development of NLRP3 Inhibitors Targeting the LRR Domain to Disrupt NLRP3-NEK7 Interaction for the Treatment of Rheumatoid Arthritis | Li, Bing-yan; et al | Journal of Medicinal Chemistry (2024), 67(12), 9869-9895. | 10.1021/acs.jmedchem.3c02407",
+        "core_detail": null,
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-614-CAS-44298742",
+        "reaction_type": "Other",
+        "dataset_file": "amide-formation-2021-2024.jsonl",
+        "cond_key": "none/none/Thionyl chloride|7719-09-7/DCM|75-09-2+Dichloromethane|+Ethyl acetate|141-78-6",
+        "similarity": 0.388,
+        "reactant_smiles": "O=C(O)c1ccc(CBr)cc1.CCN",
+        "product_smiles": "CCNC(=O)c1ccc(CBr)cc1",
+        "reaction_smiles": "O=C(O)c1ccc(CBr)cc1.CCN>>CCNC(=O)c1ccc(CBr)cc1",
+        "ligands": [],
+        "solvents": [
+          "Ethyl acetate",
+          "DCM"
+        ],
+        "bases": [],
+        "temperature": 80.0,
+        "time": 5.0,
+        "yield_pct": 87.0,
+        "catalyst": null,
+        "reference": "Discovery and Development of NLRP3 Inhibitors Targeting the LRR Domain to Disrupt NLRP3-NEK7 Interaction for the Treatment of Rheumatoid Arthritis | Li, Bing-yan; et al | Journal of Medicinal Chemistry (2024), 67(12), 9869-9895. | 10.1021/acs.jmedchem.3c02407",
+        "core_detail": null,
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-614-CAS-34871210",
+        "reaction_type": "Other",
+        "dataset_file": "amide-formation-2021-2024.jsonl",
+        "cond_key": "none/none/1-Ethyl-3-(3-dimethylaminopropyl)carbodiimide hydrochloride|25952-53-8+1-Ethyl-3-(3′-dimethylaminopropyl)carbodiimide hydrochloride|+1-Hydroxy-7-azabenzotriazole|39968-33-7+Proton sponge|20734-58-1/DMF|68-12-2+Dimethylformamide|",
+        "similarity": 0.386,
+        "reactant_smiles": "NCCc1ccccc1.CC(C)(C(=O)O)c1ccccc1[N+](=O)[O-]",
+        "product_smiles": "CC(C)(C(=O)NCCc1ccccc1)c1ccccc1[N+](=O)[O-]",
+        "reaction_smiles": "NCCc1ccccc1.CC(C)(C(=O)O)c1ccccc1[N+](=O)[O-]>>CC(C)(C(=O)NCCc1ccccc1)c1ccccc1[N+](=O)[O-]",
+        "ligands": [],
+        "solvents": [
+          "DMF"
+        ],
+        "bases": [],
+        "temperature": 70.0,
+        "time": 1.0,
+        "yield_pct": 93.0,
+        "catalyst": null,
+        "reference": "Structure-activity relationship study of 4,5-didehydroguadiscine, an aporphine alkaloid showing potent melanogenesis-inhibitory activity in B16 melanoma cells | Takashima, Katsuki; et al | Bioorganic & Medicinal Chemistry Letters (2022), 78, 129034. | 10.1016/j.bmcl.2022.129034",
+        "core_detail": null,
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-614-CAS-31828433",
+        "reaction_type": "Other",
+        "dataset_file": "amide-formation-2021-2024.jsonl",
+        "cond_key": "none/none/1-Ethyl-3-(3-dimethylaminopropyl)carbodiimide hydrochloride|25952-53-8+1-Ethyl-3-(3′-dimethylaminopropyl)carbodiimide hydrochloride|+1-Hydroxybenzotriazole|2592-95-2/DMF|68-12-2+Dimethylformamide|",
+        "similarity": 0.384,
+        "reactant_smiles": "NCCc1ccccc1.O=C(O)c1c[nH]nc1-c1ccc(Cl)c(Cl)c1",
+        "product_smiles": "O=C(NCCc1ccccc1)c1c[nH]nc1-c1ccc(Cl)c(Cl)c1",
+        "reaction_smiles": "NCCc1ccccc1.O=C(O)c1c[nH]nc1-c1ccc(Cl)c(Cl)c1>>O=C(NCCc1ccccc1)c1c[nH]nc1-c1ccc(Cl)c(Cl)c1",
+        "ligands": [],
+        "solvents": [
+          "DMF"
+        ],
+        "bases": [],
+        "temperature": 5.0,
+        "time": 16.0,
+        "yield_pct": 85.0,
+        "catalyst": null,
+        "reference": "Discovery of a cryptic site at the interface 2 of TEAD - Towards a new family of YAP/TAZ-TEAD inhibitors | Sturbaut, Manon; et al | European Journal of Medicinal Chemistry (2021), 226, 113835. | 10.1016/j.ejmech.2021.113835",
+        "core_detail": null,
+        "core_generic": null
+      }
+    ]
+  }
+}
