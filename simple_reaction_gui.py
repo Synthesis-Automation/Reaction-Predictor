@@ -16,7 +16,7 @@ from PyQt6.QtWidgets import (
     QGridLayout, QLabel, QLineEdit, QPushButton, QTextEdit, QComboBox,
     QGroupBox, QMessageBox, QFrame, QDialog, QListWidget, QListWidgetItem,
     QSplitter, QCheckBox, QScrollArea, QProgressBar, QSizePolicy,
-    QGraphicsDropShadowEffect
+    QGraphicsDropShadowEffect, QButtonGroup, QRadioButton
 )
 from PyQt6.QtCore import Qt, QThread, pyqtSignal, QUrl, QTimer, QMutex
 from PyQt6.QtGui import QFont, QPalette, QColor, QPixmap, QImage
@@ -330,10 +330,11 @@ class SimplePredictionWorker(QThread):
     error = pyqtSignal(str)
     progress = pyqtSignal(int)
     
-    def __init__(self, reaction_smiles: str, reaction_type: str):
+    def __init__(self, reaction_smiles: str, reaction_type: str, selected_catalyst: str = "auto"):
         super().__init__()
         self.reaction_smiles = reaction_smiles
         self.reaction_type = reaction_type
+        self.selected_catalyst = selected_catalyst
     
     def run(self):
         """Run prediction with enhanced recommendation engine"""
@@ -360,14 +361,46 @@ class SimplePredictionWorker(QThread):
                 
                 self.progress.emit(80)
                 
-                result = {
-                    'reaction_smiles': self.reaction_smiles,
-                    'reaction_type': self.reaction_type,
-                    'status': 'Enhanced recommendations generated successfully',
-                    'recommendations': recommendations,
-                    'available_recommenders': engine.get_available_recommenders(),
-                    'analysis_type': recommendations.get('analysis_type', 'enhanced')
-                }
+                # Handle catalyst selection case differently
+                if recommendations.get('analysis_type') == 'catalyst_selection_needed':
+                    # Check if user has already selected a specific catalyst
+                    if self.selected_catalyst and self.selected_catalyst != "auto":
+                        # User has selected a catalyst, resolve automatically
+                        try:
+                            resolved_result = engine.get_recommendations_with_catalyst(
+                                self.reaction_smiles, 
+                                self.selected_catalyst, 
+                                self.reaction_type
+                            )
+                            result = {
+                                'reaction_smiles': self.reaction_smiles,
+                                'reaction_type': self.reaction_type,
+                                'status': f'Enhanced recommendations generated successfully (catalyst: {self.selected_catalyst})',
+                                'recommendations': resolved_result,
+                                'available_recommenders': engine.get_available_recommenders(),
+                                'analysis_type': resolved_result.get('analysis_type', 'enhanced'),
+                                'catalyst_used': self.selected_catalyst
+                            }
+                        except Exception as e:
+                            # If catalyst resolution fails, fall back to showing selection prompt
+                            result = recommendations
+                            result['reaction_smiles'] = self.reaction_smiles
+                            result['selected_reaction_type'] = self.reaction_type
+                    else:
+                        # No specific catalyst selected, show selection prompt
+                        result = recommendations
+                        result['reaction_smiles'] = self.reaction_smiles
+                        result['selected_reaction_type'] = self.reaction_type
+                else:
+                    # Standard enhanced recommendations
+                    result = {
+                        'reaction_smiles': self.reaction_smiles,
+                        'reaction_type': self.reaction_type,
+                        'status': 'Enhanced recommendations generated successfully',
+                        'recommendations': recommendations,
+                        'available_recommenders': engine.get_available_recommenders(),
+                        'analysis_type': recommendations.get('analysis_type', 'enhanced')
+                    }
                 
             except ImportError as e:
                 # Fallback to original recommendation engine
@@ -1694,7 +1727,7 @@ class SimpleReactionGUI(QMainWindow):
     
     def create_reaction_scheme_section(self, parent_layout):
         """Create the reaction scheme visualization section with control buttons"""
-        # Create horizontal layout for scheme and buttons
+        # Create horizontal layout for scheme, catalyst selector, and buttons
         scheme_buttons_layout = QHBoxLayout()
 
         # Reaction image area
@@ -1717,7 +1750,89 @@ class SimpleReactionGUI(QMainWindow):
         self.reaction_image_label.setWordWrap(True)
         self.reaction_image_label.setScaledContents(False)
         self.reaction_image_label.setFixedHeight(30)
-        scheme_buttons_layout.addWidget(self.reaction_image_label, 3)
+        scheme_buttons_layout.addWidget(self.reaction_image_label, 2)
+
+        # Catalyst selector group in the middle
+        catalyst_group = QGroupBox("Catalyst")
+        catalyst_group.setStyleSheet(
+            """
+            QGroupBox { 
+                border: 1px solid #555555; 
+                border-radius: 5px; 
+                margin-top: 0.4em;
+                font-weight: bold;
+            }
+            QGroupBox::title { 
+                subcontrol-origin: margin; 
+                left: 8px; 
+                padding: 0 4px; 
+                color: #FFFFFF;
+            }
+            """
+        )
+        catalyst_layout = QVBoxLayout(catalyst_group)
+        catalyst_layout.setContentsMargins(8, 8, 8, 8)
+        catalyst_layout.setSpacing(4)
+
+        # Create radio buttons for catalyst selection
+        self.catalyst_buttons = {}
+        self.catalyst_group_buttons = QButtonGroup(self)  # Ensures only one can be selected
+        
+        # Catalyst options
+        catalysts = [
+            ("Not specified", "auto"),  # Auto-detect/no specific catalyst
+            ("Pd", "Pd"),
+            ("Ni", "Ni"), 
+            ("Cu", "Cu"),
+            ("Fe", "Fe"),
+            ("Mn", "Mn"),
+            ("Co", "Co"),
+            ("Au", "Au"),
+            ("Ir", "Ir"),
+            ("Ru", "Ru"),
+            ("Ti", "Ti"),
+            ("Other metals", "other"),
+            ("Organocatalysts", "organo")
+        ]
+        
+        for display_name, value in catalysts:
+            radio_btn = QRadioButton(display_name)
+            radio_btn.setStyleSheet(
+                """
+                QRadioButton {
+                    color: #FFFFFF;
+                    font-size: 11px;
+                    spacing: 3px;
+                }
+                QRadioButton::indicator {
+                    width: 12px;
+                    height: 12px;
+                }
+                QRadioButton::indicator:unchecked {
+                    border: 1px solid #555555;
+                    background-color: #404040;
+                    border-radius: 6px;
+                }
+                QRadioButton::indicator:checked {
+                    border: 1px solid #2E7D32;
+                    background-color: #2E7D32;
+                    border-radius: 6px;
+                }
+                """
+            )
+            
+            self.catalyst_buttons[value] = radio_btn
+            self.catalyst_group_buttons.addButton(radio_btn)
+            catalyst_layout.addWidget(radio_btn)
+            
+            # Connect to catalyst change handler
+            radio_btn.toggled.connect(self.on_catalyst_changed)
+        
+        # Set "Not specified" as default
+        self.catalyst_buttons["auto"].setChecked(True)
+        
+        catalyst_layout.addStretch()
+        scheme_buttons_layout.addWidget(catalyst_group, 1)
 
         # Actions group on the right
         actions_group = QGroupBox("Actions")
@@ -1805,6 +1920,20 @@ class SimpleReactionGUI(QMainWindow):
 
         # Finalize
         parent_layout.addLayout(scheme_buttons_layout)
+    
+    def on_catalyst_changed(self):
+        """Handle catalyst selection change"""
+        for value, radio_btn in self.catalyst_buttons.items():
+            if radio_btn.isChecked():
+                print(f"Catalyst selected: {value}")
+                break
+    
+    def get_selected_catalyst(self):
+        """Get the currently selected catalyst"""
+        for value, radio_btn in self.catalyst_buttons.items():
+            if radio_btn.isChecked():
+                return value
+        return "auto"  # Default fallback
     
     def create_results_section(self, parent_layout):
         """Create results display section"""
@@ -2002,6 +2131,7 @@ class SimpleReactionGUI(QMainWindow):
         # Get inputs
         reaction_smiles = self.smiles_input.text().strip()
         reaction_type = self.reaction_type_combo.currentText()
+        selected_catalyst = self.get_selected_catalyst()
         
         # Basic validation
         if not reaction_smiles:
@@ -2016,7 +2146,7 @@ class SimpleReactionGUI(QMainWindow):
         self.results_text.clear()
         
         # Start prediction worker
-        self.prediction_worker = SimplePredictionWorker(reaction_smiles, reaction_type)
+        self.prediction_worker = SimplePredictionWorker(reaction_smiles, reaction_type, selected_catalyst)
         self.prediction_worker.finished.connect(self.on_prediction_finished)
         self.prediction_worker.error.connect(self.on_prediction_error)
         self.prediction_worker.progress.connect(self.on_prediction_progress)
@@ -2708,7 +2838,9 @@ class SimpleReactionGUI(QMainWindow):
 
         # Choose formatter based on analysis type
         analysis_type = result.get('analysis_type')
-        if analysis_type in ('enhanced', 'comprehensive'):
+        if analysis_type == 'catalyst_selection_needed':
+            results_text = self._format_catalyst_selection_prompt(result)
+        elif analysis_type in ('enhanced', 'comprehensive'):
             results_text = self._format_enhanced_recommendations(result)
         elif analysis_type == 'buchwald_hartwig':
             results_text = self._format_buchwald_recommendations(result)
@@ -3239,6 +3371,45 @@ appropriate dataset is available.
         
         return text
     
+    def _format_catalyst_selection_prompt(self, result):
+        """Format catalyst selection prompt for C-N coupling reactions"""
+        text = f"""🔬 CATALYST SELECTION REQUIRED
+
+Reaction: {result.get('reaction_smiles', 'N/A')}
+rxn-insight Detection: {result.get('rxn_insight_class', 'Unknown')} / {result.get('rxn_insight_name', 'Unknown')}
+
+{result.get('message', 'Please select a catalyst:')}
+
+Available Catalyst Options:
+"""
+        
+        catalyst_options = result.get('catalyst_options', {})
+        for i, (catalyst, reaction_type) in enumerate(catalyst_options.items(), 1):
+            text += f"{i}. {catalyst} → {reaction_type}\n"
+        
+        text += f"""
+Instructions:
+1. Select the appropriate catalyst from your reaction conditions
+2. Re-run the prediction with the specific reaction type
+3. Or manually select the reaction type from the dropdown menu
+
+Available reaction types in dropdown:
+"""
+        
+        # Show the specific reaction types available
+        for catalyst, reaction_type in catalyst_options.items():
+            text += f"• {reaction_type}\n"
+        
+        text += f"""
+Status: {result.get('status', 'Unknown')}
+
+Note: This enhanced detection helps differentiate between Buchwald-Hartwig (Pd), 
+Ullmann (Cu), and other metal-catalyzed C-N coupling reactions based on your 
+specific catalyst choice.
+"""
+        
+        return text
+
     def _format_enhanced_recommendations(self, result):
         """Format enhanced ligand and solvent recommendations"""
         recommendations = result.get('recommendations', {})
@@ -3307,6 +3478,19 @@ Classification: {auto.get('rxn_insight_class', 'N/A')}"""
 • rxn-insight detected: {detection.get('rxn_insight_detected', 'N/A')}
 • Mapped to our system: {detection.get('mapped_to', 'N/A')}
 • Confidence: {detection.get('confidence', 'N/A')}"""
+            
+            # Show catalyst selection if available
+            if detection.get('catalyst_selected'):
+                text += f"""
+• Catalyst selected: {detection.get('catalyst_selected')}"""
+
+        # Show catalyst information if catalyst was used
+        if result.get('catalyst_used'):
+            text += f"""
+
+⚗️ Catalyst Information:
+• Selected catalyst: {result.get('catalyst_used')}
+• Prediction tailored for {result.get('catalyst_used')}-based conditions"""
 
         text += f"""
 Status: {result['status']}
