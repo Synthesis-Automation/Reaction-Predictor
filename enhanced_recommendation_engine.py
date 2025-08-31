@@ -189,6 +189,13 @@ class EnhancedRecommendationEngine:
             base_gui = gui_type
 
         mapping = {
+            # Direct mappings (these should map to themselves)
+            "Cross-Coupling": "Cross-Coupling",
+            "Ullmann": "Ullmann",
+            "Amide Formation": "Amide Formation",
+            "Hydrogenation": "Hydrogenation",
+            "Carbonylation": "Carbonylation",
+            "C-H_Activation": "C-H_Activation",
             # Couplings
             "Suzuki-Miyaura Coupling": "Cross-Coupling",
             "C-C Coupling - Suzuki-Miyaura": "Cross-Coupling",
@@ -556,8 +563,8 @@ class EnhancedRecommendationEngine:
                     # Load solvent abbreviations
                     solv_abbrev = {}
                     try:
-                        from reagents.solvent import create_solvent_dataframe  # type: ignore
-                        sdf = create_solvent_dataframe()
+                        from reagents.solvent import create_solvent_dataframe as _create_solvent_df_local  # type: ignore
+                        sdf = _create_solvent_df_local()
                         for _, rowx in sdf.iterrows():
                             nm = str(rowx.get('name') or '').strip()
                             ab = str(rowx.get('abbreviation') or '').strip()
@@ -680,16 +687,85 @@ class EnhancedRecommendationEngine:
             
             # Add dataset statistics
             try:
-                ligand_df = create_ligand_dataframe()
-                solvent_df = create_solvent_dataframe()
+                ligands_available = 0
+                solvents_available = 0
+                
+                # Only try to get dataframe sizes if enhanced reagents are available
+                dataset_specific_ligands = []
+                dataset_specific_solvents = []
+                
+                if ENHANCED_REAGENTS_AVAILABLE:
+                    try:
+                        # Use reaction-specific ligands if available
+                        if reaction_type:
+                            specific_ligands = get_reaction_specific_ligands(reaction_type)
+                            ligands_available = len(specific_ligands) if specific_ligands else 0
+                            dataset_specific_ligands = specific_ligands[:10] if specific_ligands else []  # Store top 10
+                        else:
+                            # Fallback to global count
+                            ligand_df = create_ligand_dataframe()
+                            ligands_available = len(ligand_df)
+                    except Exception as e:
+                        print(f"Warning: Could not get ligand count: {e}")
+                    
+                    try:
+                        # Use reaction-specific solvents if available
+                        if reaction_type:
+                            specific_solvents = get_reaction_specific_solvents(reaction_type)
+                            solvents_available = len(specific_solvents) if specific_solvents else 0
+                            dataset_specific_solvents = specific_solvents[:10] if specific_solvents else []  # Store top 10
+                        else:
+                            # Fallback to global count
+                            solvent_df = create_solvent_dataframe()
+                            solvents_available = len(solvent_df)
+                    except Exception as e:
+                        print(f"Warning: Could not get solvent count: {e}")
+                
+                # Get the actual dataset name being used
+                dataset_name = "Unknown"
+                if reaction_type:
+                    try:
+                        # First try resolve_dataset_path if available
+                        if resolve_dataset_path:
+                            dataset_path = resolve_dataset_path(reaction_type)
+                            if dataset_path:
+                                dataset_name = os.path.basename(dataset_path)
+                    except Exception:
+                        pass
+                    
+                    # If still unknown, try DATASET_MAP direct lookup
+                    if dataset_name == "Unknown":
+                        if reaction_type in DATASET_MAP:
+                            dataset_name = DATASET_MAP[reaction_type]
+                        else:
+                            # Try normalized lookup (remove catalyst specifications)
+                            normalized_type = reaction_type.replace(' (Pd)', '').replace(' (Cu)', '').replace(' (Ni)', '').replace(' (other metals)', '')
+                            if normalized_type in DATASET_MAP:
+                                dataset_name = DATASET_MAP[normalized_type]
+                            else:
+                                # Special handling for Cross-Coupling -> check if it's actually Buchwald
+                                if reaction_type == "Cross-Coupling":
+                                    # Default to Buchwald dataset for generic Cross-Coupling
+                                    dataset_name = "Buchwald-2021-2024.jsonl"
+                
                 recommendations['dataset_info'] = {
-                    'ligands_available': len(ligand_df),
-                    'solvents_available': len(solvent_df),
+                    'dataset_name': dataset_name,
+                    'ligands_available': ligands_available,
+                    'solvents_available': solvents_available,
+                    'specific_ligands': dataset_specific_ligands,
+                    'specific_solvents': dataset_specific_solvents,
                     'reaction_types_supported': ['Cross-Coupling', 'Hydrogenation', 'Metathesis', 'C-H_Activation', 'Carbonylation'],
                     'analytics_loaded': bool(priors)
                 }
-            except:
-                pass
+            except Exception as e:
+                # Still add basic dataset_info even if there's an error
+                recommendations['dataset_info'] = {
+                    'dataset_name': "Error retrieving dataset name",
+                    'ligands_available': 0,
+                    'solvents_available': 0,
+                    'reaction_types_supported': [],
+                    'analytics_loaded': False
+                }
             
         except Exception as e:
             recommendations['error'] = f"Enhanced recommendation error: {str(e)}"

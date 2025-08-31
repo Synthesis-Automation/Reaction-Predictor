@@ -1,0 +1,442 @@
+{
+  "meta": {
+    "generated_at": "2025-08-31T22:55:02",
+    "analysis_type": "enhanced",
+    "status": "Enhanced recommendations generated successfully (catalyst: Cu)"
+  },
+  "input": {
+    "reaction_smiles": "Brc1ccc(C#N)cc1.Nc1ccccc1>>N#Cc1ccc(Nc2ccccc2)cc1",
+    "selected_reaction_type": "Auto detect reaction type"
+  },
+  "detection": {
+    "reaction_type": "Ullmann"
+  },
+  "dataset": {
+    "dataset_name": "Ullman-2020-2024.jsonl",
+    "ligands_available": 123,
+    "solvents_available": 72,
+    "reaction_types_supported": [
+      "Cross-Coupling",
+      "Hydrogenation",
+      "Metathesis",
+      "C-H_Activation",
+      "Carbonylation"
+    ],
+    "analytics_loaded": true,
+    "analytics": {
+      "source": "Ullmann",
+      "top": {
+        "ligands": [
+          {
+            "name": "none",
+            "pct": 0.408,
+            "count": 326
+          },
+          {
+            "name": "1",
+            "pct": 0.1564,
+            "count": 125
+          },
+          {
+            "name": "2-Benzenediamine",
+            "pct": 0.0851,
+            "count": 68
+          }
+        ],
+        "solvents": [
+          {
+            "name": "DMSO",
+            "pct": 0.2979,
+            "count": 238
+          },
+          {
+            "name": "DMF",
+            "pct": 0.199,
+            "count": 159
+          },
+          {
+            "name": "Toluene",
+            "pct": 0.1327,
+            "count": 106
+          }
+        ],
+        "bases": [
+          {
+            "name": "K2CO3",
+            "pct": 0.6233,
+            "count": 498
+          },
+          {
+            "name": "K3PO4",
+            "pct": 0.2678,
+            "count": 214
+          },
+          {
+            "name": "Cs2CO3",
+            "pct": 0.2453,
+            "count": 196
+          }
+        ]
+      },
+      "cooccurrence": {
+        "best_ligand_solvent": null,
+        "best_base_solvent": null
+      },
+      "numeric_stats": {
+        "temperature_c": null,
+        "time_h": null,
+        "yield_pct": null
+      },
+      "typical_catalyst_loading": "5-20 mol% Cu"
+    }
+  },
+  "top_conditions": [
+    {
+      "reaction": {
+        "smiles": "Brc1ccc(C#N)cc1.Nc1ccccc1>>N#Cc1ccc(Nc2ccccc2)cc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Brc1ccc(C#N)cc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Nc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "CuI",
+          "cas": "7681-65-4",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "L-Proline",
+          "cas": null,
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "Cs2CO3",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "Dimethylformamide",
+          "abbreviation": "DMF",
+          "cas": "68-12-2",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-140°C",
+        "time": "6-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    },
+    {
+      "reaction": {
+        "smiles": "Brc1ccc(C#N)cc1.Nc1ccccc1>>N#Cc1ccc(Nc2ccccc2)cc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Brc1ccc(C#N)cc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Nc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "CuI",
+          "cas": "7681-65-4",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "L-Proline",
+          "cas": null,
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "Cs2CO3",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "THF",
+          "abbreviation": "THF",
+          "cas": "109-99-9",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-140°C",
+        "time": "6-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    },
+    {
+      "reaction": {
+        "smiles": "Brc1ccc(C#N)cc1.Nc1ccccc1>>N#Cc1ccc(Nc2ccccc2)cc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Brc1ccc(C#N)cc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Nc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "CuI",
+          "cas": "7681-65-4",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "L-Proline",
+          "cas": null,
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "Cs2CO3",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "N-Methyl-2-pyrrolidone",
+          "abbreviation": "NMP",
+          "cas": "872-50-4",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-140°C",
+        "time": "6-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    }
+  ],
+  "related_reactions": [
+    {
+      "reaction_smiles": "N#Cc1ccc(Br)cc1.Nc1n[nH]c2ccccc12>>N#Cc1ccc(-n2nc(N)c3ccccc32)cc1",
+      "similarity": 0.43277027027027026,
+      "reaction_id": "31-614-CAS-25058137",
+      "yield": 77.0,
+      "temperature": 110.0,
+      "time": 18.0,
+      "catalyst": "Copper(I) iodide",
+      "ligand": "trans-N, N′-Dimethyl-1, 2-cyclohexanediamine",
+      "solvent": "1, 4-Dioxane",
+      "reference": "Copper-Catalyzed N1 Coupling of 3-Aminoindazoles and Related Aminoazoles with Aryl Bromides | Authors: Cyr, Patrick; et al | European Journal of Organic Chemistry (2022), 2022(4), e202101245. | DOI: 10.1002/ejoc.202101245"
+    },
+    {
+      "reaction_smiles": "c1ccc2c(c1)Nc1ccccc1O2.N#Cc1ccc(Br)cc1>>N#Cc1ccc(N2c3ccccc3Oc3ccccc32)cc1",
+      "similarity": 0.4305555555555556,
+      "reaction_id": "31-614-CAS-33566650",
+      "yield": 99.0,
+      "temperature": 100.0,
+      "time": 18.333,
+      "catalyst": "Copper(I) iodide",
+      "ligand": "N1, N2-Bis(2-furanylmethyl)ethanediamide",
+      "solvent": "Sulfolane",
+      "reference": "Oxalamide/Amide Ligands: Enhanced and Copper-Catalyzed C-N Cross-Coupling for Triarylamine Synthesis | Authors: Li, Sasa; et al | Organic Letters (2022), 24(31), 5817-5824. | DOI: 10.1021/acs.orglett.2c02364"
+    },
+    {
+      "reaction_smiles": "C1CCNC1.N#Cc1ccc(Br)cc1>>N#Cc1ccc(N2CCCC2)cc1",
+      "similarity": 0.42993951612903225,
+      "reaction_id": "31-614-CAS-34342104",
+      "yield": 92.0,
+      "temperature": 90.0,
+      "time": 12.0,
+      "catalyst": "N/A",
+      "ligand": "Cu2O, Cu2O",
+      "solvent": "Methyl cyanide, Water",
+      "reference": "A recyclable ciprofloxacin polymer ligand for copper-catalyzed coupling of (hetero)aryl halide aminations | Authors: Song, Dake; et al | New Journal of Chemistry (2022), 46(40), 19100-19103. | DOI: 10.1039/d2nj03440a"
+    },
+    {
+      "reaction_smiles": "c1cn[nH]c1.N#Cc1ccc(Br)cc1>>N#Cc1ccc(-n2cccn2)cc1",
+      "similarity": 0.41428571428571426,
+      "reaction_id": "31-614-CAS-34342082",
+      "yield": 95.0,
+      "temperature": 90.0,
+      "time": 12.0,
+      "catalyst": "N/A",
+      "ligand": "Cu2O, Cu2O",
+      "solvent": "Methyl cyanide, Water",
+      "reference": "A recyclable ciprofloxacin polymer ligand for copper-catalyzed coupling of (hetero)aryl halide aminations | Authors: Song, Dake; et al | New Journal of Chemistry (2022), 46(40), 19100-19103. | DOI: 10.1039/d2nj03440a"
+    },
+    {
+      "reaction_smiles": "C1COCCN1.N#Cc1ccc(Br)cc1>>N#Cc1ccc(N2CCOCC2)cc1",
+      "similarity": 0.3970588235294118,
+      "reaction_id": "31-614-CAS-24285546",
+      "yield": 85.0,
+      "temperature": 90.0,
+      "time": 32.0,
+      "catalyst": "Copper, Copper",
+      "ligand": "N/A",
+      "solvent": "p-Xylene",
+      "reference": "Product selective reaction controlled by the combination of palladium nanoparticles, continuous microwave irradiation and a co-existing solid; ligand-free Buchwald-Hartwig amination vs. aryne amination | Authors: Yamada, Makito; et al | Green Chemistry (2021), 23(20), 8131-8137. | DOI: 10.1039/d1gc01782a"
+    },
+    {
+      "reaction_smiles": "c1c[nH]cn1.N#Cc1ccc(Br)cc1>>N#Cc1ccc(-n2ccnc2)cc1",
+      "similarity": 0.39365079365079364,
+      "reaction_id": "31-172-CAS-23296665",
+      "yield": 71.0,
+      "temperature": 80.0,
+      "time": 12.0,
+      "catalyst": "Copper(I) iodide",
+      "ligand": "2588211-74-7",
+      "solvent": "Ethanol",
+      "reference": "L-Proline N-oxide dihydrazides as an efficient ligand for cross-coupling reactions of aryl iodides and bromides with amines and phenols | Authors: Ding, Zhiqiang; et al | Tetrahedron (2021), 79, 131826. | DOI: 10.1016/j.tet.2020.131826"
+    },
+    {
+      "reaction_smiles": "c1c[nH]cn1.N#Cc1ccc(Br)cc1>>N#Cc1ccc(-n2ccnc2)cc1",
+      "similarity": 0.39365079365079364,
+      "reaction_id": "31-614-CAS-24992115",
+      "yield": 79.0,
+      "temperature": 100.0,
+      "time": 40.0,
+      "catalyst": "Copper(I) iodide",
+      "ligand": "Hexamethylenetetramine",
+      "solvent": "DMF",
+      "reference": "NHC ligand-based half-sandwich iridium complexes: synthesis, structure and catalytic activity in acceptorless dehydrogenation and transfer hydrogenation | Authors: Li, Rong-Jian; et al | New Journal of Chemistry (2021), 45(40), 19002-19010. | DOI: 10.1039/d1nj03824a"
+    },
+    {
+      "reaction_smiles": "c1c[nH]cn1.N#Cc1ccc(Br)cc1>>N#Cc1ccc(-n2ccnc2)cc1",
+      "similarity": 0.39365079365079364,
+      "reaction_id": "31-614-CAS-31334893",
+      "yield": 63.0,
+      "temperature": 120.0,
+      "time": 12.0,
+      "catalyst": "Copper, Iron zinc oxide (Fe2ZnO4)",
+      "ligand": "N/A",
+      "solvent": "Ethanol",
+      "reference": "Magnetic Recyclable Cu/ZnFe2O4 for Catalytic Reduction of Nitroarenes and C-N Bond Formation Reactions | Authors: Zhang, Ruike; et al | Catalysis Letters (2022), 152(11), 3506-3516. | DOI: 10.1007/s10562-021-03906-z"
+    },
+    {
+      "reaction_smiles": "c1c[nH]cn1.N#Cc1ccc(Br)cc1>>N#Cc1ccc(-n2ccnc2)cc1",
+      "similarity": 0.39365079365079364,
+      "reaction_id": "31-614-CAS-33994226",
+      "yield": 67.0,
+      "temperature": 100.0,
+      "time": 12.0,
+      "catalyst": "Copper",
+      "ligand": "Phenanthroline",
+      "solvent": "Ethanol",
+      "reference": "Phenanthroline-based microporous organic materials for removal of Cu(II) from aqueous solution and reutilization of spent adsorbent as catalysts | Authors: Tian, Baodong; et al | Water Science & Technology (2022), 86(3), 496. | DOI: 10.2166/wst.2022.218"
+    },
+    {
+      "reaction_smiles": "O=C1NCc2ccccc21.N#Cc1ccc(Br)cc1>>N#Cc1ccc(N2Cc3ccccc3C2=O)cc1",
+      "similarity": 0.3875,
+      "reaction_id": "31-172-CAS-24487829",
+      "yield": 60.0,
+      "temperature": 110.0,
+      "time": 40.0,
+      "catalyst": "Copper(I) iodide",
+      "ligand": "N/A",
+      "solvent": "1, 4-Dioxane",
+      "reference": "Copper catalyzed late-stage C(sp3)-H functionalization of nitrogen heterocycles | Authors: Chang, Zhe; et al | Nature Communications (2021), 12(1), 4342. | DOI: 10.1038/s41467-021-24671-y"
+    },
+    {
+      "reaction_smiles": "c1ccc2c(c1)[nH]c1ccccc12.N#Cc1ccc(I)cc1>>N#Cc1ccc(-n2c3ccccc3c3ccccc32)cc1",
+      "similarity": 0.36802232854864436,
+      "reaction_id": "31-614-CAS-31328541",
+      "yield": 71.0,
+      "temperature": 25.0,
+      "time": 24.017,
+      "catalyst": "Copper(I) iodide",
+      "ligand": "Carbon nitride",
+      "solvent": "Methyl cyanide",
+      "reference": "Semi-heterogeneous photo-Cu-dual-catalytic cross-coupling reactions using polymeric carbon nitrides | Authors: Zhang, Zhaofei; et al | Science Bulletin (2022), 67(1), 71-78. | DOI: 10.1016/j.scib.2021.08.001"
+    },
+    {
+      "reaction_smiles": "c1ccc2c(c1)[nH]c1ccccc12.N#Cc1ccc(Cl)cc1>>N#Cc1ccc(-n2c3ccccc3c3ccccc32)cc1",
+      "similarity": 0.36802232854864436,
+      "reaction_id": "31-614-CAS-32735037",
+      "yield": 85.0,
+      "temperature": 34.0,
+      "time": 24.0,
+      "catalyst": "Copper(1+)",
+      "ligand": "N/A",
+      "solvent": "Methyl cyanide",
+      "reference": "Visible-Light Copper Nanocluster Catalysis for the C-N Coupling of Aryl Chlorides at Room Temperature | Authors: Sagadevan, Arunachalam; et al | Journal of the American Chemical Society (2022), 144(27), 12052-12061. | DOI: 10.1021/jacs.2c02218"
+    },
+    {
+      "reaction_smiles": "c1ccc2c(c1)[nH]c1ccccc12.N#Cc1ccc(Cl)cc1>>N#Cc1ccc(-n2c3ccccc3c3ccccc32)cc1",
+      "similarity": 0.36802232854864436,
+      "reaction_id": "31-614-CAS-32735097",
+      "yield": 73.0,
+      "temperature": 34.0,
+      "time": 24.0,
+      "catalyst": "Copper(1+)",
+      "ligand": "N/A",
+      "solvent": "Methyl cyanide",
+      "reference": "Visible-Light Copper Nanocluster Catalysis for the C-N Coupling of Aryl Chlorides at Room Temperature | Authors: Sagadevan, Arunachalam; et al | Journal of the American Chemical Society (2022), 144(27), 12052-12061. | DOI: 10.1021/jacs.2c02218"
+    },
+    {
+      "reaction_smiles": "c1ccc2c(c1)[nH]c1ccccc12.N#Cc1ccc(F)cc1>>N#Cc1ccc(-n2c3ccccc3c3ccccc32)cc1",
+      "similarity": 0.36802232854864436,
+      "reaction_id": "31-614-CAS-37196226",
+      "yield": 83.0,
+      "temperature": 110.0,
+      "time": 13.0,
+      "catalyst": "Copper(I) iodide",
+      "ligand": "18-Crown-6",
+      "solvent": "DMF",
+      "reference": "Fine adjustment of emission wavelength, light-conversion quality, photostability of blue-violet light conversion agents based on FRET effect | Authors: He, Yanjin; et al | Dyes and Pigments (2023), 217, 111429. | DOI: 10.1016/j.dyepig.2023.111429"
+    },
+    {
+      "reaction_smiles": "Brc1ccc(Br)cc1.N#Cc1ccc2[nH]c3ccccc3c2c1>>N#Cc1ccc2c(c1)c1ccccc1n2-c1ccc(Br)cc1",
+      "similarity": 0.363219094247246,
+      "reaction_id": "31-172-CAS-23064433",
+      "yield": 63.0,
+      "temperature": null,
+      "time": 3.0,
+      "catalyst": "Copper(I) iodide",
+      "ligand": "Phenanthroline",
+      "solvent": "DMF",
+      "reference": "Dimethyl modified terphenyl core based compounds as hosts of blue phosphorescent emitters | Authors: Yun, Ju Hui; et al | Dyes and Pigments (2020), 173, 107947. | DOI: 10.1016/j.dyepig.2019.107947"
+    }
+  ]
+}

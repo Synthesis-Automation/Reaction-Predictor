@@ -1774,9 +1774,14 @@ class SimpleReactionGUI(QMainWindow):
         catalyst_layout.setContentsMargins(8, 8, 8, 8)
         catalyst_layout.setSpacing(4)
 
-        # Create radio buttons for catalyst selection
+        # Create radio buttons for catalyst selection with two-column layout
         self.catalyst_buttons = {}
         self.catalyst_group_buttons = QButtonGroup(self)  # Ensures only one can be selected
+        
+        # Create grid layout for two columns
+        catalyst_grid_layout = QGridLayout()
+        catalyst_grid_layout.setContentsMargins(0, 0, 0, 0)
+        catalyst_grid_layout.setSpacing(2)
         
         # Catalyst options
         catalysts = [
@@ -1795,7 +1800,8 @@ class SimpleReactionGUI(QMainWindow):
             ("Organocatalysts", "organo")
         ]
         
-        for display_name, value in catalysts:
+        # Add catalysts to grid in two columns
+        for i, (display_name, value) in enumerate(catalysts):
             radio_btn = QRadioButton(display_name)
             radio_btn.setStyleSheet(
                 """
@@ -1823,10 +1829,17 @@ class SimpleReactionGUI(QMainWindow):
             
             self.catalyst_buttons[value] = radio_btn
             self.catalyst_group_buttons.addButton(radio_btn)
-            catalyst_layout.addWidget(radio_btn)
+            
+            # Calculate row and column for two-column layout
+            row = i // 2  # Integer division for row
+            col = i % 2   # Modulo for column (0 or 1)
+            catalyst_grid_layout.addWidget(radio_btn, row, col)
             
             # Connect to catalyst change handler
             radio_btn.toggled.connect(self.on_catalyst_changed)
+        
+        # Add the grid layout to the main catalyst layout
+        catalyst_layout.addLayout(catalyst_grid_layout)
         
         # Set "Not specified" as default
         self.catalyst_buttons["auto"].setChecked(True)
@@ -3504,12 +3517,50 @@ Status: {result['status']}
         # Dataset information
         dataset_info = recommendations.get('dataset_info', {})
         if dataset_info:
+            dataset_name = dataset_info.get('dataset_name', 'Unknown')
+            specific_ligands = dataset_info.get('specific_ligands', [])
+            specific_solvents = dataset_info.get('specific_solvents', [])
+            
             text += f"""📊 Database Coverage:
+• Dataset: {dataset_name}
 • Available Ligands: {dataset_info.get('ligands_available', 'N/A')}
 • Available Solvents: {dataset_info.get('solvents_available', 'N/A')}
 • Supported Reactions: {', '.join(dataset_info.get('reaction_types_supported', []))}
-
 """
+            
+            # Show top ligands if available
+            if specific_ligands:
+                text += f"""
+🔗 Top Ligands for this reaction type:
+"""
+                for i, ligand in enumerate(specific_ligands[:5], 1):  # Show top 5
+                    if isinstance(ligand, dict):
+                        name = ligand.get('name', ligand.get('ligand', str(ligand)))
+                        score = ligand.get('score', ligand.get('compatibility_score', ''))
+                        if score:
+                            text += f"   {i}. {name} (score: {score:.2f})\n"
+                        else:
+                            text += f"   {i}. {name}\n"
+                    else:
+                        text += f"   {i}. {ligand}\n"
+            
+            # Show top solvents if available
+            if specific_solvents:
+                text += f"""
+🧪 Top Solvents for this reaction type:
+"""
+                for i, solvent in enumerate(specific_solvents[:5], 1):  # Show top 5
+                    if isinstance(solvent, dict):
+                        name = solvent.get('name', solvent.get('solvent', str(solvent)))
+                        score = solvent.get('score', solvent.get('compatibility_score', ''))
+                        if score:
+                            text += f"   {i}. {name} (score: {score:.2f})\n"
+                        else:
+                            text += f"   {i}. {name}\n"
+                    else:
+                        text += f"   {i}. {solvent}\n"
+            
+            text += "\n"
 
         # Optional analytics snippet (Ullmann) if available
         def _load_analytics_snippet(rt: str | None):
