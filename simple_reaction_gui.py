@@ -3247,6 +3247,11 @@ appropriate dataset is available.
         def _display_reaction_type():
             rt = recommendations.get('reaction_type', 'Unknown') or 'Unknown'
             origin = recommendations.get('detected_from') or result.get('selected_reaction_type') or ''
+            
+            # Check if we have rxn-insight detection info to use for better display
+            rxn_insight_info = result.get('rxn_insight_detection', {})
+            rxn_insight_detected = rxn_insight_info.get('rxn_insight_detected', '')
+            
             def _metal_for(name: str | None):
                 if not name:
                     return None
@@ -3266,10 +3271,19 @@ appropriate dataset is available.
                 if 'c-s' in low:
                     return 'Pd'
                 return None
+            
+            # For generic "Cross-Coupling", try to use rxn-insight info for better display
+            if rt and rt.lower() == 'cross-coupling' and rxn_insight_detected:
+                if 'buchwald-hartwig' in rxn_insight_detected.lower() or 'ullmann' in rxn_insight_detected.lower():
+                    # Extract the specific coupling type from rxn-insight
+                    if 'n-arylation' in rxn_insight_detected.lower():
+                        return "C-N Coupling (Pd/Cu)" if 'buchwald-hartwig/ullmann' in rxn_insight_detected.lower() else "C-N Coupling (Pd)"
+                    return f"Cross-Coupling (Pd) - {rxn_insight_detected.split('/')[-1].strip()}"
+            
             metal = _metal_for(rt) or _metal_for(origin) or ('Pd' if (rt or '').lower() == 'cross-coupling' else None)
             if metal:
                 name_part = rt if (rt and rt.lower() not in ['cross-coupling', 'general organic reaction']) else ''
-                return f"{name_part} ({metal})" if name_part else f"{metal}"
+                return f"{name_part} ({metal})" if name_part else f"Cross-Coupling ({metal})"
             return rt
 
         text = f"""🧪 ENHANCED REACTION CONDITION RECOMMENDATIONS
@@ -3283,6 +3297,16 @@ Detected Type: {_display_reaction_type()}"""
             text += f"""
 Auto-Detection: {auto.get('rxn_insight_name', 'N/A')} (confidence: {auto.get('confidence', 'unknown')})
 Classification: {auto.get('rxn_insight_class', 'N/A')}"""
+
+        # Add rxn-insight detection comparison if available
+        if 'rxn_insight_detection' in result:
+            detection = result['rxn_insight_detection']
+            text += f"""
+
+🔍 Reaction Type Detection Comparison:
+• rxn-insight detected: {detection.get('rxn_insight_detected', 'N/A')}
+• Mapped to our system: {detection.get('mapped_to', 'N/A')}
+• Confidence: {detection.get('confidence', 'N/A')}"""
 
         text += f"""
 Status: {result['status']}

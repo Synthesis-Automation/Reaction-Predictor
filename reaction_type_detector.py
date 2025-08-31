@@ -16,9 +16,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 # Mapping from rxn-insight classification to our internal reaction types
+# For reactions that need catalyst specification, we return a special catalyst-dependent type
 RXN_INSIGHT_MAPPING = {
-    # Heteroatom Alkylation and Arylation -> C-N Coupling
-    ("Heteroatom Alkylation and Arylation", "N-arylation (Buchwald-Hartwig/Ullmann-Goldberg)"): "C-N Coupling - Buchwald-Hartwig",
+    # Heteroatom Alkylation and Arylation -> C-N Coupling (catalyst-dependent)
+    ("Heteroatom Alkylation and Arylation", "N-arylation (Buchwald-Hartwig/Ullmann-Goldberg)"): "CATALYST_DEPENDENT_C-N_COUPLING",
     ("Heteroatom Alkylation and Arylation", "Goldberg coupling aryl amine-aryl chloride"): "C-N Coupling - Ullmann", 
     ("Heteroatom Alkylation and Arylation", "Ullmann condensation with aryl halides"): "C-N Coupling - Ullmann",
     ("Heteroatom Alkylation and Arylation", "Chan-Lam coupling"): "C-N Oxidative Coupling - Chan-Lam",
@@ -47,7 +48,7 @@ RXN_INSIGHT_MAPPING = {
 
 # Fallback mapping based on CLASS only (when NAME is not in the mapping)
 CLASS_FALLBACK_MAPPING = {
-    "Heteroatom Alkylation and Arylation": "C-N Coupling - Buchwald-Hartwig",  # Default to most common
+    "Heteroatom Alkylation and Arylation": "CATALYST_DEPENDENT_C-N_COUPLING",  # Needs catalyst info
     "C-C Coupling": "Cross-Coupling",  # Generic cross-coupling
     "Acylation": "Amide Formation",
     "Oxidation": "Oxidation", 
@@ -56,6 +57,35 @@ CLASS_FALLBACK_MAPPING = {
     "Elimination": "Elimination",
     "Cycloaddition": "Cycloaddition",
 }
+
+# Catalyst-dependent reaction mappings
+CATALYST_DEPENDENT_MAPPINGS = {
+    "CATALYST_DEPENDENT_C-N_COUPLING": {
+        "Pd": "C-N Coupling - Buchwald-Hartwig (Pd)",
+        "Cu": "C-N Coupling - Ullmann (Cu)", 
+        "Ni": "C-N Coupling - (Ni)",
+        "other": "C-N Coupling - (other metals)"
+    }
+}
+
+def detect_catalyst_in_smiles(reaction_smiles: str) -> str:
+    """
+    Detect catalyst metal in reaction SMILES.
+    
+    Args:
+        reaction_smiles: Reaction SMILES string
+        
+    Returns:
+        Metal symbol if found, None if no catalyst detected
+    """
+    # Common metal catalysts in SMILES
+    metals = ['Pd', 'Cu', 'Ni', 'Pt', 'Au', 'Rh', 'Ir', 'Ru', 'Os', 'Fe', 'Co', 'Mn', 'Zn']
+    
+    for metal in metals:
+        if metal in reaction_smiles:
+            return metal
+    
+    return None
 
 
 def detect_reaction_type(reaction_smiles: str) -> Dict[str, Any]:
@@ -107,15 +137,15 @@ def detect_reaction_type(reaction_smiles: str) -> Dict[str, Any]:
         
         if mapping_key in RXN_INSIGHT_MAPPING:
             # Exact match found
-            result['detected_type'] = RXN_INSIGHT_MAPPING[mapping_key]
+            detected_type = RXN_INSIGHT_MAPPING[mapping_key]
             result['confidence'] = 'high'
-            logger.info(f"Exact mapping found: {mapping_key} -> {result['detected_type']}")
+            logger.info(f"Exact mapping found: {mapping_key} -> {detected_type}")
             
         elif rxn_class in CLASS_FALLBACK_MAPPING:
             # Fallback to class-based mapping
-            result['detected_type'] = CLASS_FALLBACK_MAPPING[rxn_class]
+            detected_type = CLASS_FALLBACK_MAPPING[rxn_class]
             result['confidence'] = 'medium'
-            logger.info(f"Fallback mapping used: {rxn_class} -> {result['detected_type']}")
+            logger.info(f"Fallback mapping used: {rxn_class} -> {detected_type}")
             
         else:
             # No mapping found
@@ -123,6 +153,31 @@ def detect_reaction_type(reaction_smiles: str) -> Dict[str, Any]:
             result['confidence'] = 'low'
             result['error'] = f"No mapping found for rxn-insight classification: {rxn_class} / {rxn_name}"
             logger.warning(result['error'])
+            return result
+        
+        # Handle catalyst-dependent reactions
+        if detected_type and detected_type.startswith("CATALYST_DEPENDENT_"):
+            catalyst_metal = detect_catalyst_in_smiles(reaction_smiles)
+            
+            if detected_type in CATALYST_DEPENDENT_MAPPINGS:
+                catalyst_map = CATALYST_DEPENDENT_MAPPINGS[detected_type]
+                
+                if catalyst_metal and catalyst_metal in catalyst_map:
+                    # Found specific catalyst
+                    result['detected_type'] = catalyst_map[catalyst_metal]
+                    result['catalyst_detected'] = catalyst_metal
+                else:
+                    # No catalyst found - need user input
+                    result['needs_catalyst_selection'] = True
+                    result['available_catalysts'] = list(catalyst_map.keys())
+                    result['reaction_class'] = detected_type
+                    result['detected_type'] = None  # Will be set after catalyst selection
+                    result['partial_detection'] = True
+                    
+                    return result
+        else:
+            # Normal reaction type
+            result['detected_type'] = detected_type
             
     except ImportError:
         result['error'] = "rxn-insight library not available. Install with: pip install rxn-insight"
@@ -131,6 +186,45 @@ def detect_reaction_type(reaction_smiles: str) -> Dict[str, Any]:
     except Exception as e:
         result['error'] = f"Error in rxn-insight detection: {str(e)}"
         logger.error(result['error'])
+    
+    return result
+
+
+def resolve_catalyst_dependent_reaction(reaction_class: str, catalyst_choice: str, rxn_insight_info: dict = None) -> Dict[str, Any]:
+    """
+    Resolve a catalyst-dependent reaction to a specific reaction type.
+    
+    Args:
+        reaction_class: The catalyst-dependent reaction class (e.g., "CATALYST_DEPENDENT_C-N_COUPLING")
+        catalyst_choice: User-selected catalyst ("Pd", "Cu", "Ni", "other")
+        rxn_insight_info: Original rxn-insight detection info
+        
+    Returns:
+        Dict with resolved reaction type information
+    """
+    result = {
+        'detected_type': None,
+        'confidence': 'high',
+        'catalyst_selected': catalyst_choice,
+        'error': None
+    }
+    
+    if rxn_insight_info:
+        result.update({
+            'rxn_insight_class': rxn_insight_info.get('rxn_insight_class'),
+            'rxn_insight_name': rxn_insight_info.get('rxn_insight_name'),
+            'functional_groups': rxn_insight_info.get('functional_groups')
+        })
+    
+    if reaction_class in CATALYST_DEPENDENT_MAPPINGS:
+        catalyst_map = CATALYST_DEPENDENT_MAPPINGS[reaction_class]
+        
+        if catalyst_choice in catalyst_map:
+            result['detected_type'] = catalyst_map[catalyst_choice]
+        else:
+            result['error'] = f"Invalid catalyst choice: {catalyst_choice}. Available: {list(catalyst_map.keys())}"
+    else:
+        result['error'] = f"Unknown catalyst-dependent reaction class: {reaction_class}"
     
     return result
 

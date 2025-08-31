@@ -1,0 +1,546 @@
+{
+  "meta": {
+    "generated_at": "2025-08-31T21:02:44",
+    "analysis_type": "enhanced",
+    "status": "Enhanced recommendations generated successfully"
+  },
+  "input": {
+    "reaction_smiles": "Brc1ccccc1.N1CCCC1>>c1ccc(N2CCCC2)cc1",
+    "selected_reaction_type": "Auto detect reaction type"
+  },
+  "detection": {
+    "reaction_type": "Cross-Coupling"
+  },
+  "dataset": {},
+  "top_conditions": [
+    {
+      "reaction": {
+        "smiles": "Brc1ccccc1.N1CCCC1>>c1ccc(N2CCCC2)cc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Brc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "N1CCCC1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "Pd(OAc)2",
+          "cas": "3375-31-3",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "XPhos",
+          "cas": "98327-87-8",
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "Cs2CO3",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "THF",
+          "abbreviation": "THF",
+          "cas": "109-99-9",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-120°C",
+        "time": "4-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    },
+    {
+      "reaction": {
+        "smiles": "Brc1ccccc1.N1CCCC1>>c1ccc(N2CCCC2)cc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Brc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "N1CCCC1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "Pd(OAc)2",
+          "cas": "3375-31-3",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "SPhos",
+          "cas": "161265-03-8",
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "Cs2CO3",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "Dimethylformamide",
+          "abbreviation": "DMF",
+          "cas": "68-12-2",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-120°C",
+        "time": "4-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    },
+    {
+      "reaction": {
+        "smiles": "Brc1ccccc1.N1CCCC1>>c1ccc(N2CCCC2)cc1"
+      },
+      "chemicals": [
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "Brc1ccccc1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": null,
+          "cas": null,
+          "smiles": "N1CCCC1",
+          "equivalents": null,
+          "role": "starting_material"
+        },
+        {
+          "name": "Pd(OAc)2",
+          "cas": "3375-31-3",
+          "smiles": null,
+          "equivalents": null,
+          "role": "metal_precursor"
+        },
+        {
+          "name": "SPhos",
+          "cas": "161265-03-8",
+          "smiles": null,
+          "equivalents": null,
+          "role": "ligand"
+        },
+        {
+          "name": "Cs2CO3",
+          "cas": null,
+          "smiles": null,
+          "equivalents": 2.0,
+          "role": "base"
+        },
+        {
+          "name": "THF",
+          "abbreviation": "THF",
+          "cas": "109-99-9",
+          "smiles": null,
+          "equivalents": null,
+          "role": "solvent"
+        }
+      ],
+      "conditions": {
+        "temperature": "80-120°C",
+        "time": "4-24 hours",
+        "atmosphere": "Inert (N₂ or Ar)"
+      }
+    }
+  ],
+  "related_reactions": [
+    {
+      "reaction_smiles": "Clc1nc(Cl)nc(N)n1.NCCc1ccccc1>>NCCc1ccccc1.Nc1nc(NCCc2ccccc2)nc(N)n1",
+      "yield": 65.4,
+      "catalyst": "Pd(OAc)2",
+      "ligand": "XantPhos",
+      "similarity": 0.64
+    },
+    {
+      "reaction_smiles": "Brc1ccc(C)cc1.CN(C)C>>CN(C)c1ccc(C)cc1",
+      "yield": 92.5,
+      "catalyst": "Pd2(dba)3",
+      "ligand": "XPhos",
+      "similarity": 0.87
+    }
+  ],
+  "general": {
+    "ligands": [],
+    "solvents": [],
+    "bases": [],
+    "top_hits": [
+      {
+        "reaction_id": "31-614-CAS-42934080",
+        "reaction_type": "Buchwald",
+        "dataset_file": "Buchwald-2021-2024.jsonl",
+        "cond_key": "Pd/BINAP|98327-87-8/Sodium tert-butoxide|865-48-5/PhMe|108-88-3+Toluene|",
+        "similarity": 1.0,
+        "reactant_smiles": "Brc1ccccc1.C1CCNC1",
+        "product_smiles": "c1ccc(N2CCCC2)cc1",
+        "reaction_smiles": "Brc1ccccc1.C1CCNC1>>c1ccc(N2CCCC2)cc1",
+        "ligands": [
+          "BINAP"
+        ],
+        "solvents": [
+          "PhMe"
+        ],
+        "bases": [],
+        "temperature": 100.0,
+        "time": 16.0,
+        "yield_pct": 90.0,
+        "catalyst": "Tris(dibenzylideneacetone)dipalladium",
+        "reference": "Copper(I)-Catalyzed α,β-Dehydrogenative [2 + 3] Heteroannulation of Saturated Amines with Diaziridinone via Hydrogen Atom Transfer | Du, Zihang; et al | ACS Catalysis (2024), 14(23), 18107-18115. | 10.1021/acscatal.4c05973",
+        "core_detail": "Tris(dibenzylideneacetone)dipalladium",
+        "core_generic": "Pd"
+      },
+      {
+        "reaction_id": "31-614-CAS-34896350",
+        "reaction_type": "Ullmann",
+        "dataset_file": "Ullman-2020-2024.jsonl",
+        "cond_key": "Cu(II)/1-[2-(2-methoxyphenyl)-2-oxoethyl]-3-(2-pyridinyl)-|+bromide (1:1)|/none/none",
+        "similarity": 1.0,
+        "reactant_smiles": "Brc1ccccc1.C1CCNC1",
+        "product_smiles": "c1ccc(N2CCCC2)cc1",
+        "reaction_smiles": "Brc1ccccc1.C1CCNC1>>c1ccc(N2CCCC2)cc1",
+        "ligands": [],
+        "solvents": [],
+        "bases": [],
+        "temperature": 110.0,
+        "time": 17.0,
+        "yield_pct": 58.0,
+        "catalyst": "Cupric acetate, Cu(OAc)2",
+        "reference": "Functionalized imidazolium salt: an efficient catalyst for Buchwald-Hartwig type C-N cross-coupling of (hetero)aryl chlorides/bromides with amines under solvent-, inert gas-, and base-free ambience | Gautam, Deepak; et al | New Journal of Chemistry (2022), 46(47), 22841-22848. | 10.1039/d2nj04254a",
+        "core_detail": "Cupric acetate, Cu(OAc)2",
+        "core_generic": "Cu(II)"
+      },
+      {
+        "reaction_id": "31-614-CAS-39524863",
+        "reaction_type": "Buchwald",
+        "dataset_file": "Buchwald-2021-2024.jsonl",
+        "cond_key": "Pd/2-Dicyclohexylphosphino-2′,6′-dimethoxybiphenyl|+SPhos|657408-07-6/Sodium tert-butoxide|865-48-5+Water|7732-18-5/PhMe|108-88-3+Toluene|",
+        "similarity": 0.947,
+        "reactant_smiles": "Brc1ccccc1.C1CCNCC1",
+        "product_smiles": "c1ccc(N2CCCCC2)cc1",
+        "reaction_smiles": "Brc1ccccc1.C1CCNCC1>>c1ccc(N2CCCCC2)cc1",
+        "ligands": [
+          "SPhos"
+        ],
+        "solvents": [
+          "PhMe"
+        ],
+        "bases": [],
+        "temperature": 120.0,
+        "time": 1.0,
+        "yield_pct": 70.0,
+        "catalyst": "Pd(OAc)2",
+        "reference": "Metal-Free Directed Site-Selective Csp3-H Borylation of Saturated Cyclic Amines | Kumar Someswara Ashwathappa, Puneeth; et al | Angewandte Chemie, International Edition (2023), 62(39), e202309295. | 10.1002/anie.202309295",
+        "core_detail": "Pd(OAc)2",
+        "core_generic": "Pd"
+      },
+      {
+        "reaction_id": "31-614-CAS-42934090",
+        "reaction_type": "Buchwald",
+        "dataset_file": "Buchwald-2021-2024.jsonl",
+        "cond_key": "Pd/BINAP|98327-87-8/Sodium tert-butoxide|865-48-5/PhMe|108-88-3+Toluene|",
+        "similarity": 0.947,
+        "reactant_smiles": "Brc1ccccc1.C1CCNCC1",
+        "product_smiles": "c1ccc(N2CCCCC2)cc1",
+        "reaction_smiles": "Brc1ccccc1.C1CCNCC1>>c1ccc(N2CCCCC2)cc1",
+        "ligands": [
+          "BINAP"
+        ],
+        "solvents": [
+          "PhMe"
+        ],
+        "bases": [],
+        "temperature": 100.0,
+        "time": 16.0,
+        "yield_pct": 92.0,
+        "catalyst": "Tris(dibenzylideneacetone)dipalladium",
+        "reference": "Copper(I)-Catalyzed α,β-Dehydrogenative [2 + 3] Heteroannulation of Saturated Amines with Diaziridinone via Hydrogen Atom Transfer | Du, Zihang; et al | ACS Catalysis (2024), 14(23), 18107-18115. | 10.1021/acscatal.4c05973",
+        "core_detail": "Tris(dibenzylideneacetone)dipalladium",
+        "core_generic": "Pd"
+      },
+      {
+        "reaction_id": "31-614-CAS-34896359",
+        "reaction_type": "Other",
+        "dataset_file": "Ullman-2020-2024.jsonl",
+        "cond_key": "none/2869174-88-7|2869174-88-7/none/none",
+        "similarity": 0.947,
+        "reactant_smiles": "Brc1ccccc1.C1CCNCC1",
+        "product_smiles": "c1ccc(N2CCCCC2)cc1",
+        "reaction_smiles": "Brc1ccccc1.C1CCNCC1>>c1ccc(N2CCCCC2)cc1",
+        "ligands": [],
+        "solvents": [],
+        "bases": [],
+        "temperature": null,
+        "time": null,
+        "yield_pct": 55.0,
+        "catalyst": "Cu(OAc)2",
+        "reference": "Functionalized imidazolium salt: an efficient catalyst for Buchwald-Hartwig type C-N cross-coupling of (hetero)aryl chlorides/bromides with amines under solvent-, inert gas-, and base-free ambience | Gautam, Deepak; Gahlaut, Puneet Singh; Yadav, Kapil; Jana, Barun | New Journal of Chemistry (2022), 46(47), 22841-22848",
+        "core_detail": "Cu(OAc)2",
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-614-CAS-41175790",
+        "reaction_type": "Ullmann",
+        "dataset_file": "Ullman-2020-2024.jsonl",
+        "cond_key": "Cu(I)/L-Proline|147-85-3/Potassium carbonate|584-08-7/DMSO|67-68-5+Dimethyl sulfoxide|",
+        "similarity": 0.947,
+        "reactant_smiles": "Brc1ccccc1.C1CCCNCC1",
+        "product_smiles": "c1ccc(N2CCCCCC2)cc1",
+        "reaction_smiles": "Brc1ccccc1.C1CCCNCC1>>c1ccc(N2CCCCCC2)cc1",
+        "ligands": [
+          "L-Proline"
+        ],
+        "solvents": [
+          "DMSO"
+        ],
+        "bases": [],
+        "temperature": 80.0,
+        "time": 72.0,
+        "yield_pct": 77.0,
+        "catalyst": "Copper(I) iodide",
+        "reference": "α-Amino bicycloalkylation through organophotoredox catalysis | Nugent, Jeremy; et al | Chemical Science (2024), 15(28), 10918-10925. | 10.1039/d4sc01368a",
+        "core_detail": "Copper(I) iodide",
+        "core_generic": "Cu(I)"
+      },
+      {
+        "reaction_id": "31-172-CAS-20830396",
+        "reaction_type": "Other",
+        "dataset_file": "Ullman-2020-2024.jsonl",
+        "cond_key": "none/none/Tripotassium phosphate|7778-53-2/2-Propanol|67-63-0+Ethylene Glycol|107-21-1",
+        "similarity": 0.833,
+        "reactant_smiles": "C1CCNC1.Ic1ccccc1",
+        "product_smiles": "c1ccc(N2CCCC2)cc1",
+        "reaction_smiles": "C1CCNC1.Ic1ccccc1>>c1ccc(N2CCCC2)cc1",
+        "ligands": [],
+        "solvents": [
+          "2-Propanol",
+          "Ethylene Glycol"
+        ],
+        "bases": [],
+        "temperature": null,
+        "time": null,
+        "yield_pct": 52.0,
+        "catalyst": "Copper(I) iodide",
+        "reference": "Redox-Selective Iron Catalysis for α-Amino C-H Bond Functionalization via Aerobic Oxidation | Hwang, Joon Young; Ji, A. Young; Lee, Sang Hyeok; Kang, Eun Joo | Organic Letters (2020), 22(1), 16-21",
+        "core_detail": "Copper(I) iodide",
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-172-CAS-21967106",
+        "reaction_type": "Ullmann",
+        "dataset_file": "Ullman-2020-2024.jsonl",
+        "cond_key": "Cu(II)/2416904-09-9|2416904-09-9/Oxygen|7782-44-7/none",
+        "similarity": 0.833,
+        "reactant_smiles": "Clc1ccccc1.C1CCNC1",
+        "product_smiles": "c1ccc(N2CCCC2)cc1",
+        "reaction_smiles": "Clc1ccccc1.C1CCNC1>>c1ccc(N2CCCC2)cc1",
+        "ligands": [],
+        "solvents": [],
+        "bases": [],
+        "temperature": 110.0,
+        "time": 6.0,
+        "yield_pct": 92.0,
+        "catalyst": "Cu(OAc)2",
+        "reference": "Half-sandwich (η5-Cp*)Rh(III) complexes of pyrazolated organo-sulfur/selenium/tellurium ligands: efficient catalysts for base/solvent free C-N coupling of chloroarenes under aerobic conditions | Sharma, Charu; et al | Organic & Biomolecular Chemistry (2020), 18(18), 3599-3606. | 10.1039/d0ob00538j",
+        "core_detail": "Cu(OAc)2",
+        "core_generic": "Cu(II)"
+      },
+      {
+        "reaction_id": "31-172-CAS-22843078",
+        "reaction_type": "Ullmann",
+        "dataset_file": "Ullman-2020-2024.jsonl",
+        "cond_key": "Cu(II)/Carbonyl(η5-2,4-cyclopentadien-1-yl)diiodocobalt|12012-77-0/none/none",
+        "similarity": 0.833,
+        "reactant_smiles": "Clc1ccccc1.C1CCNC1",
+        "product_smiles": "c1ccc(N2CCCC2)cc1",
+        "reaction_smiles": "Clc1ccccc1.C1CCNC1>>c1ccc(N2CCCC2)cc1",
+        "ligands": [
+          "Carbonyl(η5-2",
+          "4-cyclopentadien-1-yl)diiodocobalt"
+        ],
+        "solvents": [],
+        "bases": [],
+        "temperature": 100.0,
+        "time": 4.0,
+        "yield_pct": 93.0,
+        "catalyst": "Cu(OAc)2",
+        "reference": "Cp*Co(III) and Cu(OAc)2 bimetallic catalysis for Buchwald-type C-N cross coupling of aryl chlorides and amines under base, inert gas & solvent-free conditions | Srivastava, Avinash K.; et al | Green Chemistry (2020), 22(23), 8248-8253. | 10.1039/d0gc02819c",
+        "core_detail": "Cu(OAc)2",
+        "core_generic": "Cu(II)"
+      },
+      {
+        "reaction_id": "31-614-CAS-31851166",
+        "reaction_type": "Ullmann",
+        "dataset_file": "Ullman-2020-2024.jsonl",
+        "cond_key": "Cu(II)/(2Fe-Fe)|+22587-69-5|22587-69-5+nonacarbonyldi-μ3-selenoxotri-|/none/none",
+        "similarity": 0.833,
+        "reactant_smiles": "Clc1ccccc1.C1CCNC1",
+        "product_smiles": "c1ccc(N2CCCC2)cc1",
+        "reaction_smiles": "Clc1ccccc1.C1CCNC1>>c1ccc(N2CCCC2)cc1",
+        "ligands": [],
+        "solvents": [],
+        "bases": [],
+        "temperature": 100.0,
+        "time": 4.0,
+        "yield_pct": 89.0,
+        "catalyst": "Cu(OAc)2, Iron",
+        "reference": "Iron- and copper-based bifunctional catalysts for the base- and solvent-free C-N coupling of amines and aryl/benzyl chlorides under aerobic conditions | Sharma, Charu; et al | New Journal of Chemistry (2022), 46(18), 8551-8556. | 10.1039/d2nj00593j",
+        "core_detail": "Cu(OAc)2, Iron",
+        "core_generic": "Cu(II)"
+      },
+      {
+        "reaction_id": "31-614-CAS-32326799",
+        "reaction_type": "Ullmann",
+        "dataset_file": "Ullman-2020-2024.jsonl",
+        "cond_key": "Cu(I)/(2R,3R)-N1,N4-Bis(2-furanylmethyl)-2,3-dihydroxybutanediamide|2773925-08-7/NaOH|1310-73-2+Sodium hydroxide|/Diethylene Glycol|111-46-6",
+        "similarity": 0.833,
+        "reactant_smiles": "C1CCNC1.Ic1ccccc1",
+        "product_smiles": "c1ccc(N2CCCC2)cc1",
+        "reaction_smiles": "C1CCNC1.Ic1ccccc1>>c1ccc(N2CCCC2)cc1",
+        "ligands": [
+          "(2R",
+          "3R)-N1",
+          "N4-Bis(2-furanylmethyl)-2",
+          "3-dihydroxybutanediamide"
+        ],
+        "solvents": [
+          "Diethylene Glycol"
+        ],
+        "bases": [],
+        "temperature": 25.0,
+        "time": 24.0,
+        "yield_pct": 80.0,
+        "catalyst": "Copper(I) iodide",
+        "reference": "Tartramide Ligands for Copper-Catalyzed N-Arylation at Room Temperature | Ma, Xuerui; et al | Advanced Synthesis & Catalysis (2022), 364(12), 2023-2031. | 10.1002/adsc.202200174",
+        "core_detail": "Copper(I) iodide",
+        "core_generic": "Cu(I)"
+      },
+      {
+        "reaction_id": "31-614-CAS-34408118",
+        "reaction_type": "Ullmann",
+        "dataset_file": "Ullman-2020-2024.jsonl",
+        "cond_key": "Cu(I)+Ni/none/Acetic Acid|64-19-7/none",
+        "similarity": 0.833,
+        "reactant_smiles": "Clc1ccccc1.C1CCNC1",
+        "product_smiles": "c1ccc(N2CCCC2)cc1",
+        "reaction_smiles": "Clc1ccccc1.C1CCNC1>>c1ccc(N2CCCC2)cc1",
+        "ligands": [],
+        "solvents": [],
+        "bases": [],
+        "temperature": 100.0,
+        "time": 2.0,
+        "yield_pct": 91.0,
+        "catalyst": "Copper(I) iodide, Nickel dichloride",
+        "reference": "Unification of Ullmann and Kharasch coupling: acid promoted CuI catalysed C-N coupling protocols under ligand, base and solvent-free conditions | Sharma, Charu; et al | Organic Chemistry Frontiers (2022), 9(22), 6252-6258. | 10.1039/d2qo01080a",
+        "core_detail": "Copper(I) iodide, Nickel dichloride",
+        "core_generic": "Cu(I), Ni"
+      },
+      {
+        "reaction_id": "31-614-CAS-35773765",
+        "reaction_type": "Other",
+        "dataset_file": "Ullman-2020-2024.jsonl",
+        "cond_key": "none/none/KOH|1310-58-3/Water|7732-18-5",
+        "similarity": 0.833,
+        "reactant_smiles": "Clc1ccccc1.C1CCNC1",
+        "product_smiles": "c1ccc(N2CCCC2)cc1",
+        "reaction_smiles": "Clc1ccccc1.C1CCNC1>>c1ccc(N2CCCC2)cc1",
+        "ligands": [],
+        "solvents": [
+          "Water"
+        ],
+        "bases": [
+          "KOH"
+        ],
+        "temperature": null,
+        "time": null,
+        "yield_pct": 54.0,
+        "catalyst": "1317-38-0, 1643-19-2, 2915383-28-5",
+        "reference": "Design and application of a novel and effective ligand for the Cu-catalyzed amination of aryl halides in water | Wang, Lifang; Zhu, Xinhai; Liang, Zexuan; Huang, Manna; Wan, Yiqian | Green Chemistry Letters and Reviews (2023), 16(1), 2147027/1-2147027/7",
+        "core_detail": "1317-38-0, 1643-19-2, 2915383-28-5",
+        "core_generic": null
+      },
+      {
+        "reaction_id": "31-614-CAS-38000411",
+        "reaction_type": "Ullmann",
+        "dataset_file": "Ullman-2020-2024.jsonl",
+        "cond_key": "Cu(I)/none/Ethylene Glycol|107-21-1+Tripotassium phosphate|7778-53-2/2-Propanol|67-63-0+Isopropanol|",
+        "similarity": 0.833,
+        "reactant_smiles": "C1CCNC1.Ic1ccccc1",
+        "product_smiles": "c1ccc(N2CCCC2)cc1",
+        "reaction_smiles": "C1CCNC1.Ic1ccccc1>>c1ccc(N2CCCC2)cc1",
+        "ligands": [],
+        "solvents": [
+          "2-Propanol"
+        ],
+        "bases": [],
+        "temperature": 90.0,
+        "time": 24.0,
+        "yield_pct": 60.0,
+        "catalyst": "Copper(I) iodide",
+        "reference": "Fe-Catalyzed C-H Alkenylation of Dialkyl Anilines with Disulfonylethenes | Hwang, Joon Young; et al | Organic Letters (2023), 25(40), 7359-7363. | 10.1021/acs.orglett.3c02812",
+        "core_detail": "Copper(I) iodide",
+        "core_generic": "Cu(I)"
+      },
+      {
+        "reaction_id": "31-614-CAS-42284200",
+        "reaction_type": "Ullmann",
+        "dataset_file": "Ullman-2020-2024.jsonl",
+        "cond_key": "Cu/4,7-Dimethoxy-1,10-phenanthroline|7758-98-7/Tripotassium phosphate|7778-53-2/Water|7732-18-5",
+        "similarity": 0.833,
+        "reactant_smiles": "Clc1ccccc1.C1CCNC1",
+        "product_smiles": "c1ccc(N2CCCC2)cc1",
+        "reaction_smiles": "Clc1ccccc1.C1CCNC1>>c1ccc(N2CCCC2)cc1",
+        "ligands": [
+          "4",
+          "7-Dimethoxy-1",
+          "10-phenanthroline"
+        ],
+        "solvents": [
+          "Water"
+        ],
+        "bases": [],
+        "temperature": 180.0,
+        "time": 18.0,
+        "yield_pct": 61.0,
+        "catalyst": "Copper sulfate",
+        "reference": "Copper(II)-Catalyzed Amination of Aryl Chlorides in Aqueous Ammonia | Mello, Lucas S.; et al | Chemistry - A European Journal (2024), 30(68), e202403023. | 10.1002/chem.202403023",
+        "core_detail": "Copper sulfate",
+        "core_generic": "Cu"
+      }
+    ]
+  }
+}

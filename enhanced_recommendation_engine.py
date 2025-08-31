@@ -107,6 +107,9 @@ class EnhancedRecommendationEngine:
     def analyze_reaction_type(self, reaction_smiles: str, suggested_type: str = None) -> str:
         """Analyze and determine the reaction type from SMILES"""
         
+        # Store detection info for later use
+        self._last_detection_info = None
+        
         # If user specified a type, try to map it
         if suggested_type and not self._is_auto_detect(suggested_type):
             mapped_type = self._map_reaction_type(suggested_type)
@@ -117,17 +120,35 @@ class EnhancedRecommendationEngine:
         if RXN_INSIGHT_AVAILABLE and detect_reaction_type:
             try:
                 detection_result = detect_reaction_type(reaction_smiles)
+                
+                # Handle catalyst-dependent reactions
+                if detection_result.get('needs_catalyst_selection'):
+                    # Store detection info for catalyst selection
+                    self._catalyst_selection_info = detection_result
+                    return "NEEDS_CATALYST_SELECTION"
+                
                 if detection_result['detected_type'] and detection_result['detected_type'] != "Unknown":
+                    # Store the detection info for use in output
+                    self._last_detection_info = {
+                        'rxn_insight_detected': f"{detection_result['rxn_insight_class']} / {detection_result['rxn_insight_name']}",
+                        'rxn_insight_class': detection_result['rxn_insight_class'],
+                        'rxn_insight_name': detection_result['rxn_insight_name'],
+                        'confidence': detection_result.get('confidence'),
+                        'raw_detected_type': detection_result['detected_type']
+                    }
+                    
                     # Use rxn-insight result and map it to our system
                     rxn_insight_type = detection_result['detected_type']
                     mapped_type = self._map_reaction_type(rxn_insight_type)
                     
                     if mapped_type:
+                        self._last_detection_info['mapped_to'] = mapped_type
                         print(f"rxn-insight detected: {detection_result['rxn_insight_class']} / {detection_result['rxn_insight_name']}")
                         print(f"Mapped to: {mapped_type}")
                         return mapped_type
                     else:
                         # If mapping failed, still return the rxn-insight result
+                        self._last_detection_info['mapped_to'] = rxn_insight_type
                         print(f"rxn-insight detected: {rxn_insight_type} (no internal mapping)")
                         return rxn_insight_type
             except Exception as e:
@@ -270,6 +291,56 @@ class EnhancedRecommendationEngine:
         
         return reaction_type.lower() in supported_types
     
+    def get_recommendations_with_catalyst(self, reaction_smiles: str, catalyst_choice: str, reaction_type: str = "Auto-detect") -> Dict:
+        """Get recommendations after catalyst selection for catalyst-dependent reactions"""
+        
+        try:
+            from reaction_type_detector import resolve_catalyst_dependent_reaction
+            
+            # Get stored catalyst selection info
+            catalyst_info = getattr(self, '_catalyst_selection_info', {})
+            if not catalyst_info:
+                return {
+                    'analysis_type': 'error',
+                    'error': 'No catalyst selection info available. Please run get_recommendations first.',
+                    'status': 'failed'
+                }
+            
+            # Resolve the catalyst-dependent reaction
+            resolved = resolve_catalyst_dependent_reaction(
+                catalyst_info.get('reaction_class', ''),
+                catalyst_choice,
+                catalyst_info
+            )
+            
+            if resolved.get('error'):
+                return {
+                    'analysis_type': 'error',
+                    'error': resolved['error'],
+                    'status': 'failed'
+                }
+            
+            # Store detection info
+            self._last_detection_info = {
+                'rxn_insight_detected': f"{catalyst_info.get('rxn_insight_class', '')} / {catalyst_info.get('rxn_insight_name', '')}",
+                'rxn_insight_class': catalyst_info.get('rxn_insight_class'),
+                'rxn_insight_name': catalyst_info.get('rxn_insight_name'),
+                'confidence': resolved.get('confidence'),
+                'raw_detected_type': resolved['detected_type'],
+                'mapped_to': resolved['detected_type'],
+                'catalyst_selected': catalyst_choice
+            }
+            
+            # Now get recommendations with the resolved reaction type
+            return self.get_recommendations(reaction_smiles, resolved['detected_type'])
+            
+        except Exception as e:
+            return {
+                'analysis_type': 'error',
+                'error': f'Failed to resolve catalyst selection: {str(e)}',
+                'status': 'failed'
+            }
+
     def get_recommendations(self, reaction_smiles: str, reaction_type: str = "Auto-detect") -> Dict:
         """Get comprehensive recommendations including ligands and solvents"""
         
@@ -294,6 +365,25 @@ class EnhancedRecommendationEngine:
             # Determine actual reaction type
             actual_reaction_type = self.analyze_reaction_type(reaction_smiles, reaction_type)
             
+            # Handle catalyst selection needed
+            if actual_reaction_type == "NEEDS_CATALYST_SELECTION":
+                catalyst_info = getattr(self, '_catalyst_selection_info', {})
+                return {
+                    'analysis_type': 'catalyst_selection_needed',
+                    'status': 'needs_catalyst_selection',
+                    'reaction_smiles': reaction_smiles,
+                    'rxn_insight_class': catalyst_info.get('rxn_insight_class', 'Unknown'),
+                    'rxn_insight_name': catalyst_info.get('rxn_insight_name', 'Unknown'),
+                    'available_catalysts': catalyst_info.get('available_catalysts', ['Pd', 'Cu', 'Ni', 'other']),
+                    'message': 'Reaction type detected as N-arylation. Please select a catalyst to determine the specific reaction type:',
+                    'catalyst_options': {
+                        'Pd': 'C-N Coupling - Buchwald-Hartwig (Pd)',
+                        'Cu': 'C-N Coupling - Ullmann (Cu)', 
+                        'Ni': 'C-N Coupling - (Ni)',
+                        'other': 'C-N Coupling - (other metals)'
+                    }
+                }
+            
             # Check if the detected/provided reaction type is supported
             if actual_reaction_type and not self._is_reaction_type_supported(actual_reaction_type):
                 return {
@@ -317,6 +407,10 @@ class EnhancedRecommendationEngine:
                 'detected_from': reaction_type,
                 'status': 'success'
             }
+            
+            # Add rxn-insight detection comparison if available
+            if hasattr(self, '_last_detection_info') and self._last_detection_info:
+                result['rxn_insight_detection'] = self._last_detection_info
             
             # Add rxn-insight information if auto-detection was used
             if self._is_auto_detect(reaction_type) and RXN_INSIGHT_AVAILABLE:
