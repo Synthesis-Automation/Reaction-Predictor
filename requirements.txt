@@ -1,3 +1,15 @@
+# Core GUI and data processing
 PyQt6>=6.4.0
 pandas>=1.5.0
+numpy>=1.21.0
+
+# Chemistry and molecular fingerprinting
 rdkit-pypi>=2022.9.1
+
+# Excel file support (optional, for ligand/base database exports)
+openpyxl>=3.0.0
+
+# Web automation for SMILES-Drawer (optional)
+selenium>=4.0.0
+webdriver-manager>=3.8.0
+rxn_insight>=0.1.0
