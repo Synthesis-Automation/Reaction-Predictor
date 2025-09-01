@@ -1,11 +1,11 @@
 {
   "meta": {
-    "generated_at": "2025-09-01T21:56:39",
+    "generated_at": "2025-09-01T22:01:36",
     "analysis_type": "enhanced",
     "status": "Enhanced recommendations generated successfully (catalyst: Cu)"
   },
   "input": {
-    "reaction_smiles": "Brc1ccc(C)cc1.Nc1ccccc1>>Cc1ccc(Nc2ccccc2)cc1",
+    "reaction_smiles": "Brc1ccccc1.N1CCC(O)CC1>>OC1CCN(c2ccccc2)CC1",
     "selected_reaction_type": "Auto detect reaction type"
   },
   "detection": {
@@ -251,20 +251,20 @@
   "top_conditions": [
     {
       "reaction": {
-        "smiles": "Brc1ccc(C)cc1.Nc1ccccc1>>Cc1ccc(Nc2ccccc2)cc1"
+        "smiles": "Brc1ccccc1.N1CCC(O)CC1>>OC1CCN(c2ccccc2)CC1"
       },
       "chemicals": [
         {
           "name": null,
           "cas": null,
-          "smiles": "Brc1ccc(C)cc1",
+          "smiles": "Brc1ccccc1",
           "equivalents": null,
           "role": "starting_material"
         },
         {
           "name": null,
           "cas": null,
-          "smiles": "Nc1ccccc1",
+          "smiles": "N1CCC(O)CC1",
           "equivalents": null,
           "role": "starting_material"
         },
@@ -306,20 +306,20 @@
     },
     {
       "reaction": {
-        "smiles": "Brc1ccc(C)cc1.Nc1ccccc1>>Cc1ccc(Nc2ccccc2)cc1"
+        "smiles": "Brc1ccccc1.N1CCC(O)CC1>>OC1CCN(c2ccccc2)CC1"
       },
       "chemicals": [
         {
           "name": null,
           "cas": null,
-          "smiles": "Brc1ccc(C)cc1",
+          "smiles": "Brc1ccccc1",
           "equivalents": null,
           "role": "starting_material"
         },
         {
           "name": null,
           "cas": null,
-          "smiles": "Nc1ccccc1",
+          "smiles": "N1CCC(O)CC1",
           "equivalents": null,
           "role": "starting_material"
         },
@@ -361,20 +361,20 @@
     },
     {
       "reaction": {
-        "smiles": "Brc1ccc(C)cc1.Nc1ccccc1>>Cc1ccc(Nc2ccccc2)cc1"
+        "smiles": "Brc1ccccc1.N1CCC(O)CC1>>OC1CCN(c2ccccc2)CC1"
       },
       "chemicals": [
         {
           "name": null,
           "cas": null,
-          "smiles": "Brc1ccc(C)cc1",
+          "smiles": "Brc1ccccc1",
           "equivalents": null,
           "role": "starting_material"
         },
         {
           "name": null,
           "cas": null,
-          "smiles": "Nc1ccccc1",
+          "smiles": "N1CCC(O)CC1",
           "equivalents": null,
           "role": "starting_material"
         },
@@ -417,107 +417,11 @@
   ],
   "related_reactions": [
     {
-      "reaction_smiles": "c1ccc2c(c1)[nH]c1ccccc12.Cc1ccc(Br)cc1>>Cc1ccc(-n2c3ccccc3c3ccccc32)cc1",
-      "similarity": 0.41666666666666663,
-      "reaction_id": "31-614-CAS-37956908",
-      "yield": 59.0,
-      "temperature": 180.0,
-      "time": 35.0,
-      "catalyst": "Copper(I) iodide",
-      "ligand": "18-Crown-6",
-      "solvent": "1, 2-Dichlorobenzene, Water",
-      "reference": "From Induced-Fit Assemblies to Ternary Inclusion Complexes with Fullerenes in Corannulene-Based Molecular Tweezers | Authors: Sacristan-Martin, Adriana; et al | Journal of Organic Chemistry (2022), 87(24), 16691-16706. | DOI: 10.1021/acs.joc.2c02345"
-    },
-    {
-      "reaction_smiles": "O=C(c1ccccc1)c1ccc(Br)cc1.Cc1ccc(Nc2ccc(C)cc2)cc1>>Cc1ccc(N(c2ccc(C)cc2)c2ccc(C(=O)c3ccccc3)cc2)cc1",
-      "similarity": 0.38888888888888884,
-      "reaction_id": "31-614-CAS-33566706",
-      "yield": 78.0,
-      "temperature": 100.0,
-      "time": 18.333,
-      "catalyst": "Copper(I) iodide",
-      "ligand": "N-(2-Methyl-1-naphthalenyl)-1-isoquinolinecarboxamide",
-      "solvent": "Sulfolane",
-      "reference": "Oxalamide/Amide Ligands: Enhanced and Copper-Catalyzed C-N Cross-Coupling for Triarylamine Synthesis | Authors: Li, Sasa; et al | Organic Letters (2022), 24(31), 5817-5824. | DOI: 10.1021/acs.orglett.2c02364"
-    },
-    {
-      "reaction_smiles": "Cc1ccc(Br)cc1.c1ccc(-c2cc[nH]n2)cc1>>Cc1ccc(-n2ccc(-c3ccccc3)n2)cc1",
-      "similarity": 0.3857142857142857,
-      "reaction_id": "31-172-CAS-22704365",
-      "yield": 82.0,
-      "temperature": 25.0,
-      "time": 20.0,
-      "catalyst": "N/A",
-      "ligand": "[5, 5′-bis(trifluoromethyl)-2, 2′-bipyridine-κN1, κN1′]bis[3, 5-difluoro-2-[5-(trifluoromethyl)-2-pyridinyl-κN]phenyl-κC]-, hexafluorophosphate(1-) (1:1)",
-      "solvent": "Methyl cyanide, Ethyl acetate",
-      "reference": "HARC as an open-shell strategy to bypass oxidative addition in Ullmann-Goldberg couplings | Authors: Lavagnino, Marissa N.; et al | Proceedings of the National Academy of Sciences of the United States of America (2020), 117(35), 21058-21064. | DOI: 10.1073/pnas.2011831117"
-    },
-    {
-      "reaction_smiles": "Cc1ccc(Br)cc1.Nc1n[nH]c2ccccc12>>Cc1ccc(-n2nc(N)c3ccccc32)cc1",
-      "similarity": 0.38513513513513514,
-      "reaction_id": "31-614-CAS-25058138",
-      "yield": 77.0,
-      "temperature": 110.0,
-      "time": 18.0,
-      "catalyst": "Copper(I) iodide",
-      "ligand": "trans-N, N′-Dimethyl-1, 2-cyclohexanediamine",
-      "solvent": "1, 4-Dioxane",
-      "reference": "Copper-Catalyzed N1 Coupling of 3-Aminoindazoles and Related Aminoazoles with Aryl Bromides | Authors: Cyr, Patrick; et al | European Journal of Organic Chemistry (2022), 2022(4), e202101245. | DOI: 10.1002/ejoc.202101245"
-    },
-    {
-      "reaction_smiles": "Cc1ccc(Br)cc1.c1ccc2[nH]ccc2c1>>Cc1ccc(-n2ccc3ccccc32)cc1",
-      "similarity": 0.3787878787878788,
-      "reaction_id": "31-614-CAS-36529216",
-      "yield": 73.0,
-      "temperature": 110.0,
-      "time": 4.0,
-      "catalyst": "Copper(1+)",
-      "ligand": "N/A",
-      "solvent": "DMSO",
-      "reference": "An efficient 2-(2-Pyridyl)imidazole based copper catalyst for N-Arylation of N-heterocycles | Authors: Sarkar, Gayetri; et al | Molecular Catalysis (2023), 545, 113212. | DOI: 10.1016/j.mcat.2023.113212"
-    },
-    {
-      "reaction_smiles": "Cc1ccc(Br)cc1.c1ccc2[nH]ccc2c1>>Cc1ccc(-n2ccc3ccccc32)cc1",
-      "similarity": 0.3787878787878788,
-      "reaction_id": "31-614-CAS-41844040",
-      "yield": 88.0,
-      "temperature": 80.0,
-      "time": 5.0,
-      "catalyst": "Copper oxide (CuO)",
-      "ligand": "Guar gum",
-      "solvent": "DMF",
-      "reference": "An eco-friendly convenient approach for the synthesis of guar gum integrated copper nanoparticles: Investigation of its catalytic activity in the C-N Ullmann coupling reactions and study of its anti-human kidney cancer effects | Authors: Li, Nana; et al | Journal of Organometallic Chemistry (2024), 1020, 123329. | DOI: 10.1016/j.jorganchem.2024.123329"
-    },
-    {
-      "reaction_smiles": "CNc1ccccc1.Cc1ccc(I)cc1>>Cc1ccc(N(C)c2ccccc2)cc1",
-      "similarity": 0.3782051282051282,
-      "reaction_id": "31-614-CAS-37879589",
-      "yield": 83.0,
-      "temperature": 110.0,
-      "time": 28.0,
-      "catalyst": "Copper",
-      "ligand": "Carbon nitride",
-      "solvent": "DMSO",
-      "reference": "Geminal-atom catalysis for cross-coupling | Authors: Hai, Xiao; et al | Nature (London, United Kingdom) (2023), 622(7984), 754-760. | DOI: 10.1038/s41586-023-06529-z"
-    },
-    {
-      "reaction_smiles": "Brc1ccccc1.Cc1ccc(=O)[nH]c1>>Cc1ccc(=O)n(-c2ccccc2)c1",
-      "similarity": 0.36837121212121215,
-      "reaction_id": "31-614-CAS-43193387",
-      "yield": 62.0,
-      "temperature": 150.0,
-      "time": 22.083,
-      "catalyst": "Copper(I) iodide",
-      "ligand": "N/A",
-      "solvent": "DMF",
-      "reference": "Direct Synthesis of Benzhydryl-Functionalized 3,4-Dihydropyridin-2-ones from 2-Pyridones and Their Use in the Formation of Bridged δ-Lactams | Authors: Myk, Zofia M.; et al | Molecules (2024), 29(22), 5274. | DOI: 10.3390/molecules29225274"
-    },
-    {
-      "reaction_smiles": "Cc1ccc(Br)cc1.C1CNCCN1>>Cc1ccc(N2CCNCC2)cc1",
-      "similarity": 0.3657407407407407,
-      "reaction_id": "31-614-CAS-34342111",
-      "yield": 82.0,
-      "temperature": 100.0,
+      "reaction_smiles": "Clc1ccc(Br)cc1.OC1CCNCC1>>OC1CCN(c2ccc(Cl)cc2)CC1",
+      "similarity": 0.6547619047619048,
+      "reaction_id": "31-614-CAS-34342095",
+      "yield": 80.0,
+      "temperature": 105.0,
       "time": 24.0,
       "catalyst": "N/A",
       "ligand": "Cu2O, Cu2O",
@@ -525,76 +429,172 @@
       "reference": "A recyclable ciprofloxacin polymer ligand for copper-catalyzed coupling of (hetero)aryl halide aminations | Authors: Song, Dake; et al | New Journal of Chemistry (2022), 46(40), 19100-19103. | DOI: 10.1039/d2nj03440a"
     },
     {
-      "reaction_smiles": "Cc1ccc(Br)cc1.c1cn[nH]c1>>Cc1ccc(-n2cccn2)cc1",
-      "similarity": 0.359375,
-      "reaction_id": "31-172-CAS-21786811",
-      "yield": 57.0,
+      "reaction_smiles": "COc1ccc(Br)cc1.OC1CCNCC1>>COc1ccc(N2CCC(O)CC2)cc1",
+      "similarity": 0.5933528836754643,
+      "reaction_id": "31-614-CAS-39895256",
+      "yield": 80.0,
+      "temperature": 25.0,
+      "time": 3.25,
+      "catalyst": "Copper(I) iodide",
+      "ligand": "1, 2-Benzenediamine",
+      "solvent": "DMSO",
+      "reference": "Room-Temperature Cu-Catalyzed Amination of Aryl Bromides Enabled by DFT-Guided Ligand Design | Authors: Kim, Seoung-Tae; et al | Journal of the American Chemical Society (2023), 145(12), 6966-6975. | DOI: 10.1021/jacs.3c00500"
+    },
+    {
+      "reaction_smiles": "Brc1ccccc1.C1CCNC1>>c1ccc(N2CCCC2)cc1",
+      "similarity": 0.5762962962962963,
+      "reaction_id": "31-614-CAS-34896350",
+      "yield": 58.0,
+      "temperature": 110.0,
+      "time": 17.0,
+      "catalyst": "Cupric acetate, Cu(OAc)2",
+      "ligand": "N/A",
+      "solvent": "N/A",
+      "reference": "Functionalized imidazolium salt: an efficient catalyst for Buchwald-Hartwig type C-N cross-coupling of (hetero)aryl chlorides/bromides with amines under solvent-, inert gas-, and base-free ambience | Authors: Gautam, Deepak; et al | New Journal of Chemistry (2022), 46(47), 22841-22848. | DOI: 10.1039/d2nj04254a"
+    },
+    {
+      "reaction_smiles": "Brc1ccccc1.C1CCNCC1>>c1ccc(N2CCCCC2)cc1",
+      "similarity": 0.554945054945055,
+      "reaction_id": "31-614-CAS-34896359",
+      "yield": 55.0,
       "temperature": null,
       "time": null,
-      "catalyst": "Cu2O",
-      "ligand": "N/A",
-      "solvent": "DMF",
-      "reference": "Design, synthesis, and evaluation of indeno[2,1-c]pyrazolones for use as inhibitors against hypoxia-inducible factor (HIF)-1 transcriptional activity | Authors: Fuse, Shinichiro; Suzuki, Kensuke; Kuchimaru, Takahiro; Kadonosono, Tetsuya; Ueda, Hiroki; Sato, Shinichi; Kizaka-Kondoh, Shinae; Nakamura, Hiroyuki | Bioorganic & Medicinal Chemistry (2020), 28(1), 115207"
+      "catalyst": "Cu(OAc)2",
+      "ligand": "2869174-88-7",
+      "solvent": "N/A",
+      "reference": "Functionalized imidazolium salt: an efficient catalyst for Buchwald-Hartwig type C-N cross-coupling of (hetero)aryl chlorides/bromides with amines under solvent-, inert gas-, and base-free ambience | Authors: Gautam, Deepak; Gahlaut, Puneet Singh; Yadav, Kapil; Jana, Barun | New Journal of Chemistry (2022), 46(47), 22841-22848"
     },
     {
-      "reaction_smiles": "Cc1ccc(Br)cc1.c1cn[nH]c1>>Cc1ccc(-n2cccn2)cc1",
-      "similarity": 0.359375,
-      "reaction_id": "31-614-CAS-34342068",
-      "yield": 95.0,
-      "temperature": 100.0,
-      "time": 24.0,
-      "catalyst": "N/A",
-      "ligand": "Cu2O, Cu2O",
-      "solvent": "Methyl cyanide, Water",
-      "reference": "A recyclable ciprofloxacin polymer ligand for copper-catalyzed coupling of (hetero)aryl halide aminations | Authors: Song, Dake; et al | New Journal of Chemistry (2022), 46(40), 19100-19103. | DOI: 10.1039/d2nj03440a"
-    },
-    {
-      "reaction_smiles": "Cc1ccc(Br)cc1.c1cn[nH]c1>>Cc1ccc(-n2cccn2)cc1",
-      "similarity": 0.359375,
-      "reaction_id": "31-614-CAS-36529176",
-      "yield": 78.0,
-      "temperature": 110.0,
-      "time": 4.0,
-      "catalyst": "Copper(1+)",
-      "ligand": "N/A",
-      "solvent": "DMSO",
-      "reference": "An efficient 2-(2-Pyridyl)imidazole based copper catalyst for N-Arylation of N-heterocycles | Authors: Sarkar, Gayetri; et al | Molecular Catalysis (2023), 545, 113212. | DOI: 10.1016/j.mcat.2023.113212"
-    },
-    {
-      "reaction_smiles": "Cc1ccc(Br)cc1.c1ccc2[nH]ncc2c1>>Cc1ccc(-n2ncc3ccccc32)cc1",
-      "similarity": 0.3571428571428571,
-      "reaction_id": "31-172-CAS-23433082",
-      "yield": 60.0,
-      "temperature": 130.0,
-      "time": 18.083,
+      "reaction_smiles": "Brc1ccccc1.C1CCCNCC1>>c1ccc(N2CCCCCC2)cc1",
+      "similarity": 0.554945054945055,
+      "reaction_id": "31-614-CAS-41175790",
+      "yield": 77.0,
+      "temperature": 80.0,
+      "time": 72.0,
       "catalyst": "Copper(I) iodide",
-      "ligand": "N/A",
-      "solvent": "DMF",
-      "reference": "A ligand-free copper-catalyzed strategy to the N-arylation of indazole using aryl bromides | Authors: Bai, Di-Xiang; et al | Synthetic Communications (2021), 51(9), 1398-1405. | DOI: 10.1080/00397911.2021.1883062"
-    },
-    {
-      "reaction_smiles": "Nc1ccc(Br)cc1.CNS(=O)(=O)c1ccc(C)cc1>>Cc1ccc(S(=O)(=O)N(C)c2ccc(N)cc2)cc1",
-      "similarity": 0.35526315789473684,
-      "reaction_id": "31-614-CAS-34358160",
-      "yield": 92.0,
-      "temperature": 100.0,
-      "time": 24.0,
-      "catalyst": "Copper(I) iodide",
-      "ligand": "N1-(2-Methyl-1-naphthalenyl)-N2-(2-pyrazinylmethyl)ethanediamide",
+      "ligand": "L-Proline",
       "solvent": "DMSO",
-      "reference": "Cu-Catalyzed Coupling Reactions of Sulfonamides with (Hetero)Aryl Chlorides/Bromides | Authors: Li, Qiaoli; et al | Angewandte Chemie, International Edition (2022), 61(43), e202210483. | DOI: 10.1002/anie.202210483"
+      "reference": "α-Amino bicycloalkylation through organophotoredox catalysis | Authors: Nugent, Jeremy; et al | Chemical Science (2024), 15(28), 10918-10925. | DOI: 10.1039/d4sc01368a"
     },
     {
-      "reaction_smiles": "Cc1ccc(Nc2ccccc2)cc1.Brc1ccsc1>>Cc1ccc(N(c2ccccc2)c2ccsc2)cc1",
-      "similarity": 0.3509538950715422,
-      "reaction_id": "31-614-CAS-41277501",
-      "yield": 75.0,
+      "reaction_smiles": "OC1CCNCC1.Brc1ccc2c(c1)oc1ccccc12>>OC1CCN(c2ccc3c(c2)oc2ccccc23)CC1",
+      "similarity": 0.525987525987526,
+      "reaction_id": "31-614-CAS-40801496",
+      "yield": 84.0,
+      "temperature": 24.0,
+      "time": 16.0,
+      "catalyst": "Copper(I) iodide",
+      "ligand": "1, 2-Benzenediamine",
+      "solvent": "DMSO",
+      "reference": "Cu-Catalyzed Amination of Base-Sensitive Aryl Bromides and the Chemoselective N- and O-Arylation of Amino Alcohols | Authors: Strauss, Michael J.; et al | Journal of the American Chemical Society (2024), 146(27), 18616-18625. | DOI: 10.1021/jacs.4c05246"
+    },
+    {
+      "reaction_smiles": "Brc1ccccc1.C1COCCN1>>c1ccc(N2CCOCC2)cc1",
+      "similarity": 0.5259259259259259,
+      "reaction_id": "31-614-CAS-24285552",
+      "yield": 98.0,
+      "temperature": 90.0,
+      "time": 32.0,
+      "catalyst": "Copper, Copper",
+      "ligand": "N/A",
+      "solvent": "p-Xylene",
+      "reference": "Product selective reaction controlled by the combination of palladium nanoparticles, continuous microwave irradiation and a co-existing solid; ligand-free Buchwald-Hartwig amination vs. aryne amination | Authors: Yamada, Makito; et al | Green Chemistry (2021), 23(20), 8131-8137. | DOI: 10.1039/d1gc01782a"
+    },
+    {
+      "reaction_smiles": "Brc1ccccc1.C1COCCN1>>c1ccc(N2CCOCC2)cc1",
+      "similarity": 0.5259259259259259,
+      "reaction_id": "31-614-CAS-34896368",
+      "yield": 56.0,
+      "temperature": null,
+      "time": null,
+      "catalyst": "Cu(OAc)2",
+      "ligand": "2869174-88-7",
+      "solvent": "N/A",
+      "reference": "Functionalized imidazolium salt: an efficient catalyst for Buchwald-Hartwig type C-N cross-coupling of (hetero)aryl chlorides/bromides with amines under solvent-, inert gas-, and base-free ambience | Authors: Gautam, Deepak; Gahlaut, Puneet Singh; Yadav, Kapil; Jana, Barun | New Journal of Chemistry (2022), 46(47), 22841-22848"
+    },
+    {
+      "reaction_smiles": "Brc1ccccc1.C1COCCN1>>c1ccc(N2CCOCC2)cc1",
+      "similarity": 0.5259259259259259,
+      "reaction_id": "31-614-CAS-39895243",
+      "yield": 99.0,
       "temperature": 25.0,
-      "time": 0.833,
-      "catalyst": "Copper sulfate",
-      "ligand": "Kanamycin A",
-      "solvent": "Water",
-      "reference": "Kanamycin-Cu(II) Complex Catalyzed Ullmann Amine Synthesis at Room Temperature: A Tool for Mechanistic Insights into Methylene Blue Degradation | Authors: Basheer, Huma; et al | European Journal of Organic Chemistry (2024), 27(29), e202400328. | DOI: 10.1002/ejoc.202400328"
+      "time": 3.25,
+      "catalyst": "Copper(I) iodide",
+      "ligand": "1, 2-Benzenediamine",
+      "solvent": "DMSO",
+      "reference": "Room-Temperature Cu-Catalyzed Amination of Aryl Bromides Enabled by DFT-Guided Ligand Design | Authors: Kim, Seoung-Tae; et al | Journal of the American Chemical Society (2023), 145(12), 6966-6975. | DOI: 10.1021/jacs.3c00500"
+    },
+    {
+      "reaction_smiles": "Ic1ccccc1.Cl.OC1CNC1>>OC1CN(c2ccccc2)C1",
+      "similarity": 0.5046620046620047,
+      "reaction_id": "31-614-CAS-39340037",
+      "yield": 55.0,
+      "temperature": 90.0,
+      "time": 40.0,
+      "catalyst": "Copper(I) iodide",
+      "ligand": "L-Proline",
+      "solvent": "DMSO",
+      "reference": "Interrupted N-Heterocyclic Carbene-Catalyzed Radical Coupling Strategy: A Versatile Platform for Alkylation and Arylation of [60]Fullerene | Authors: Chao, Di; et al | Organic Letters (2024), 26(7), 1432-1436. | DOI: 10.1021/acs.orglett.4c00043"
+    },
+    {
+      "reaction_smiles": "C1CNCCN1.Ic1ccccc1>>c1ccc(N2CCN(c3ccccc3)CC2)cc1",
+      "similarity": 0.4876811594202899,
+      "reaction_id": "31-172-CAS-22954190",
+      "yield": 84.0,
+      "temperature": 110.0,
+      "time": 6.0,
+      "catalyst": "Copper",
+      "ligand": "N/A",
+      "solvent": "DMF",
+      "reference": "Functionalization of superparamagnetic Fe3O4@SiO2 nanoparticles with a Cu(II) binuclear Schiff base complex as an efficient and reusable nanomagnetic catalyst for N-arylation of α-amino acids and nitrogen-containing heterocycles with aryl halides | Authors: Sardarian, A. R.; et al | Applied Organometallic Chemistry (2021), 35(1), e6051. | DOI: 10.1002/aoc.6051"
+    },
+    {
+      "reaction_smiles": "c1ccc(N2CCNCC2)cc1.Brc1ccc(Br)cc1>>Brc1ccc(N2CCN(c3ccccc3)CC2)cc1",
+      "similarity": 0.46196754563894527,
+      "reaction_id": "31-172-CAS-23688386",
+      "yield": 71.0,
+      "temperature": 110.0,
+      "time": 24.0,
+      "catalyst": "Copper(I) iodide",
+      "ligand": "Picolinic acid",
+      "solvent": "DMF",
+      "reference": "Synthesis of some new distyrylbenzene derivatives using immobilized Pd on an NHC-functionalized MIL-101(Cr) catalyst: photophysical property evaluation, DFT and TD-DFT calculations | Authors: Niknam, Esmaeil; et al | RSC Advances (2021), 11(20), 12374-12380. | DOI: 10.1039/d1ra00457c"
+    },
+    {
+      "reaction_smiles": "C1CCNC1.Ic1ccccc1>>c1ccc(N2CCCC2)cc1",
+      "similarity": 0.451875,
+      "reaction_id": "31-172-CAS-20830396",
+      "yield": 52.0,
+      "temperature": null,
+      "time": null,
+      "catalyst": "Copper(I) iodide",
+      "ligand": "N/A",
+      "solvent": "2-Propanol, Ethylene Glycol",
+      "reference": "Redox-Selective Iron Catalysis for α-Amino C-H Bond Functionalization via Aerobic Oxidation | Authors: Hwang, Joon Young; Ji, A. Young; Lee, Sang Hyeok; Kang, Eun Joo | Organic Letters (2020), 22(1), 16-21"
+    },
+    {
+      "reaction_smiles": "Clc1ccccc1.C1CCNC1>>c1ccc(N2CCCC2)cc1",
+      "similarity": 0.451875,
+      "reaction_id": "31-172-CAS-21967106",
+      "yield": 92.0,
+      "temperature": 110.0,
+      "time": 6.0,
+      "catalyst": "Cu(OAc)2",
+      "ligand": "2416904-09-9",
+      "solvent": "N/A",
+      "reference": "Half-sandwich (η5-Cp*)Rh(III) complexes of pyrazolated organo-sulfur/selenium/tellurium ligands: efficient catalysts for base/solvent free C-N coupling of chloroarenes under aerobic conditions | Authors: Sharma, Charu; et al | Organic & Biomolecular Chemistry (2020), 18(18), 3599-3606. | DOI: 10.1039/d0ob00538j"
+    },
+    {
+      "reaction_smiles": "Clc1ccccc1.C1CCNC1>>c1ccc(N2CCCC2)cc1",
+      "similarity": 0.451875,
+      "reaction_id": "31-172-CAS-22843078",
+      "yield": 93.0,
+      "temperature": 100.0,
+      "time": 4.0,
+      "catalyst": "Cu(OAc)2",
+      "ligand": "Carbonyl(η5-2, 4-cyclopentadien-1-yl)diiodocobalt",
+      "solvent": "N/A",
+      "reference": "Cp*Co(III) and Cu(OAc)2 bimetallic catalysis for Buchwald-type C-N cross coupling of aryl chlorides and amines under base, inert gas & solvent-free conditions | Authors: Srivastava, Avinash K.; et al | Green Chemistry (2020), 22(23), 8248-8253. | DOI: 10.1039/d0gc02819c"
     }
   ]
 }
